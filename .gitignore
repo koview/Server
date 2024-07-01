@@ -1,0 +1,6 @@
+### mac ###
+.DS_Store
+### db ###
+store/
+### IntelliJ IDEA ###
+.idea/

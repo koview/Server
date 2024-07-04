@@ -14,5 +14,5 @@ ARG JAR_FILE=build/libs/*.jar
 RUN mv $JAR_FILE app.jar
 
 # Java 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=local", "app.jar"]
 

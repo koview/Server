@@ -1,11 +1,11 @@
-package com.koview.koview_server.config.apiPayload;
+package com.koview.koview_server.global.apiPayload;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.koview.koview_server.config.apiPayload.code.BaseCode;
-import com.koview.koview_server.config.apiPayload.code.BaseErrorCode;
-import com.koview.koview_server.config.apiPayload.code.status.*;
+import com.koview.koview_server.global.apiPayload.code.BaseCode;
+import com.koview.koview_server.global.apiPayload.code.BaseErrorCode;
+import com.koview.koview_server.global.apiPayload.code.status.SuccessStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

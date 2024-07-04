@@ -1,4 +1,4 @@
-package com.koview.koview_server.config.apiPayload.code;
+package com.koview.koview_server.global.apiPayload.code;
 
 import lombok.Builder;
 import lombok.Getter;

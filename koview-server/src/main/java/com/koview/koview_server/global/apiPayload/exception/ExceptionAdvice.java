@@ -1,8 +1,8 @@
-package com.koview.koview_server.config.apiPayload.exception;
+package com.koview.koview_server.global.apiPayload.exception;
 
-import com.koview.koview_server.config.apiPayload.ApiResult;
-import com.koview.koview_server.config.apiPayload.code.ErrorReasonDto;
-import com.koview.koview_server.config.apiPayload.code.status.ErrorStatus;
+import com.koview.koview_server.global.apiPayload.ApiResult;
+import com.koview.koview_server.global.apiPayload.code.ErrorReasonDto;
+import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;

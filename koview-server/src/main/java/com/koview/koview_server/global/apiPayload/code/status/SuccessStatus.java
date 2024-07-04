@@ -1,7 +1,7 @@
-package com.koview.koview_server.config.apiPayload.code.status;
+package com.koview.koview_server.global.apiPayload.code.status;
 
-import com.koview.koview_server.config.apiPayload.code.BaseCode;
-import com.koview.koview_server.config.apiPayload.code.ReasonDto;
+import com.koview.koview_server.global.apiPayload.code.BaseCode;
+import com.koview.koview_server.global.apiPayload.code.ReasonDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,6 @@
-package com.koview.koview_server.image.controller;
+package com.koview.koview_server.imageTest.controller;
 
-import com.koview.koview_server.image.service.ImageServiceImpl;
+import com.koview.koview_server.imageTest.service.ImageServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

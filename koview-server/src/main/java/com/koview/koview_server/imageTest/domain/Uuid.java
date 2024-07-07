@@ -1,4 +1,4 @@
-package com.koview.koview_server.image.domain;
+package com.koview.koview_server.imageTest.domain;
 
 import com.koview.koview_server.global.common.BaseTimeEntity;
 import jakarta.persistence.*;

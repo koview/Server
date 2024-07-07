@@ -1,8 +1,8 @@
-package com.koview.koview_server.image.service;
+package com.koview.koview_server.imageTest.service;
 
 import com.koview.koview_server.global.s3.AmazonS3Manager;
-import com.koview.koview_server.image.domain.Uuid;
-import com.koview.koview_server.image.repository.UuidRepository;
+import com.koview.koview_server.imageTest.domain.Uuid;
+import com.koview.koview_server.global.image.repository.UuidRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

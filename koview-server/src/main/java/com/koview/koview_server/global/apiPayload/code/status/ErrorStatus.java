@@ -21,7 +21,10 @@ public enum ErrorStatus implements BaseErrorCode {
     MEMBER_EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "MEMBER4002", "이미 존재하는 이메일입니다."),
     MEMBER_NAME_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "MEMBER4003", "이미 존재하는 이름입니다."),
     MEMBER_PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "MEMBER4004", "비밀번호가 일치하지 않습니다."),
-    NOT_MATCHING_MEMBER_TOKEN(HttpStatus.BAD_REQUEST, "MEMBER4005", "토큰과 로그인 된 멤버가 일치하지 않습니다.");
+    NOT_MATCHING_MEMBER_TOKEN(HttpStatus.BAD_REQUEST, "MEMBER4005", "토큰과 로그인 된 멤버가 일치하지 않습니다."),
+    MEMBER_ACCESS_TOKEN_IS_EXPIRED(HttpStatus.BAD_REQUEST, "MEMBER4006", "만료된 Access Token 입니다. 재발급을 요청하세요."),
+    MEMBER_REFRESH_TOKEN_IS_EXPIRED(HttpStatus.BAD_REQUEST, "MEMBER4007", "만료된 Access Token 입니다. 재발급을 요청하세요."),
+    MEMBER_WAS_SIGN_OUT(HttpStatus.BAD_REQUEST, "MEMBER4007", "로그아웃 된 사용자입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

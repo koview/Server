@@ -1,19 +1,19 @@
-# 도커 빌드
+# Todo: 임시로 로컬 mysql을 만들었습니다. 나중에, 배포할 db 환경변수로 변경해야 합니다.
 server:
   servlet:
     encoding:
       charset: utf-8
       force: true
-  port: 8080
+  port: 9000
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: prod
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-    driver-class-name: ${SPRING_DATASOURCE_DRIVER}
+    url: jdbc:mysql://localhost:3306/kodb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     properties:
       hibernate:

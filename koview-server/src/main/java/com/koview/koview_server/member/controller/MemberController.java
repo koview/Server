@@ -4,6 +4,7 @@ import com.koview.koview_server.global.apiPayload.ApiResult;
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import com.koview.koview_server.global.apiPayload.exception.MemberException;
 import com.koview.koview_server.global.security.dto.JwtTokenDTO;
+import com.koview.koview_server.global.security.dto.ReissueRequestDTO;
 import com.koview.koview_server.member.domain.dto.LoginRequestDTO;
 import com.koview.koview_server.member.domain.dto.SignupRequestDTO;
 import com.koview.koview_server.member.domain.dto.SignupResponseDTO;
@@ -46,6 +47,11 @@ public class MemberController {
         JwtTokenDTO jwtTokenDTO = memberServiceImpl.signIn(requestDTO);
 
         return ApiResult.onSuccess(jwtTokenDTO);
+    }
+
+    @PostMapping("/reissue")
+    public ApiResult<?> reissue(@RequestBody ReissueRequestDTO requestDTO) {
+        return ApiResult.onSuccess(memberServiceImpl.reissue(requestDTO));
     }
 
 //    @PostConstruct

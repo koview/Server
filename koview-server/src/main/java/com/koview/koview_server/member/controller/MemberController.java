@@ -3,6 +3,8 @@ package com.koview.koview_server.member.controller;
 import com.koview.koview_server.global.apiPayload.ApiResult;
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import com.koview.koview_server.global.apiPayload.exception.MemberException;
+import com.koview.koview_server.global.security.dto.JwtTokenDTO;
+import com.koview.koview_server.member.domain.dto.LoginRequestDTO;
 import com.koview.koview_server.member.domain.dto.SignupRequestDTO;
 import com.koview.koview_server.member.domain.dto.SignupResponseDTO;
 import com.koview.koview_server.member.service.MemberServiceImpl;
@@ -39,7 +41,14 @@ public class MemberController {
         return ApiResult.onSuccess(responseDTO);
     }
 
-    @PostConstruct
+    @PostMapping("/signin")
+    public ApiResult<?> signIn(@RequestBody LoginRequestDTO requestDTO) {
+        JwtTokenDTO jwtTokenDTO = memberServiceImpl.signIn(requestDTO);
+
+        return ApiResult.onSuccess(jwtTokenDTO);
+    }
+
+//    @PostConstruct
     public void initMemberData() {
         SignupRequestDTO member1 = SignupRequestDTO.builder()
                 .email("test@gmail.com")

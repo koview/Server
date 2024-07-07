@@ -1,6 +1,8 @@
 package com.koview.koview_server.member.service;
 
+import com.koview.koview_server.global.security.dto.JwtTokenDTO;
 import com.koview.koview_server.member.domain.Member;
+import com.koview.koview_server.member.domain.dto.LoginRequestDTO;
 import com.koview.koview_server.member.domain.dto.SignupRequestDTO;
 import com.koview.koview_server.member.domain.dto.SignupResponseDTO;
 
@@ -11,5 +13,6 @@ public interface MemberService {
     boolean confirmEmail(String email);
     boolean confirmName(String name);
     SignupResponseDTO createMember(SignupRequestDTO signupRequestDTO);
+    JwtTokenDTO signIn(LoginRequestDTO requestDTO);
     Optional<Member> findByEmail(String email);
 }

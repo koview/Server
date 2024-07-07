@@ -20,6 +20,18 @@ spring:
     show-sql: true
     open-in-view: true
 
+cloud:
+  aws:
+    s3:
+      bucket: koview
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+
 logging:
   level:
     '[com.koview.koview_server]': INFO

@@ -10,8 +10,8 @@ services:
       MYSQL_DATABASE: kodb
     ports:
       - 4000:3306
-    volumes:
-      - ./mysql/store:/var/lib/mysql
+    # volumes:
+      # - ./mysql/store:/var/lib/mysql
     networks:
       - network
 
@@ -29,6 +29,8 @@ services:
       SPRING_DATASOURCE_DRIVER: com.mysql.cj.jdbc.Driver
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
     networks:
       - network
 networks:

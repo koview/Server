@@ -4,3 +4,4 @@
 store/
 ### IntelliJ IDEA ###
 .idea/
+.env

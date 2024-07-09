@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface MemberService {
 
     boolean confirmEmail(String email);
-    boolean confirmName(String name);
+    boolean confirmNickname(String nickname);
     SignupResponseDTO createMember(SignupRequestDTO signupRequestDTO);
     JwtTokenDTO signIn(LoginRequestDTO requestDTO);
     Member save(Member member);

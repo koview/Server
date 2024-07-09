@@ -33,7 +33,7 @@ public class SignupRequestDTO {
 
     @NotBlank
     @Schema(description = "회원 닉네임", example = "홍길동")
-    private String name;
+    private String nickname;
 
     @Schema(description = "회원 나이", example = "20")
     private int age;
@@ -45,7 +45,7 @@ public class SignupRequestDTO {
                 .email(email)
                 .loginPw(loginPw)
                 .verifiedPw(verifiedPw)
-                .name(name)
+                .nickname(nickname)
                 .age(age)
                 .role(RoleType.USER)
                 .build();

@@ -12,7 +12,7 @@ public class SignupResponseDTO {
     private final Long id;
     private final String email;
     private final String loginPw;
-    private final String name;
+    private final String nickname;
     private final int age;
 
     /* Entity -> DTO */
@@ -20,7 +20,7 @@ public class SignupResponseDTO {
         this.id = member.getId();
         this.email = member.getEmail();
         this.loginPw = member.getLoginPw();
-        this.name = member.getName();
+        this.nickname = member.getNickname();
         this.age = member.getAge();
     }
 }

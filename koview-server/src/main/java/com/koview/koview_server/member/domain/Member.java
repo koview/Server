@@ -27,7 +27,7 @@ public class Member extends BaseTimeEntity {
     private String verifiedPw; // 비밀번호 확인
 
     @Column(nullable = false, unique = true)
-    private String name; // 이름
+    private String nickname; // 닉네임
 
     private int age; // 나이
 

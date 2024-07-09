@@ -41,8 +41,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean confirmName(String name) {
-        return memberRepository.existsByName(name);
+    public boolean confirmNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname);
     }
 
     @Override

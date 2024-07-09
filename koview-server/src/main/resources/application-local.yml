@@ -26,13 +26,19 @@ spring:
 jwt:
   secret: ${JWT_SECRET_KEY}
 
-  access:
-    expiration: 1000
-    header: Authorization
-
-  refresh:
-    expiration: 3000
-    header: Authorization-refresh
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  api-docs:
+    groups:
+      enabled: true
+  swagger-ui:
+    operations-sorter: alpha
+    tags-sorter: alpha
+    disable-swagger-default-url: true
+    doc-expansion: none
+  paths-to-match:
+    - /**
 
 cloud:
   aws:

@@ -54,4 +54,7 @@ class ImageServiceImplTest {
         assertEquals(s3Url, result);
         verify(uuidRepository, times(1)).save(any(Uuid.class));
         verify(s3Manager, times(1)).genReviewsKeyName(any(Uuid.class));
-        verif
+        verify(s3Manager, times(1)).uploadFile(anyString(), any(MultipartFile.class));
+    }
+*/
+}

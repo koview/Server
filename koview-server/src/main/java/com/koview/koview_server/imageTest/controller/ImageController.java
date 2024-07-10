@@ -34,4 +34,6 @@ public class ImageController {
     @DeleteMapping(value="/reviews")
     public ApiResult<String> deleteReviewImages(@RequestBody ImageTestRequestDTO.ImageIdListDTO request){
 
-       
+        return ApiResult.onSuccess(reviewImageService.deleteReviews(request.getImageIdList()));
+    }
+}

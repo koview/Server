@@ -45,10 +45,8 @@ public class AmazonS3Manager{
     }
     // 단건 삭제 메소드
     public void deleteFile(String imagePath) {
-        log.info("0번:{}",imagePath);
         try {
             String keyName = getObjectKeyFromUrl(imagePath);
-            log.info("2번:{}",keyName);
             amazonS3.deleteObject(amazonConfig.getBucket(), keyName);
             log.info("Deleted file with key: {}", keyName);
         } catch (AmazonServiceException e) {
@@ -58,13 +56,11 @@ public class AmazonS3Manager{
             log.error("SdkClientException at AmazonS3Manager deleteFile : {}", e);
             throw new RuntimeException("Failed to delete file", e);
         } catch (MalformedURLException e) {
-            log.info("3번");
             throw new RuntimeException(e);
         }
     }
 
     public static String getObjectKeyFromUrl(String url) throws MalformedURLException {
-        log.info("1번:{}",url);
         URL s3Url = new URL(url);
         return s3Url.getPath().substring(1); // /<object-key> -> <object-key>
     }
@@ -81,4 +77,6 @@ public class AmazonS3Manager{
         return "products" + '/' + uuid;
     }
     public String genUserProfilesKeyName(String uuid) {
-        return "user-prof
+        return "user-profiles" + '/' + uuid;
+    }
+}

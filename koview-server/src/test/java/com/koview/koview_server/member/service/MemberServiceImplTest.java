@@ -61,10 +61,8 @@ class MemberServiceImplTest {
         SignupRequestDTO requestDTO = SignupRequestDTO.builder()
                 .email("test@example.com")
                 .loginPw("password")
-                .verifiedPw("password")
                 .nickname("Test User")
                 .age(20)
-                .roleType(RoleType.USER)
                 .build();
 
         Member savedMember = Member.builder()

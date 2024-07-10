@@ -28,26 +28,18 @@ public class SignupRequestDTO {
     private String loginPw;
 
     @NotBlank
-    @Schema(description = "회원 비밀번호 확인", example = "test1234")
-    private String verifiedPw;
-
-    @NotBlank
     @Schema(description = "회원 닉네임", example = "홍길동")
     private String nickname;
 
     @Schema(description = "회원 나이", example = "20")
     private int age;
 
-    private RoleType roleType;
-
     public Member toEntity() {
         return Member.builder()
                 .email(email)
                 .loginPw(loginPw)
-                .verifiedPw(verifiedPw)
                 .nickname(nickname)
                 .age(age)
-                .role(RoleType.USER)
                 .build();
     }
 }

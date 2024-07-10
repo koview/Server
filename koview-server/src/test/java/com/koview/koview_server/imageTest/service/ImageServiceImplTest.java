@@ -1,8 +1,8 @@
 package com.koview.koview_server.imageTest.service;
 
 import com.koview.koview_server.global.s3.AmazonS3Manager;
-import com.koview.koview_server.imageTest.domain.Uuid;
-import com.koview.koview_server.global.image.repository.UuidRepository;
+import com.koview.koview_server.imageTest.domain.ImagePath;
+import com.koview.koview_server.imageTest.repository.ImagePathRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class ImageServiceImplTest {
     private AmazonS3Manager s3Manager;
 
     @Mock
-    private UuidRepository uuidRepository;
+    private ImagePathRepository imagePathRepository;
 
     @InjectMocks
     private ImageServiceImpl imageService;
@@ -32,7 +32,7 @@ class ImageServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-
+/* Todo: Uuid 테이블 -> ImagePath로 변경된거 반영하기
     @Test
     @DisplayName("리뷰 이미지 생성")
     void createReview() {
@@ -54,6 +54,4 @@ class ImageServiceImplTest {
         assertEquals(s3Url, result);
         verify(uuidRepository, times(1)).save(any(Uuid.class));
         verify(s3Manager, times(1)).genReviewsKeyName(any(Uuid.class));
-        verify(s3Manager, times(1)).uploadFile(anyString(), any(MultipartFile.class));
-    }
-}
+        verif

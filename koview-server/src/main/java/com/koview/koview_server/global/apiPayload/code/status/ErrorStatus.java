@@ -24,7 +24,12 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_MATCHING_MEMBER_TOKEN(HttpStatus.BAD_REQUEST, "MEMBER4005", "토큰과 로그인 된 멤버가 일치하지 않습니다."),
     MEMBER_ACCESS_TOKEN_IS_EXPIRED(HttpStatus.BAD_REQUEST, "MEMBER4006", "만료된 Access Token 입니다. 재발급을 요청하세요."),
     MEMBER_REFRESH_TOKEN_IS_EXPIRED(HttpStatus.BAD_REQUEST, "MEMBER4007", "만료된 Access Token 입니다. 재발급을 요청하세요."),
-    MEMBER_WAS_SIGN_OUT(HttpStatus.BAD_REQUEST, "MEMBER4007", "로그아웃 된 사용자입니다.");
+    MEMBER_WAS_SIGN_OUT(HttpStatus.BAD_REQUEST, "MEMBER4007", "로그아웃 된 사용자입니다."),
+
+    // 이미지 에러
+    REVIEW_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "4001", "리뷰 사진이 존재하지 않습니다."),
+    MEMBER_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "4002", "유저 프로필 사진이 존재하지 않습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String code;

@@ -1,0 +1,25 @@
+# .dockerignore 예시
+
+# Git 관련 파일 및 디렉토리
+.git
+.gitignore
+
+# 빌드 결과물 (Gradle 또는 Maven 사용 시)
+build/
+target/
+
+# 로컬 개발 환경 설정 파일
+.idea
+.vscode
+
+# 로그 파일
+*.log
+
+# 임시 파일 및 디렉토리
+tmp/
+temp/
+*.tmp
+
+# 운영체제에서 생성하는 파일
+.DS_Store
+Thumbs.db

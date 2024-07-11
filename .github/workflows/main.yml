@@ -14,6 +14,12 @@ jobs:
     name: Build and Push Docker Image
     runs-on: [self-hosted, label-go]  # self-hosted 및 label-go 라벨이 붙은 러너에서 실행
     steps:
+      - name: Grant Docker access to GitHub Actions runner
+        run: sudo usermod -aG docker $USER
+
+      - name: Restart Docker service
+        run: sudo systemctl restart docker
+
       - uses: actions/checkout@v2
 
       - name: Set up Docker Buildx

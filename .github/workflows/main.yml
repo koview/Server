@@ -15,10 +15,7 @@ jobs:
     runs-on: [self-hosted, label-go]  # self-hosted 및 label-go 라벨이 붙은 러너에서 실행
     steps:
       - name: Grant Docker access to GitHub Actions runner
-        run: sudo usermod -aG docker $USER
-
-      - name: Restart Docker service
-        run: sudo systemctl restart docker
+        run: sudo chmod 666 /var/run/docker.sock
 
       - uses: actions/checkout@v2
 

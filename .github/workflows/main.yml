@@ -2,70 +2,102 @@ name: CI/CD Docker
 
 # 트리거를 수행할 브랜치를 지정합니다.
 on:
-  pull_request:
-    branches: [ dev ]
+  push:
+    branches: [ main, dev ]
 
 # 환경설정
 env:
-  DOCKER_IMAGE: ghcr.io/${{ github.actor }}/koview-auto-deploy
+  DOCKER_IMAGE: tinywhale1031/koview-auto-deploy
   VERSION: ${{ github.sha }}
   NAME: koview_cicd
 
 jobs:
-  # 빌드 Job
-  build:
-    name: Build
-    runs-on: ubuntu-latest
+  build_and_push:
+    name: Build and Push Docker Image
+    runs-on: [self-hosted, label-go]  # self-hosted 및 label-go 라벨이 붙은 러너에서 실행
     steps:
       # GitHub repository에서 checkout
       - uses: actions/checkout@v2
 
       # Docker buildx 설정
-      - name: Set up docker buildx
+      - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
 
       # Docker layers 캐시
-      - name: Cache docker layers
+      - name: Cache Docker layers
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ env.VERSION }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-      # GitHub 컨테이너 레지스트리에 로그인 후 빌드 & 푸시
-      - name: Login to ghcr
-        uses: docker/login-action@v1
+
+      # Docker Hub에 로그인
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.SECRETE_ACTION_KEY }}
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       # Docker 이미지를 빌드하고 푸시
-      - name: Build and push
+      - name: Build and Push Docker Image
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           context: ./koview-server
+          file: ./koview-server/Dockerfile.prod
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ env.DOCKER_IMAGE }}:latest
+          tags: ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+        env:
+          AWS_RDS_URL: ${{ secrets.AWS_RDS_URL }}
+          AWS_RDS_USERNAME: ${{ secrets.AWS_RDS_USERNAME }}
+          AWS_RDS_PASSWORD: ${{ secrets.AWS_RDS_PASSWORD }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  # 배포 Job
   deploy:
-    needs: build  # build 후에 실행되도록 정의
-    name: Deploy
-    runs-on: [ self-hosted, label-go ] # AWS ./configure에서 사용할 label명
+    needs: build_and_push
+    name: Deploy Docker Image
+    runs-on: [self-hosted, label-go]  # self-hosted 및 label-go 라벨이 붙은 러너에서 실행
     steps:
-      - name: Login to ghcr
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+      - name: Configure AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ap-northeast-2
+
+      - name: Login to GHCR
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.SECRETE_ACTION_KEY }}
 
-      # 8080 -> 8080 포트로 수행하도록 지정
-      - name: Docker run
+      - name: EC2 Run Commands
         run: |
-          docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
-          docker run -d -p 8080:8080 --name koview_cicd --restart always ${{ env.DOCKER_IMAGE }}:latest
+          aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --targets "Key=instanceIds,Values=${{ secrets.EC2_INSTANCE_ID }}" \
+            --parameters commands='
+              docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }};
+              docker stop ${{ env.NAME }} || true;
+              docker rm ${{ env.NAME }} || true;
+              docker pull ${{ env.DOCKER_IMAGE }}:${{ github.sha }};
+              docker run -d -p 8080:8080 --name ${{ env.NAME }} \
+                --env AWS_RDS_URL=${{ secrets.AWS_RDS_URL }} \
+                --env AWS_RDS_USERNAME=${{ secrets.AWS_RDS_USERNAME }} \
+                --env AWS_RDS_PASSWORD=${{ secrets.AWS_RDS_PASSWORD }} \
+                --env JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
+                --env AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+                --env AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+                --restart always ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+            '
+

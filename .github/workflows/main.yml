@@ -45,12 +45,11 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ env.DOCKER_HUB_USERNAME }}
-          password: ${{ env.DOCKER_HUB_ACCESS_TOKEN }}
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Build and Push Docker Image
-        id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v2.8.0
         with:
           context: ./koview-server
           file: ./koview-server/Dockerfile.prod
@@ -63,7 +62,7 @@ jobs:
   deploy:
     needs: build_and_push
     name: Deploy Docker Image
-    runs-on: [self-hosted, label-go] # AWS ./configure에서 사용할 label 명
+    runs-on: [self-hosted, label-go]
     steps:
       - name: Install AWS CLI
         run: |
@@ -72,36 +71,37 @@ jobs:
 
       - name: Configure AWS CLI
         run: |
-          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set default.region ap-northeast-2
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ env.DOCKER_HUB_USERNAME }}
-          password: ${{ env.DOCKER_HUB_ACCESS_TOKEN }}
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Login to GHCR
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ env.SECRETE_ACTION_KEY }}
+          password: ${{ secrets.SECRETE_ACTION_KEY }}
 
       - name: EC2 Run Commands
         run: |
-          sudo docker login -u ${{ env.DOCKER_HUB_USERNAME }} -p ${{ env.DOCKER_HUB_ACCESS_TOKEN }}
+          sudo docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
           sudo docker stop ${{ env.NAME }} || true
           sudo docker rm ${{ env.NAME }} || true
           sudo docker pull ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
           sudo docker run -d -p 8080:8080 --name ${{ env.NAME }} \
-            --env AWS_RDS_URL=${{ env.AWS_RDS_URL }} \
-            --env AWS_RDS_USERNAME=${{ env.AWS_RDS_USERNAME }} \
-            --env AWS_RDS_PASSWORD=${{ env.AWS_RDS_PASSWORD }} \
-            --env JWT_SECRET_KEY=${{ env.JWT_SECRET_KEY }} \
-            --env AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }} \
-            --env AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }} \
+            --env AWS_RDS_URL=${{ secrets.AWS_RDS_URL }} \
+            --env AWS_RDS_USERNAME=${{ secrets.AWS_RDS_USERNAME }} \
+            --env AWS_RDS_PASSWORD=${{ secrets.AWS_RDS_PASSWORD }} \
+            --env JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
+            --env AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+            --env AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
             --restart always ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+
 
 

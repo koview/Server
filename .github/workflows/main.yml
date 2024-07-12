@@ -63,7 +63,7 @@ jobs:
   deploy:
     needs: build_and_push
     name: Deploy Docker Image
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, label-go] # AWS ./configure에서 사용할 label 명
     steps:
       - name: Install AWS CLI
         run: |

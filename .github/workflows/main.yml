@@ -78,11 +78,12 @@ jobs:
 
       - name: Run the new container
         run: |
-          docker run -d -p 8080:8080 --name koview_cicd \
-            --env AWS_RDS_URL=${{ secrets.AWS_RDS_URL }} \
-            --env AWS_RDS_USERNAME=${{ secrets.AWS_RDS_USERNAME }} \
-            --env AWS_RDS_PASSWORD=${{ secrets.AWS_RDS_PASSWORD }} \
-            --env JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
-            --env AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-            --env AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-            ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          docker run -d -p 8080:8080 --name ${{ env.NAME }} \
+            --env "AWS_RDS_URL=${{ secrets.AWS_RDS_URL }}" \
+            --env "AWS_RDS_USERNAME=${{ secrets.AWS_RDS_USERNAME }}" \
+            --env "AWS_RDS_PASSWORD=${{ secrets.AWS_RDS_PASSWORD }}" \
+            --env "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" \
+            --env "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            --env "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+            "${{ env.DOCKER_IMAGE }}:${{ env.VERSION }}"
+

@@ -52,7 +52,7 @@ public class MemberServiceImpl implements MemberService {
         member.encodePassword(passwordEncoder);
         save(member);
 
-        return new SignupResponseDTO(member);
+        return new SignupResponseDTO(member, signupRequestDTO.getLoginPw());
     }
 
     @Override

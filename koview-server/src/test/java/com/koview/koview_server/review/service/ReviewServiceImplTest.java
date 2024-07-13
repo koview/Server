@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,5 +80,26 @@ class ReviewServiceImplTest {
 
         // Then
         verify(reviewRepository, times(1)).deleteById(reviewId);
+    }
+
+    @Test
+    @DisplayName("모든 리뷰 조회")
+    void findAll() {
+        // Given
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(Review.builder().id(1L).content("Review 1").build());
+        reviews.add(Review.builder().id(2L).content("Review 2").build());
+
+        when(reviewRepository.findAll()).thenReturn(reviews);
+
+        // When
+        List<ReviewResponseDTO> responseDTOS = reviewService.findAll();
+
+        // Then
+        assertNotNull(responseDTOS);
+        assertEquals(2, responseDTOS.size());
+        assertEquals(reviews.get(0).getContent(), responseDTOS.get(0).getContent());
+        assertEquals(reviews.get(1).getContent(), responseDTOS.get(1).getContent());
+        verify(reviewRepository, times(1)).findAll();
     }
 }

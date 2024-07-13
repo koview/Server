@@ -30,4 +30,10 @@ public class ReviewController {
         reviewService.deleteReview(reviewId);
         return ApiResult.onSuccess();
     }
+
+    @GetMapping
+    @Operation(description = "리뷰 전체 조회")
+    public ApiResult<?> getAllReviews() {
+        return ApiResult.onSuccess(reviewService.findAll());
+    }
 }

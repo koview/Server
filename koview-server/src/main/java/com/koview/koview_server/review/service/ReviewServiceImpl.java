@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -37,5 +40,16 @@ public class ReviewServiceImpl implements ReviewService {
     public void deleteReview(Long reviewId) {
         reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewException(ErrorStatus.REVIEW_NOT_FOUND));
         reviewRepository.deleteById(reviewId);
+    }
+
+    @Override
+    public List<ReviewResponseDTO> findAll() {
+        List<Review> all = reviewRepository.findAll();
+        List<ReviewResponseDTO> responseDTOS = new ArrayList<>();
+        for (Review review : all) {
+            ReviewResponseDTO responseDTO = new ReviewResponseDTO(review);
+            responseDTOS.add(responseDTO);
+        }
+        return responseDTOS;
     }
 }

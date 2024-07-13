@@ -1,9 +1,13 @@
 package com.koview.koview_server.member.domain;
 
 import com.koview.koview_server.global.common.BaseTimeEntity;
+import com.koview.koview_server.review.domain.Review;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,6 +35,9 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private RoleType role; // 권한
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviewList = new ArrayList<>();
 
     /* 패스워드 암호화 관련 */
     public void encodePassword(PasswordEncoder passwordEncoder){

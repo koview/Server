@@ -11,7 +11,6 @@ import lombok.Getter;
 public class SignupResponseDTO {
     private final Long id;
     private final String email;
-    private final String loginPw;
     private final String nickname;
     private final int age;
 
@@ -19,7 +18,6 @@ public class SignupResponseDTO {
     public SignupResponseDTO(Member member) {
         this.id = member.getId();
         this.email = member.getEmail();
-        this.loginPw = member.getLoginPw();
         this.nickname = member.getNickname();
         this.age = member.getAge();
     }

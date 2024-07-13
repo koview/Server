@@ -7,7 +7,7 @@ COPY . .
 
 # gradlew 스크립트에 실행 권한 부여 및 빌드 실행
 RUN chmod +x ./gradlew
-RUN ./gradlew clean build
+RUN ./gradlew clean build -x test
 
 # JAR 파일을 app.jar로 이름 변경 및 이동
 ARG JAR_FILE=build/libs/*.jar

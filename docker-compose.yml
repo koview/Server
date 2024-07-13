@@ -25,10 +25,10 @@ services:
     depends_on:
       - kodb
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://kodb:3306/kodb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+      DOCKER_RDS_URL: ${DOCKER_RDS_URL}
+      DOCKER_RDS_USERNAME: root
+      DOCKER_RDS_PASSWORD: root
       SPRING_DATASOURCE_DRIVER: com.mysql.cj.jdbc.Driver
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}

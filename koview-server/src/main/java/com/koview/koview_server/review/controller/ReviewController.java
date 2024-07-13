@@ -36,4 +36,10 @@ public class ReviewController {
     public ApiResult<?> getAllReviews() {
         return ApiResult.onSuccess(reviewService.findAll());
     }
+
+    @GetMapping("/{reviewId}")
+    @Operation(description = "리뷰 상세 조회")
+    public ApiResult<ReviewResponseDTO> getReview(@PathVariable Long reviewId) {
+        return ApiResult.onSuccess(reviewService.findById(reviewId));
+    }
 }

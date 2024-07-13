@@ -73,6 +73,24 @@ class ReviewServiceImplTest {
     @DisplayName("리뷰 삭제")
     void deleteReview() {
         // Given
+        ReviewRequestDTO requestDTO = ReviewRequestDTO.builder()
+                .content("This is a review")
+                .build();
+
+        Member member = Member.builder()
+                .id(1L)
+                .email("test@example.com")
+                .build();
+
+        Review review = Review.builder()
+                .id(1L)
+                .content(requestDTO.getContent())
+                .member(member)
+                .build();
+
+        reviewRepository.save(review);
+
+        // Given
         Long reviewId = 1L;
 
         // When
@@ -101,5 +119,26 @@ class ReviewServiceImplTest {
         assertEquals(reviews.get(0).getContent(), responseDTOS.get(0).getContent());
         assertEquals(reviews.get(1).getContent(), responseDTOS.get(1).getContent());
         verify(reviewRepository, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("리뷰 아이디로 조회")
+    void findById() {
+        // Given
+        Long reviewId = 1L;
+        Review review = Review.builder()
+                .id(reviewId)
+                .content("Review Content")
+                .build();
+
+        when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
+
+        // When
+        ReviewResponseDTO responseDTO = reviewService.findById(reviewId);
+
+        // Then
+        assertNotNull(responseDTO);
+        assertEquals(review.getContent(), responseDTO.getContent());
+        verify(reviewRepository, times(1)).findById(reviewId);
     }
 }

@@ -52,4 +52,10 @@ public class ReviewServiceImpl implements ReviewService {
         }
         return responseDTOS;
     }
+
+    @Override
+    public ReviewResponseDTO findById(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewException(ErrorStatus.REVIEW_NOT_FOUND));
+        return new ReviewResponseDTO(review);
+    }
 }

@@ -2,6 +2,7 @@ package com.koview.koview_server.review.service;
 
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import com.koview.koview_server.global.apiPayload.exception.MemberException;
+import com.koview.koview_server.global.apiPayload.exception.ReviewException;
 import com.koview.koview_server.global.security.util.SecurityUtil;
 import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
@@ -30,5 +31,11 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.save(review);
 
         return new ReviewResponseDTO(review);
+    }
+
+    @Override
+    public void deleteReview(Long reviewId) {
+        reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewException(ErrorStatus.REVIEW_NOT_FOUND));
+        reviewRepository.deleteById(reviewId);
     }
 }

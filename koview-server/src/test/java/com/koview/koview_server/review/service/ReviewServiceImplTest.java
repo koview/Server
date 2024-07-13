@@ -66,4 +66,17 @@ class ReviewServiceImplTest {
         assertEquals(review.getContent(), responseDTO.getContent());
         verify(reviewRepository, times(1)).save(any(Review.class));
     }
+
+    @Test
+    @DisplayName("리뷰 삭제")
+    void deleteReview() {
+        // Given
+        Long reviewId = 1L;
+
+        // When
+        reviewService.deleteReview(reviewId);
+
+        // Then
+        verify(reviewRepository, times(1)).deleteById(reviewId);
+    }
 }

@@ -6,4 +6,5 @@ import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
 public interface ReviewService {
 
     ReviewResponseDTO createReview(ReviewRequestDTO requestDTO);
+    void deleteReview(Long reviewId);
 }

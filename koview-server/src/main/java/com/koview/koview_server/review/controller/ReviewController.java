@@ -23,4 +23,11 @@ public class ReviewController {
         ReviewResponseDTO responseDTO = reviewService.createReview(requestDTO);
         return ApiResult.onSuccess(responseDTO);
     }
+
+    @DeleteMapping("/{reviewId}/delete")
+    @Operation(description = "리뷰 삭제")
+    public ApiResult<?> deleteReview(@PathVariable Long reviewId) {
+        reviewService.deleteReview(reviewId);
+        return ApiResult.onSuccess();
+    }
 }

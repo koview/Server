@@ -10,8 +10,8 @@ services:
       MYSQL_DATABASE: kodb
     ports:
       - 4000:3306
-    # volumes:
-      # - ./mysql/store:/var/lib/mysql
+    volumes:
+      - ./mysql/store:/var/lib/mysql
     networks:
       - network
 

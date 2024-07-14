@@ -33,4 +33,11 @@ public class MypageController {
         reviewService.deleteMyReview(reviewId);
         return ApiResult.onSuccess();
     }
+
+    @DeleteMapping("/myreviews/delete")
+    @Operation(description = "나의 리뷰 리스트 삭제")
+    public ApiResult<?> deleteReview(@RequestBody ReviewRequestDTO.ReviewIdListDTO requestDTO) {
+        reviewService.deleteMyReviewList(requestDTO);
+        return ApiResult.onSuccess();
+    }
 }

@@ -13,33 +13,32 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/review")
 @Tag(name = "Review", description = "Review API")
 public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("/create")
+    @PostMapping("/review/create")
     @Operation(description = "리뷰 등록")
     public ApiResult<ReviewResponseDTO> createReview(@RequestBody ReviewRequestDTO requestDTO) {
         ReviewResponseDTO responseDTO = reviewService.createReview(requestDTO);
         return ApiResult.onSuccess(responseDTO);
     }
 
-    @DeleteMapping("/{reviewId}/delete")
+    @DeleteMapping("/reviews/{reviewId}/delete")
     @Operation(description = "리뷰 삭제")
     public ApiResult<?> deleteReview(@PathVariable Long reviewId) {
         reviewService.deleteReview(reviewId);
         return ApiResult.onSuccess();
     }
 
-    @GetMapping
+    @GetMapping("/reviews")
     @Operation(description = "리뷰 전체 조회")
     public ApiResult<List<ReviewResponseDTO>> getAllReviews() {
         return ApiResult.onSuccess(reviewService.findAll());
     }
 
-    @GetMapping("/{reviewId}")
+    @GetMapping("/reviews/{reviewId}")
     @Operation(description = "리뷰 상세 조회")
     public ApiResult<ReviewResponseDTO> getReview(@PathVariable Long reviewId) {
         return ApiResult.onSuccess(reviewService.findById(reviewId));

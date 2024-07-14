@@ -32,6 +32,13 @@ public class ReviewController {
         return ApiResult.onSuccess();
     }
 
+    @DeleteMapping("/reviews/delete")
+    @Operation(description = "리뷰 리스트 삭제")
+    public ApiResult<?> deleteReview(@RequestBody ReviewRequestDTO.ReviewIdListDTO requestDTO) {
+        reviewService.deleteReviewList(requestDTO);
+        return ApiResult.onSuccess();
+    }
+
     @GetMapping("/reviews")
     @Operation(description = "리뷰 전체 조회")
     public ApiResult<List<ReviewResponseDTO>> getAllReviews() {

@@ -8,6 +8,9 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -34,12 +37,16 @@ public class SignupRequestDTO {
     @Schema(description = "회원 나이", example = "20")
     private int age;
 
+    @Schema(description = "사용자 선호 쇼핑몰 ID 리스트", example = "[Amazon, eBay, AliExpress, Walmart, Target]")
+    private List<String> shopName;
+
     public Member toEntity() {
         return Member.builder()
                 .email(email)
                 .loginPw(loginPw)
                 .nickname(nickname)
                 .age(age)
+                .memberLikedShopList(new ArrayList<>())
                 .build();
     }
 }

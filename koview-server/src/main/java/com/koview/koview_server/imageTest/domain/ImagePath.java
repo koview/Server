@@ -13,7 +13,6 @@ public class ImagePath extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
     @Column(unique = true)
     private String url;
 }

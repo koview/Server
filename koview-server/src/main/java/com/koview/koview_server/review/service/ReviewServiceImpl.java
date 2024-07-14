@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +57,25 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewResponseDTO findById(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewException(ErrorStatus.REVIEW_NOT_FOUND));
         return new ReviewResponseDTO(review);
+    }
+
+    @Override
+    public List<ReviewResponseDTO> findAllByMember() {
+        Member member = memberRepository.findByEmail(SecurityUtil.getEmail()).orElseThrow(
+                () -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        List<Review> all = reviewRepository.findAllByMember(member);
+        List<ReviewResponseDTO> responseDTOS = new ArrayList<>();
+
+        for (Review review : all) {
+            ReviewResponseDTO responseDTO = new ReviewResponseDTO(review);
+            responseDTOS.add(responseDTO);
+        }
+        return responseDTOS;
+    }
+
+    @Override
+    public void deleteMyReview(Long reviewId) {
+        reviewRepository.deleteById(reviewId);
     }
 }

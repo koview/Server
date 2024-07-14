@@ -1,7 +1,9 @@
 package com.koview.koview_server.member.domain;
 
 import com.koview.koview_server.global.common.BaseTimeEntity;
+import com.koview.koview_server.memberLikedShop.domain.MemberLikedShop;
 import com.koview.koview_server.review.domain.Review;
+import com.koview.koview_server.shop.domain.Shop;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,6 +41,9 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviewList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MemberLikedShop> memberLikedShopList = new ArrayList<>();
+
     /* 패스워드 암호화 관련 */
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.loginPw = passwordEncoder.encode(loginPw);
@@ -47,5 +52,15 @@ public class Member extends BaseTimeEntity {
     /* 권한 부여 */
     public void addMemberAuthority() {
         this.role = RoleType.USER;
+    }
+
+    public void addMemberLikedShops(List<Shop> shops) {
+        for (Shop shop : shops) {
+            MemberLikedShop memberLikedShop = MemberLikedShop.builder()
+                    .member(this)
+                    .shop(shop)
+                    .build();
+            this.memberLikedShopList.add(memberLikedShop);
+        }
     }
 }

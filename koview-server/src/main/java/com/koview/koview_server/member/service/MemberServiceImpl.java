@@ -12,6 +12,8 @@ import com.koview.koview_server.member.domain.dto.SignupRequestDTO;
 import com.koview.koview_server.member.domain.dto.SignupResponseDTO;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.member.repository.RefreshTokenRepository;
+import com.koview.koview_server.shop.domain.Shop;
+import com.koview.koview_server.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -31,6 +34,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final ShopRepository shopRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -50,6 +54,9 @@ public class MemberServiceImpl implements MemberService {
         Member member = signupRequestDTO.toEntity();
         member.addMemberAuthority();
         member.encodePassword(passwordEncoder);
+
+        List<Shop> memberLikedShops = shopRepository.findAllByShopNameIn(signupRequestDTO.getShopName());
+        member.addMemberLikedShops(memberLikedShops);
         save(member);
 
         return new SignupResponseDTO(member);

@@ -19,7 +19,7 @@ public class ReviewController {
 
     @PostMapping("/create")
     @Operation(description = "리뷰 등록")
-    public ApiResult<ReviewResponseDTO> createReview(ReviewRequestDTO requestDTO) {
+    public ApiResult<ReviewResponseDTO> createReview(@RequestBody ReviewRequestDTO requestDTO) {
         ReviewResponseDTO responseDTO = reviewService.createReview(requestDTO);
         return ApiResult.onSuccess(responseDTO);
     }

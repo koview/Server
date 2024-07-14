@@ -22,7 +22,7 @@ public class MypageController {
 
     @GetMapping("/myreview")
     @Operation(description = "나의 리뷰 전체 조회")
-    public ApiResult<?> findAllMyReview() {
+    public ApiResult<List<ReviewResponseDTO>> findAllMyReview() {
         List<ReviewResponseDTO> responseDTOs = reviewService.findAllByMember();
         return ApiResult.onSuccess(responseDTOs);
     }

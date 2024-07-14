@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/review")
@@ -33,7 +35,7 @@ public class ReviewController {
 
     @GetMapping
     @Operation(description = "리뷰 전체 조회")
-    public ApiResult<?> getAllReviews() {
+    public ApiResult<List<ReviewResponseDTO>> getAllReviews() {
         return ApiResult.onSuccess(reviewService.findAll());
     }
 

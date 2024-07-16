@@ -45,9 +45,9 @@ public class ReviewController {
         return ApiResult.onSuccess(reviewService.findAll());
     }
 
-    @GetMapping("/reviews/{reviewId}")
+    @GetMapping("/reviews/detail")
     @Operation(description = "리뷰 상세 조회")
-    public ApiResult<ReviewResponseDTO> getReview(@PathVariable Long reviewId) {
+    public ApiResult<ReviewResponseDTO> getReview(@RequestParam("reviewId") Long reviewId) {
         return ApiResult.onSuccess(reviewService.findById(reviewId));
     }
 }

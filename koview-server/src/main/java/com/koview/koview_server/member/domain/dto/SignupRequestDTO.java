@@ -38,7 +38,7 @@ public class SignupRequestDTO {
     private int age;
 
     @Schema(description = "사용자 선호 쇼핑몰 ID 리스트", example = "[1, 2, 3]")
-    private List<Long> shopId;
+    private List<Long> shopIdList;
 
     public Member toEntity() {
         return Member.builder()

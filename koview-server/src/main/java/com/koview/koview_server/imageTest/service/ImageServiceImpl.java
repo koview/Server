@@ -42,7 +42,7 @@ public class ImageServiceImpl {
     }
     @Transactional
     public String deleteReview(Long imageId) {
-        ImagePath imagePath=imagePathRepository.findById(imageId).orElseThrow(()->new GeneralException(ErrorStatus.REVIEW_IMAGE_NOT_FOUND));
+        ImagePath imagePath=imagePathRepository.findById(imageId).orElseThrow(()->new GeneralException(ErrorStatus.IMAGE_NOT_FOUND));
         s3Manager.deleteFile(imagePath.getUrl());
         imagePathRepository.delete(imagePath);
 

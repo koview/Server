@@ -20,6 +20,7 @@ public class ProductConverter {
                 .status(product.getStatus())
                 .productImageUrls(productImages)
                 .purchaseLinkList(purchaseLinkList)
+                .category(product.getCategory())
                 .build();
     }
     public static ProductResponseDTO.ProductSlice toSliceDTO(Slice<Product> productSlice,

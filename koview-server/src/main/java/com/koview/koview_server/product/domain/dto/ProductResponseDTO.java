@@ -2,6 +2,7 @@ package com.koview.koview_server.product.domain.dto;
 
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
 import com.koview.koview_server.global.common.purchaseLink.PurchaseLinkResponseDTO;
+import com.koview.koview_server.product.domain.Category;
 import com.koview.koview_server.product.domain.StatusType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,7 @@ public class ProductResponseDTO {
     public static class Single{
         private Long productId;
         private String productName;
+        private Category category;
         private LocalDate restrictedDate;
         private StatusType status;
         private List<ImageResponseDTO> productImageUrls;

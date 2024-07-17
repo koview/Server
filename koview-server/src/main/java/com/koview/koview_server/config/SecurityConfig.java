@@ -29,7 +29,8 @@ public class SecurityConfig {
                 // JWT를 사용하기 때문에 세션을 사용하지 않음
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui/**","/v3/api-docs/**", "/member/**", "/image/**").permitAll()
+                        .requestMatchers("/swagger-ui/**","/v3/api-docs/**", "/member/**", "/image/**",
+                                "/shops", "/reviews", "/reviews/{reviewId}","/products", "/categories").permitAll()
                         .anyRequest().authenticated()
                 )
 

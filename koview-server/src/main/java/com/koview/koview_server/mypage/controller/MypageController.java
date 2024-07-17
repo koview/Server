@@ -20,17 +20,24 @@ public class MypageController {
 
     private final ReviewService reviewService;
 
-    @GetMapping("/myreview")
+    @GetMapping("/myreviews")
     @Operation(description = "나의 리뷰 전체 조회")
-    public ApiResult<?> findAllMyReview() {
+    public ApiResult<List<ReviewResponseDTO>> findAllMyReview() {
         List<ReviewResponseDTO> responseDTOs = reviewService.findAllByMember();
         return ApiResult.onSuccess(responseDTOs);
     }
 
-    @DeleteMapping("/myreview/{reviewId}/delete")
+    @DeleteMapping("/myreviews/{reviewId}/delete")
     @Operation(description = "나의 리뷰 삭제")
     public ApiResult<?> deleteMyReview(@PathVariable Long reviewId) {
         reviewService.deleteMyReview(reviewId);
+        return ApiResult.onSuccess();
+    }
+
+    @DeleteMapping("/myreviews/delete")
+    @Operation(description = "나의 리뷰 리스트 삭제")
+    public ApiResult<?> deleteReview(@RequestBody ReviewRequestDTO.ReviewIdListDTO requestDTO) {
+        reviewService.deleteMyReviewList(requestDTO);
         return ApiResult.onSuccess();
     }
 }

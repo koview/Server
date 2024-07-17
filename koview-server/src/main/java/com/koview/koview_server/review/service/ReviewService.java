@@ -9,8 +9,10 @@ public interface ReviewService {
 
     ReviewResponseDTO createReview(ReviewRequestDTO requestDTO);
     void deleteReview(Long reviewId);
+    void deleteReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO);
     List<ReviewResponseDTO> findAll();
     ReviewResponseDTO findById(Long reviewId);
     List<ReviewResponseDTO> findAllByMember();
     void deleteMyReview(Long reviewId);
+    void deleteMyReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO);
 }

@@ -43,6 +43,13 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public void deleteReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO) {
+        for (Long reviewId : reviewIdListDTO.getReviewIdList()) {
+            reviewRepository.deleteById(reviewId);
+        }
+    }
+
+    @Override
     public List<ReviewResponseDTO> findAll() {
         List<Review> all = reviewRepository.findAll();
         List<ReviewResponseDTO> responseDTOS = new ArrayList<>();
@@ -77,5 +84,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteMyReview(Long reviewId) {
         reviewRepository.deleteById(reviewId);
+    }
+
+    @Override
+    public void deleteMyReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO) {
+        for (Long reviewId : reviewIdListDTO.getReviewIdList()) {
+            reviewRepository.deleteById(reviewId);
+        }
     }
 }

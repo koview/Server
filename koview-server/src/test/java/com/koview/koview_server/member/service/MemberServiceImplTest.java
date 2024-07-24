@@ -11,6 +11,8 @@ import com.koview.koview_server.member.domain.dto.SignupRequestDTO;
 import com.koview.koview_server.member.domain.dto.SignupResponseDTO;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.member.repository.RefreshTokenRepository;
+import com.koview.koview_server.shop.domain.Shop;
+import com.koview.koview_server.shop.repository.ShopRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,6 +39,9 @@ class MemberServiceImplTest {
 
     @Mock
     private RefreshTokenRepository refreshTokenRepository;
+
+    @Mock
+    private ShopRepository shopRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -63,19 +69,26 @@ class MemberServiceImplTest {
                 .loginPw("password")
                 .nickname("Test User")
                 .age(20)
+                .shopIdList(List.of(1L, 2L))  // shopIdList 추가
                 .build();
 
         Member savedMember = Member.builder()
                 .id(1L)
                 .email("test@example.com")
-                .loginPw("password")
+                .loginPw("encodedPassword")
                 .nickname("Test User")
                 .age(20)
                 .role(RoleType.USER)
                 .build();
 
+        List<Shop> likedShops = List.of(
+                Shop.builder().id(1L).shopName("Shop 1").build(),
+                Shop.builder().id(2L).shopName("Shop 2").build()
+        );
+
         when(passwordEncoder.encode(any())).thenReturn("encodedPassword");
         when(memberRepository.save(any())).thenReturn(savedMember);
+        when(shopRepository.findAllByIdIn(any())).thenReturn(likedShops);
 
         // When
         SignupResponseDTO responseDTO = memberService.createMember(requestDTO);

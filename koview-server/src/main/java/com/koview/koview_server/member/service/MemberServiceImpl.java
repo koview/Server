@@ -51,6 +51,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public SignupResponseDTO createMember(SignupRequestDTO signupRequestDTO) {
+        checkDuplicateEmail(signupRequestDTO);
+        checkDuplicateNickname(signupRequestDTO);
+
         Member member = signupRequestDTO.toEntity();
         member.addMemberAuthority();
         member.encodePassword(passwordEncoder);
@@ -60,6 +63,18 @@ public class MemberServiceImpl implements MemberService {
         save(member);
 
         return new SignupResponseDTO(member);
+    }
+
+    public void checkDuplicateEmail(SignupRequestDTO signupRequestDTO) {
+        if (memberRepository.existsByEmail(signupRequestDTO.getEmail())) {
+            throw new MemberException(ErrorStatus.MEMBER_EMAIL_ALREADY_EXISTS);
+        }
+    }
+
+    public void checkDuplicateNickname(SignupRequestDTO signupRequestDTO) {
+        if (memberRepository.existsByNickname(signupRequestDTO.getNickname())) {
+            throw new MemberException(ErrorStatus.MEMBER_NAME_ALREADY_EXISTS);
+        }
     }
 
     @Override

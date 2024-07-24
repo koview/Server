@@ -4,12 +4,9 @@ import com.koview.koview_server.global.apiPayload.code.BaseErrorCode;
 import lombok.Getter;
 
 @Getter
-public class MemberException extends RuntimeException {
-    private final BaseErrorCode errorCode;
-
-    public MemberException(BaseErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.errorCode = errorCode;
+public class MemberException extends GeneralException {
+    public MemberException(BaseErrorCode code) {
+        super(code);
     }
 }
 

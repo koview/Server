@@ -17,7 +17,10 @@ import java.util.List;
 public class ReviewRequestDTO {
 
     @NotBlank
+    @Schema(description = "리뷰 내용", example = "리뷰 내용 테스트")
     private String content;
+
+    @Schema(description = "이미지 ID 리스트", example = "[1, 2, 3]")
     private List<Long> imagePathIdList;
 
     public Review toEntity() {

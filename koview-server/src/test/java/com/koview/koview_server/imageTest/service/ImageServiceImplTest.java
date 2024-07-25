@@ -1,6 +1,7 @@
 package com.koview.koview_server.imageTest.service;
 
 import com.koview.koview_server.global.s3.AmazonS3Manager;
+import com.koview.koview_server.global.common.image.ImageResponseDTO;
 import com.koview.koview_server.imageTest.domain.ImagePath;
 import com.koview.koview_server.imageTest.repository.ImagePathRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +53,7 @@ class ImageServiceImplTest {
         when(imagePathRepository.save(any(ImagePath.class))).thenReturn(imagePath);
 
         // When
-        ImagePath result = imageService.createReview(file);
+        ImageResponseDTO result = imageService.createReview(file);
 
         // Then
         assertNotNull(result);
@@ -79,7 +80,7 @@ class ImageServiceImplTest {
         when(imagePathRepository.save(any(ImagePath.class))).thenReturn(imagePath1, imagePath2);
 
         // When
-        List<ImagePath> results = imageService.createReviews(files);
+        List<ImageResponseDTO> results = imageService.createReviews(files);
 
         // Then
         assertNotNull(results);

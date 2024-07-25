@@ -12,12 +12,13 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Schema(description = "Review Create Request")
 public class ReviewRequestDTO {
 
     @NotBlank
     private String content;
+    private List<Long> imagePathIdList;
 
     public Review toEntity() {
         return Review.builder()

@@ -7,10 +7,11 @@ import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
 import com.koview.koview_server.review.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,13 +43,13 @@ public class ReviewController {
 
     @GetMapping("/reviews")
     @Operation(description = "리뷰 전체 조회(이미지 2개 제한)")
-    public ApiResult<List<LimitedReviewResponseDTO>> getAllReviews() {
-        return ApiResult.onSuccess(reviewService.findAllWithLimitedImages());
+    public ApiResult<Slice<LimitedReviewResponseDTO>> getAllReviews(@RequestParam(defaultValue = "0") int page) {
+        return ApiResult.onSuccess(reviewService.findAllWithLimitedImages(PageRequest.of(page, 20)));
     }
 
     @GetMapping("/reviews/detail")
     @Operation(description = "리뷰 상세 조회")
-    public ApiResult<List<ReviewResponseDTO>> getReview() {
-        return ApiResult.onSuccess(reviewService.findAll());
+    public ApiResult<Slice<ReviewResponseDTO>> getReview(@RequestParam(defaultValue = "0") int page) {
+        return ApiResult.onSuccess(reviewService.findAll(PageRequest.of(page, 20)));
     }
 }

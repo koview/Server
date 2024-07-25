@@ -2,7 +2,6 @@ package com.koview.koview_server.review.service;
 
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import com.koview.koview_server.global.apiPayload.exception.MemberException;
-import com.koview.koview_server.global.apiPayload.exception.ReviewException;
 import com.koview.koview_server.global.security.util.SecurityUtil;
 import com.koview.koview_server.imageTest.domain.ImagePath;
 import com.koview.koview_server.imageTest.repository.ImagePathRepository;
@@ -14,12 +13,14 @@ import com.koview.koview_server.review.domain.dto.ReviewRequestDTO;
 import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
 import com.koview.koview_server.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -60,25 +61,25 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<LimitedReviewResponseDTO> findAllWithLimitedImages() {
-        List<Review> all = reviewRepository.findAll();
+    public Slice<LimitedReviewResponseDTO> findAllWithLimitedImages(Pageable pageable) {
+        Slice<Review> all = reviewRepository.findAll(pageable);
         List<LimitedReviewResponseDTO> responseDTOS = new ArrayList<>();
         for (Review review : all) {
             LimitedReviewResponseDTO responseDTO = new LimitedReviewResponseDTO(review);
             responseDTOS.add(responseDTO);
         }
-        return responseDTOS;
+        return new SliceImpl<>(responseDTOS, pageable, all.hasNext());
     }
 
     @Override
-    public List<ReviewResponseDTO> findAll() {
-        List<Review> all = reviewRepository.findAll();
+    public Slice<ReviewResponseDTO> findAll(Pageable pageable) {
+        Slice<Review> all = reviewRepository.findAll(pageable);
         List<ReviewResponseDTO> responseDTOS = new ArrayList<>();
         for (Review review : all) {
             ReviewResponseDTO responseDTO = new ReviewResponseDTO(review);
             responseDTOS.add(responseDTO);
         }
-        return responseDTOS;
+        return new SliceImpl<>(responseDTOS, pageable, all.hasNext());
     }
 
     private Member validateMember() {

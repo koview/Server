@@ -1,6 +1,7 @@
 package com.koview.koview_server.review.controller;
 
 import com.koview.koview_server.global.apiPayload.ApiResult;
+import com.koview.koview_server.review.domain.dto.LimitedReviewResponseDTO;
 import com.koview.koview_server.review.domain.dto.ReviewRequestDTO;
 import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
 import com.koview.koview_server.review.service.ReviewService;
@@ -40,14 +41,14 @@ public class ReviewController {
     }
 
     @GetMapping("/reviews")
-    @Operation(description = "리뷰 전체 조회")
-    public ApiResult<List<ReviewResponseDTO>> getAllReviews() {
-        return ApiResult.onSuccess(reviewService.findAll());
+    @Operation(description = "리뷰 전체 조회(이미지 2개 제한)")
+    public ApiResult<List<LimitedReviewResponseDTO>> getAllReviews() {
+        return ApiResult.onSuccess(reviewService.findAllWithLimitedImages());
     }
 
-    @GetMapping("/reviews/{reviewId}")
+    @GetMapping("/reviews/detail")
     @Operation(description = "리뷰 상세 조회")
-    public ApiResult<ReviewResponseDTO> getReview(@PathVariable Long reviewId) {
-        return ApiResult.onSuccess(reviewService.findById(reviewId));
+    public ApiResult<List<ReviewResponseDTO>> getReview() {
+        return ApiResult.onSuccess(reviewService.findAll());
     }
 }

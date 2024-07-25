@@ -4,9 +4,12 @@ import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import com.koview.koview_server.global.apiPayload.exception.MemberException;
 import com.koview.koview_server.global.apiPayload.exception.ReviewException;
 import com.koview.koview_server.global.security.util.SecurityUtil;
+import com.koview.koview_server.imageTest.domain.ImagePath;
+import com.koview.koview_server.imageTest.repository.ImagePathRepository;
 import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.review.domain.Review;
+import com.koview.koview_server.review.domain.dto.LimitedReviewResponseDTO;
 import com.koview.koview_server.review.domain.dto.ReviewRequestDTO;
 import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
 import com.koview.koview_server.review.repository.ReviewRepository;
@@ -25,15 +28,22 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final MemberRepository memberRepository;
     private final ReviewRepository reviewRepository;
+    private final ImagePathRepository imagePathRepository;
 
     @Override
     public ReviewResponseDTO createReview(ReviewRequestDTO requestDTO) {
-        Member member = memberRepository.findByEmail(SecurityUtil.getEmail()).orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        Member member = validateMember();
 
         Review review = requestDTO.toEntity();
         review.setMember(member);
-        reviewRepository.save(review);
 
+        List<ImagePath> images = imagePathRepository.findAllById(requestDTO.getImagePathIdList());
+        for (ImagePath image : images) {
+            image.addReview(review);
+        }
+        review.setImagePathList(images);
+
+        reviewRepository.save(review);
         return new ReviewResponseDTO(review);
     }
 
@@ -50,6 +60,17 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public List<LimitedReviewResponseDTO> findAllWithLimitedImages() {
+        List<Review> all = reviewRepository.findAll();
+        List<LimitedReviewResponseDTO> responseDTOS = new ArrayList<>();
+        for (Review review : all) {
+            LimitedReviewResponseDTO responseDTO = new LimitedReviewResponseDTO(review);
+            responseDTOS.add(responseDTO);
+        }
+        return responseDTOS;
+    }
+
+    @Override
     public List<ReviewResponseDTO> findAll() {
         List<Review> all = reviewRepository.findAll();
         List<ReviewResponseDTO> responseDTOS = new ArrayList<>();
@@ -60,36 +81,8 @@ public class ReviewServiceImpl implements ReviewService {
         return responseDTOS;
     }
 
-    @Override
-    public ReviewResponseDTO findById(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewException(ErrorStatus.REVIEW_NOT_FOUND));
-        return new ReviewResponseDTO(review);
-    }
-
-    @Override
-    public List<ReviewResponseDTO> findAllByMember() {
-        Member member = memberRepository.findByEmail(SecurityUtil.getEmail()).orElseThrow(
+    private Member validateMember() {
+        return memberRepository.findByEmail(SecurityUtil.getEmail()).orElseThrow(
                 () -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-
-        List<Review> all = reviewRepository.findAllByMember(member);
-        List<ReviewResponseDTO> responseDTOS = new ArrayList<>();
-
-        for (Review review : all) {
-            ReviewResponseDTO responseDTO = new ReviewResponseDTO(review);
-            responseDTOS.add(responseDTO);
-        }
-        return responseDTOS;
-    }
-
-    @Override
-    public void deleteMyReview(Long reviewId) {
-        reviewRepository.deleteById(reviewId);
-    }
-
-    @Override
-    public void deleteMyReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO) {
-        for (Long reviewId : reviewIdListDTO.getReviewIdList()) {
-            reviewRepository.deleteById(reviewId);
-        }
     }
 }

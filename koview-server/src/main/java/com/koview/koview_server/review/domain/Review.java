@@ -1,16 +1,20 @@
 package com.koview.koview_server.review.domain;
 
 import com.koview.koview_server.global.common.BaseTimeEntity;
+import com.koview.koview_server.imageTest.domain.ImagePath;
 import com.koview.koview_server.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Review extends BaseTimeEntity {
 
     @Id
@@ -24,4 +28,7 @@ public class Review extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ImagePath> imagePathList = new ArrayList<>();
 }

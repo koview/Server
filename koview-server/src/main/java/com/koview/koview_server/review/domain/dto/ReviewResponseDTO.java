@@ -22,8 +22,9 @@ public class ReviewResponseDTO {
         this.id = review.getId();
         this.content = review.getContent();
         this.writer = review.getMember().getNickname();
-        this.imagePathIdList = review.getImagePathList().stream()
-                .map(ImagePath::getId)
-                .collect(Collectors.toList());
+        this.imagePathIdList = review.getImagePathList() != null ?
+                review.getImagePathList().stream()
+                        .map(ImagePath::getId)
+                        .collect(Collectors.toList()) : null;
     }
 }

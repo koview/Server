@@ -8,9 +8,9 @@ import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,16 +22,14 @@ public class MypageController {
 
     @GetMapping("/myreviews")
     @Operation(description = "나의 리뷰 전체 조회")
-    public ApiResult<List<LimitedReviewResponseDTO>> findAllMyReview() {
-        List<LimitedReviewResponseDTO> responseDTOs = mypageService.findAllByMemberWithLimitedImages();
-        return ApiResult.onSuccess(responseDTOs);
+    public ApiResult<Slice<LimitedReviewResponseDTO>> findAllMyReview(@RequestParam(defaultValue = "0") int page) {
+        return ApiResult.onSuccess(mypageService.findAllByMemberWithLimitedImages(PageRequest.of(page, 20)));
     }
 
     @GetMapping("/myreviews/detail")
     @Operation(description = "나의 리뷰 상세 조회")
-    public ApiResult<List<ReviewResponseDTO>> findAllMyReviewDetail() {
-        List<ReviewResponseDTO> responseDTOs = mypageService.findAllByMember();
-        return ApiResult.onSuccess(responseDTOs);
+    public ApiResult<Slice<ReviewResponseDTO>> findAllMyReviewDetail(@RequestParam(defaultValue = "0") int page) {
+        return ApiResult.onSuccess(mypageService.findAllByMember(PageRequest.of(page, 20)));
     }
 
     @DeleteMapping("/myreviews/{reviewId}/delete")

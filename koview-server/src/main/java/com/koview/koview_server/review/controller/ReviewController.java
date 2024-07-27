@@ -54,7 +54,8 @@ public class ReviewController {
     public ApiResult<ReviewResponseDTO.ReviewSlice> getReview(
             @Parameter(description = "페이지 번호(1부터 시작), default: 1")
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size) {
-        return ApiResult.onSuccess(reviewService.findAll(PageRequest.of(page-1, size)));
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam Long clickedReviewId) {
+        return ApiResult.onSuccess(reviewService.findAll(PageRequest.of(page-1, size), clickedReviewId));
     }
 }

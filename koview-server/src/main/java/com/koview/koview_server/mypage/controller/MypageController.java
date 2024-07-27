@@ -34,8 +34,9 @@ public class MypageController {
     public ApiResult<ReviewResponseDTO.ReviewSlice> findAllMyReviewDetail(
             @Parameter(description = "페이지 번호(0부터 시작), default: 0")
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
-        return ApiResult.onSuccess(mypageService.findAllByMember(PageRequest.of(page-1, size)));
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam Long clickedReviewId) {
+        return ApiResult.onSuccess(mypageService.findAllByMember(PageRequest.of(page-1, size), clickedReviewId));
     }
 
     @DeleteMapping("/myreviews/{reviewId}/delete")

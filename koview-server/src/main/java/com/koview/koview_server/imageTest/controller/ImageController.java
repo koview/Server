@@ -1,9 +1,10 @@
 package com.koview.koview_server.imageTest.controller;
 
 import com.koview.koview_server.global.apiPayload.ApiResult;
-import com.koview.koview_server.imageTest.domain.ImagePath;
+import com.koview.koview_server.global.common.image.ImageResponseDTO;
 import com.koview.koview_server.imageTest.domain.dto.ImageTestRequestDTO;
 import com.koview.koview_server.imageTest.service.ImageServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,24 +17,30 @@ import java.util.List;
 public class ImageController {
 
     private final ImageServiceImpl reviewImageService;
-    @PostMapping(value = "/review",consumes = "multipart/form-data")
-    public ApiResult<ImagePath> postReviewImage(@RequestPart MultipartFile image){
 
+    @PostMapping(value = "/review", consumes = "multipart/form-data")
+    public ApiResult<ImageResponseDTO> postReviewImage(@RequestPart MultipartFile image) {
         return ApiResult.onSuccess(reviewImageService.createReview(image));
     }
-    @PostMapping(value = "/reviews",consumes = "multipart/form-data")
-    public ApiResult<List<ImagePath>> postReviewImage(@RequestPart List<MultipartFile> images){
 
+    @PostMapping(value = "/reviews", consumes = "multipart/form-data")
+    public ApiResult<List<ImageResponseDTO>> postReviewImage(@RequestPart List<MultipartFile> images) {
         return ApiResult.onSuccess(reviewImageService.createReviews(images));
     }
-    @DeleteMapping(value="/reviews/{reviewId}")
-    public ApiResult<String> deleteReviewImage(@PathVariable Long reviewId){
 
+    @DeleteMapping(value = "/reviews/{reviewId}")
+    public ApiResult<String> deleteReviewImage(@PathVariable Long reviewId) {
         return ApiResult.onSuccess(reviewImageService.deleteReview(reviewId));
     }
-    @DeleteMapping(value="/reviews")
-    public ApiResult<String> deleteReviewImages(@RequestBody ImageTestRequestDTO.ImageIdListDTO request){
 
+    @DeleteMapping(value = "/reviews")
+    public ApiResult<String> deleteReviewImages(@RequestBody ImageTestRequestDTO.ImageIdListDTO request) {
         return ApiResult.onSuccess(reviewImageService.deleteReviews(request.getImageIdList()));
+    }
+
+    @GetMapping
+    @Operation(description = "이미지 데이터 받아오는 API")
+    public ApiResult<List<ImageResponseDTO>> findAllImages() {
+        return ApiResult.onSuccess(reviewImageService.findAll());
     }
 }

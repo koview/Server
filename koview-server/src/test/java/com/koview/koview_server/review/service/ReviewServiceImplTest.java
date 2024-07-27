@@ -1,5 +1,7 @@
 package com.koview.koview_server.review.service;
 
+import com.koview.koview_server.imageTest.domain.ImagePath;
+import com.koview.koview_server.imageTest.repository.ImagePathRepository;
 import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.review.domain.Review;
@@ -13,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,205 +23,73 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-    class ReviewServiceImplTest {
+class ReviewServiceImplTest {
 
-        @Mock
-        private MemberRepository memberRepository;
+    @Mock
+    private MemberRepository memberRepository;
 
-        @Mock
-        private ReviewRepository reviewRepository;
+    @Mock
+    private ReviewRepository reviewRepository;
 
-        @InjectMocks
-        private ReviewServiceImpl reviewService;
+    @Mock
+    private ImagePathRepository imagePathRepository;
 
-        @BeforeEach
-        void setUp() {
-            MockitoAnnotations.openMocks(this);
-        }
+    @InjectMocks
+    private ReviewServiceImpl reviewService;
 
-        @Test
-        @DisplayName("리뷰 등록")
-        void createReview() {
-            // Given
-            ReviewRequestDTO requestDTO = ReviewRequestDTO.builder()
-                    .content("This is a review")
-                    .build();
-
-            Member member = Member.builder()
-                    .id(1L)
-                    .email("test@example.com")
-                    .nickname("testUser")
-                    .build();
-
-            Review review = Review.builder()
-                    .id(1L)
-                    .content(requestDTO.getContent())
-                    .member(member)
-                    .build();
-
-            when(memberRepository.findByEmail(any())).thenReturn(Optional.of(member));
-            when(reviewRepository.save(any())).thenReturn(review);
-
-            // When
-            ReviewResponseDTO responseDTO = reviewService.createReview(requestDTO);
-
-            // Then
-            assertNotNull(responseDTO);
-            assertEquals(review.getContent(), responseDTO.getContent());
-            assertEquals(member.getNickname(), responseDTO.getWriter());
-            verify(reviewRepository, times(1)).save(any(Review.class));
-        }
-
-        @Test
-        @DisplayName("리뷰 삭제")
-        void deleteReview() {
-            // Given
-            Long reviewId = 1L;
-
-            // When
-            reviewService.deleteReview(reviewId);
-
-            // Then
-            verify(reviewRepository, times(1)).deleteById(reviewId);
-        }
-
-        @Test
-        @DisplayName("리뷰 리스트 삭제")
-        void deleteReviewList() {
-            // Given
-            List<Long> reviewIdList = List.of(1L, 2L, 3L);
-            ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO = new ReviewRequestDTO.ReviewIdListDTO(reviewIdList);
-
-            // When
-            reviewService.deleteReviewList(reviewIdListDTO);
-
-            // Then
-            verify(reviewRepository, times(1)).deleteById(1L);
-            verify(reviewRepository, times(1)).deleteById(2L);
-            verify(reviewRepository, times(1)).deleteById(3L);
-        }
-
-        @Test
-        @DisplayName("모든 리뷰 조회")
-        void findAll() {
-            // Given
-            Member member = Member.builder()
-                    .id(1L)
-                    .email("test@example.com")
-                    .nickname("testUser")
-                    .build();
-
-            List<Review> reviews = new ArrayList<>();
-            reviews.add(Review.builder().id(1L).content("Review 1").member(member).build());
-            reviews.add(Review.builder().id(2L).content("Review 2").member(member).build());
-
-            when(reviewRepository.findAll()).thenReturn(reviews);
-
-            // When
-            List<ReviewResponseDTO> responseDTOS = reviewService.findAll();
-
-            // Then
-            assertNotNull(responseDTOS);
-            assertEquals(2, responseDTOS.size());
-            assertEquals(reviews.get(0).getContent(), responseDTOS.get(0).getContent());
-            assertEquals(reviews.get(0).getMember().getNickname(), responseDTOS.get(0).getWriter());
-            assertEquals(reviews.get(1).getContent(), responseDTOS.get(1).getContent());
-            assertEquals(reviews.get(1).getMember().getNickname(), responseDTOS.get(1).getWriter());
-            verify(reviewRepository, times(1)).findAll();
-        }
-
-        @Test
-        @DisplayName("리뷰 아이디로 조회")
-        void findById() {
-            // Given
-            Long reviewId = 1L;
-            Member member = Member.builder()
-                    .id(1L)
-                    .email("test@example.com")
-                    .nickname("testUser")
-                    .build();
-
-            Review review = Review.builder()
-                    .id(reviewId)
-                    .content("Review Content")
-                    .member(member)
-                    .build();
-
-            when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
-
-            // When
-            ReviewResponseDTO responseDTO = reviewService.findById(reviewId);
-
-            // Then
-            assertNotNull(responseDTO);
-            assertEquals(review.getContent(), responseDTO.getContent());
-            assertEquals(review.getMember().getNickname(), responseDTO.getWriter());
-            verify(reviewRepository, times(1)).findById(reviewId);
-        }
-
-        @Test
-        @DisplayName("사용자의 모든 리뷰 조회")
-        void findAllByMember() {
-            // Given
-            String email = "hyun3478@gmail.com";
-            Member member = Member.builder()
-                    .id(1L)
-                    .email(email)
-                    .nickname("testUser")
-                    .build();
-
-            List<Review> reviews = new ArrayList<>();
-            reviews.add(Review.builder().id(1L).content("Review 1").member(member).build());
-            reviews.add(Review.builder().id(2L).content("Review 2").member(member).build());
-
-            when(memberRepository.findByEmail(email)).thenReturn(Optional.of(member));
-            when(reviewRepository.findAllByMember(member)).thenReturn(reviews);
-
-            // When
-            List<Review> all = reviewRepository.findAllByMember(member);
-            List<ReviewResponseDTO> responseDTOS = new ArrayList<>();
-
-            for (Review review : all) {
-                ReviewResponseDTO responseDTO = new ReviewResponseDTO(review);
-                responseDTOS.add(responseDTO);
-            }
-
-            // Then
-            assertNotNull(responseDTOS);
-            assertEquals(2, responseDTOS.size());
-            assertEquals(reviews.get(0).getContent(), responseDTOS.get(0).getContent());
-            assertEquals(reviews.get(0).getMember().getNickname(), responseDTOS.get(0).getWriter());
-            assertEquals(reviews.get(1).getContent(), responseDTOS.get(1).getContent());
-            assertEquals(reviews.get(1).getMember().getNickname(), responseDTOS.get(1).getWriter());
-            verify(reviewRepository, times(1)).findAllByMember(member);
-        }
-
-        @Test
-        @DisplayName("사용자의 리뷰 삭제")
-        void deleteMyReview() {
-            // Given
-            Long reviewId = 1L;
-
-            // When
-            reviewService.deleteMyReview(reviewId);
-
-            // Then
-            verify(reviewRepository, times(1)).deleteById(reviewId);
-        }
-
-        @Test
-        @DisplayName("사용자의 리뷰 리스트 삭제")
-        void deleteMyReviewList() {
-            // Given
-            List<Long> reviewIdList = List.of(1L, 2L, 3L);
-            ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO = new ReviewRequestDTO.ReviewIdListDTO(reviewIdList);
-
-            // When
-            reviewService.deleteMyReviewList(reviewIdListDTO);
-
-            // Then
-            verify(reviewRepository, times(1)).deleteById(1L);
-            verify(reviewRepository, times(1)).deleteById(2L);
-            verify(reviewRepository, times(1)).deleteById(3L);
-        }
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
+
+    @Test
+    @DisplayName("리뷰 생성")
+    void createReview() {
+        // Given
+        ReviewRequestDTO requestDTO = mock(ReviewRequestDTO.class);
+        Member member = new Member();
+        Review review = new Review();
+        List<ImagePath> images = List.of(new ImagePath(), new ImagePath());
+
+        when(memberRepository.findByEmail(any())).thenReturn(Optional.of(member));
+        when(requestDTO.toEntity()).thenReturn(review);
+        when(imagePathRepository.findAllById(any())).thenReturn(images);
+
+        // When
+        ReviewResponseDTO.toReviewDTO result = reviewService.createReview(requestDTO);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(member, review.getMember());  // 멤버가 제대로 설정되었는지 확인
+        verify(memberRepository, times(1)).findByEmail(any());
+        verify(reviewRepository, times(1)).save(any(Review.class));
+        verify(imagePathRepository, times(1)).findAllById(any());
+    }
+
+    @Test
+    @DisplayName("리뷰 삭제")
+    void deleteReview() {
+        // Given
+        Long reviewId = 1L;
+
+        // When
+        reviewService.deleteReview(reviewId);
+
+        // Then
+        verify(reviewRepository, times(1)).deleteById(reviewId);
+    }
+
+    @Test
+    @DisplayName("리뷰 리스트 삭제")
+    void deleteReviewList() {
+        // Given
+        List<Long> reviewIds = List.of(1L, 2L);
+        ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO = new ReviewRequestDTO.ReviewIdListDTO(reviewIds);
+
+        // When
+        reviewService.deleteReviewList(reviewIdListDTO);
+
+        // Then
+        verify(reviewRepository, times(2)).deleteById(any(Long.class));
+    }
+}

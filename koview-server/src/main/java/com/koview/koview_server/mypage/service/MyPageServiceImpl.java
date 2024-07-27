@@ -1,10 +1,8 @@
-package com.koview.koview_server.review.service;
+package com.koview.koview_server.mypage.service;
 
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import com.koview.koview_server.global.apiPayload.exception.MemberException;
 import com.koview.koview_server.global.security.util.SecurityUtil;
-import com.koview.koview_server.imageTest.domain.ImagePath;
-import com.koview.koview_server.imageTest.repository.ImagePathRepository;
 import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.review.domain.Review;
@@ -24,53 +22,37 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ReviewServiceImpl implements ReviewService {
+public class MyPageServiceImpl implements MypageService {
 
     private final MemberRepository memberRepository;
     private final ReviewRepository reviewRepository;
-    private final ImagePathRepository imagePathRepository;
 
     @Override
-    public ReviewResponseDTO.toReviewDTO createReview(ReviewRequestDTO requestDTO) {
+    public LimitedReviewResponseDTO.ReviewSlice findAllByMemberWithLimitedImages(Pageable pageable) {
         Member member = validateMember();
-
-        Review review = requestDTO.toEntity();
-        review.setMember(member);
-
-        List<ImagePath> images = imagePathRepository.findAllById(requestDTO.getImagePathIdList());
-        for (ImagePath image : images) {
-            image.addReview(review);
-        }
-        review.setImagePathList(images);
-
-        reviewRepository.save(review);
-        return new ReviewResponseDTO.toReviewDTO(review);
-    }
-
-    @Override
-    public void deleteReview(Long reviewId) {
-        reviewRepository.deleteById(reviewId);
-    }
-
-    @Override
-    public void deleteReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO) {
-        for (Long reviewId : reviewIdListDTO.getReviewIdList()) {
-            reviewRepository.deleteById(reviewId);
-        }
-    }
-
-    @Override
-    public LimitedReviewResponseDTO.ReviewSlice findAllWithLimitedImages(Pageable pageable) {
-        Slice<Review> reviewSlice = reviewRepository.findAll(pageable);
+        Slice<Review> reviewSlice = reviewRepository.findAllByMember(member, pageable);
 
         return getLimitedImageReviewSlice(reviewSlice);
     }
 
     @Override
-    public ReviewResponseDTO.ReviewSlice findAll(Pageable pageable, Long clickedReviewId) {
-        Slice<Review> reviewSlice = reviewRepository.findAllWithClickedReviewFirst(clickedReviewId, pageable);
+    public ReviewResponseDTO.ReviewSlice findAllByMember(Pageable pageable, Long clickedReviewId) {
+        Member member = validateMember();
+        Slice<Review> reviewSlice = reviewRepository.findAllByMemberWithClickedReviewFirst(member, clickedReviewId, pageable);
 
         return getReviewSlice(reviewSlice);
+    }
+
+    @Override
+    public void deleteMyReview(Long reviewId) {
+        reviewRepository.deleteById(reviewId);
+    }
+
+    @Override
+    public void deleteMyReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO) {
+        for (Long reviewId : reviewIdListDTO.getReviewIdList()) {
+            reviewRepository.deleteById(reviewId);
+        }
     }
 
     private Member validateMember() {

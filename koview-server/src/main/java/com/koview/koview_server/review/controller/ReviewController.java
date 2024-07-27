@@ -1,15 +1,16 @@
 package com.koview.koview_server.review.controller;
 
 import com.koview.koview_server.global.apiPayload.ApiResult;
+import com.koview.koview_server.review.domain.dto.LimitedReviewResponseDTO;
 import com.koview.koview_server.review.domain.dto.ReviewRequestDTO;
 import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
 import com.koview.koview_server.review.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,8 +21,8 @@ public class ReviewController {
 
     @PostMapping("/review/create")
     @Operation(description = "리뷰 등록")
-    public ApiResult<ReviewResponseDTO> createReview(@RequestBody ReviewRequestDTO requestDTO) {
-        ReviewResponseDTO responseDTO = reviewService.createReview(requestDTO);
+    public ApiResult<ReviewResponseDTO.toReviewDTO> createReview(@RequestBody ReviewRequestDTO requestDTO) {
+        ReviewResponseDTO.toReviewDTO responseDTO = reviewService.createReview(requestDTO);
         return ApiResult.onSuccess(responseDTO);
     }
 
@@ -40,14 +41,21 @@ public class ReviewController {
     }
 
     @GetMapping("/reviews")
-    @Operation(description = "리뷰 전체 조회")
-    public ApiResult<List<ReviewResponseDTO>> getAllReviews() {
-        return ApiResult.onSuccess(reviewService.findAll());
+    @Operation(description = "리뷰 전체 조회(이미지 2개 제한)")
+    public ApiResult<LimitedReviewResponseDTO.ReviewSlice> getAllReviews(
+            @Parameter(description = "페이지 번호(1부터 시작), default: 1")
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ApiResult.onSuccess(reviewService.findAllWithLimitedImages(PageRequest.of(page-1, size)));
     }
 
-    @GetMapping("/reviews/{reviewId}")
+    @GetMapping("/reviews/detail")
     @Operation(description = "리뷰 상세 조회")
-    public ApiResult<ReviewResponseDTO> getReview(@PathVariable Long reviewId) {
-        return ApiResult.onSuccess(reviewService.findById(reviewId));
+    public ApiResult<ReviewResponseDTO.ReviewSlice> getReview(
+            @Parameter(description = "페이지 번호(1부터 시작), default: 1")
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam Long clickedReviewId) {
+        return ApiResult.onSuccess(reviewService.findAll(PageRequest.of(page-1, size), clickedReviewId));
     }
 }

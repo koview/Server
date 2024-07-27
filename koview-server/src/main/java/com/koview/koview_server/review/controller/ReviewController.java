@@ -6,11 +6,10 @@ import com.koview.koview_server.review.domain.dto.ReviewRequestDTO;
 import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
 import com.koview.koview_server.review.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,8 +21,8 @@ public class ReviewController {
 
     @PostMapping("/review/create")
     @Operation(description = "리뷰 등록")
-    public ApiResult<ReviewResponseDTO> createReview(@RequestBody ReviewRequestDTO requestDTO) {
-        ReviewResponseDTO responseDTO = reviewService.createReview(requestDTO);
+    public ApiResult<ReviewResponseDTO.toReviewDTO> createReview(@RequestBody ReviewRequestDTO requestDTO) {
+        ReviewResponseDTO.toReviewDTO responseDTO = reviewService.createReview(requestDTO);
         return ApiResult.onSuccess(responseDTO);
     }
 
@@ -43,13 +42,19 @@ public class ReviewController {
 
     @GetMapping("/reviews")
     @Operation(description = "리뷰 전체 조회(이미지 2개 제한)")
-    public ApiResult<Slice<LimitedReviewResponseDTO>> getAllReviews(@RequestParam(defaultValue = "0") int page) {
-        return ApiResult.onSuccess(reviewService.findAllWithLimitedImages(PageRequest.of(page, 20)));
+    public ApiResult<LimitedReviewResponseDTO.ReviewSlice> getAllReviews(
+            @Parameter(description = "페이지 번호(1부터 시작), default: 1")
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ApiResult.onSuccess(reviewService.findAllWithLimitedImages(PageRequest.of(page-1, size)));
     }
 
     @GetMapping("/reviews/detail")
     @Operation(description = "리뷰 상세 조회")
-    public ApiResult<Slice<ReviewResponseDTO>> getReview(@RequestParam(defaultValue = "0") int page) {
-        return ApiResult.onSuccess(reviewService.findAll(PageRequest.of(page, 20)));
+    public ApiResult<ReviewResponseDTO.ReviewSlice> getReview(
+            @Parameter(description = "페이지 번호(1부터 시작), default: 1")
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ApiResult.onSuccess(reviewService.findAll(PageRequest.of(page-1, size)));
     }
 }

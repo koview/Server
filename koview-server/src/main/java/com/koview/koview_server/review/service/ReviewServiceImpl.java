@@ -9,17 +9,16 @@ import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.review.domain.Review;
 import com.koview.koview_server.review.domain.dto.LimitedReviewResponseDTO;
+import com.koview.koview_server.review.domain.dto.ReviewConverter;
 import com.koview.koview_server.review.domain.dto.ReviewRequestDTO;
 import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
 import com.koview.koview_server.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,7 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ImagePathRepository imagePathRepository;
 
     @Override
-    public ReviewResponseDTO createReview(ReviewRequestDTO requestDTO) {
+    public ReviewResponseDTO.toReviewDTO createReview(ReviewRequestDTO requestDTO) {
         Member member = validateMember();
 
         Review review = requestDTO.toEntity();
@@ -45,7 +44,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setImagePathList(images);
 
         reviewRepository.save(review);
-        return new ReviewResponseDTO(review);
+        return new ReviewResponseDTO.toReviewDTO(review);
     }
 
     @Override
@@ -61,29 +60,33 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Slice<LimitedReviewResponseDTO> findAllWithLimitedImages(Pageable pageable) {
-        Slice<Review> all = reviewRepository.findAll(pageable);
-        List<LimitedReviewResponseDTO> responseDTOS = new ArrayList<>();
-        for (Review review : all) {
-            LimitedReviewResponseDTO responseDTO = new LimitedReviewResponseDTO(review);
-            responseDTOS.add(responseDTO);
-        }
-        return new SliceImpl<>(responseDTOS, pageable, all.hasNext());
+    public LimitedReviewResponseDTO.ReviewSlice findAllWithLimitedImages(Pageable pageable) {
+        Slice<Review> reviewSlice = reviewRepository.findAll(pageable);
+
+        return getLimitedImageReviewSlice(reviewSlice);
     }
 
     @Override
-    public Slice<ReviewResponseDTO> findAll(Pageable pageable) {
-        Slice<Review> all = reviewRepository.findAll(pageable);
-        List<ReviewResponseDTO> responseDTOS = new ArrayList<>();
-        for (Review review : all) {
-            ReviewResponseDTO responseDTO = new ReviewResponseDTO(review);
-            responseDTOS.add(responseDTO);
-        }
-        return new SliceImpl<>(responseDTOS, pageable, all.hasNext());
+    public ReviewResponseDTO.ReviewSlice findAll(Pageable pageable) {
+        Slice<Review> reviewSlice = reviewRepository.findAll(pageable);
+
+        return getReviewSlice(reviewSlice);
     }
 
     private Member validateMember() {
         return memberRepository.findByEmail(SecurityUtil.getEmail()).orElseThrow(
                 () -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+    }
+
+    private LimitedReviewResponseDTO.ReviewSlice getLimitedImageReviewSlice(Slice<Review> reviewSlice) {
+        List<LimitedReviewResponseDTO.Single> reviewList = reviewSlice.stream().map(ReviewConverter::toSingleDto).toList();
+
+        return ReviewConverter.toSliceDto(reviewSlice, reviewList);
+    }
+
+    private ReviewResponseDTO.ReviewSlice getReviewSlice(Slice<Review> reviewSlice) {
+        List<ReviewResponseDTO.Single> reviewList = reviewSlice.stream().map(ReviewConverter::toSingleDTO).toList();
+
+        return ReviewConverter.toSliceDTO(reviewSlice, reviewList);
     }
 }

@@ -4,13 +4,12 @@ import com.koview.koview_server.review.domain.dto.LimitedReviewResponseDTO;
 import com.koview.koview_server.review.domain.dto.ReviewRequestDTO;
 import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 
 public interface ReviewService {
 
-    ReviewResponseDTO createReview(ReviewRequestDTO requestDTO);
+    ReviewResponseDTO.toReviewDTO createReview(ReviewRequestDTO requestDTO);
     void deleteReview(Long reviewId);
     void deleteReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO);
-    Slice<LimitedReviewResponseDTO> findAllWithLimitedImages(Pageable pageable);
-    Slice<ReviewResponseDTO> findAll(Pageable pageable);
+    LimitedReviewResponseDTO.ReviewSlice findAllWithLimitedImages(Pageable pageable);
+    ReviewResponseDTO.ReviewSlice findAll(Pageable pageable);
 }

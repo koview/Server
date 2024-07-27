@@ -9,22 +9,55 @@ import lombok.Getter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter
-@Builder
-@AllArgsConstructor
 public class ReviewResponseDTO {
-    private Long id;
-    private String content;
-    private String writer;
-    private List<Long> imagePathIdList;
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class Single {
 
-    public ReviewResponseDTO(Review review) {
-        this.id = review.getId();
-        this.content = review.getContent();
-        this.writer = review.getMember().getNickname();
-        this.imagePathIdList = review.getImagePathList() != null ?
-                review.getImagePathList().stream()
-                        .map(ImagePath::getId)
-                        .collect(Collectors.toList()) : null;
+        private Long reviewId;
+        private String content;
+        private String writer;
+        private List<Long> imagePathIdList;
+
+        public Single(Review review) {
+            this.reviewId = review.getId();
+            this.content = review.getContent();
+            this.writer = review.getMember().getNickname();
+            this.imagePathIdList = review.getImagePathList() != null ?
+                    review.getImagePathList().stream()
+                            .map(ImagePath::getId)
+                            .collect(Collectors.toList()) : null;
+        }
+    }
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class ReviewSlice {
+
+        private List<ReviewResponseDTO.Single> reviewList;
+        private int getNumber;
+        private boolean hasPrevious;
+        private boolean hasNext;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class toReviewDTO {
+        private Long reviewId;
+        private String content;
+        private String writer;
+        private List<Long> imagePathIdList;
+
+        public toReviewDTO(Review review) {
+            this.reviewId = review.getId();
+            this.content = review.getContent();
+            this.writer = review.getMember().getNickname();
+            this.imagePathIdList = review.getImagePathList() != null ?
+                    review.getImagePathList().stream()
+                            .map(ImagePath::getId)
+                            .collect(Collectors.toList()) : null;
+        }
     }
 }

@@ -19,6 +19,8 @@ public class ReviewConverter {
                                 .limit(2)
                                 .map(ImagePath::getId)
                                 .collect(Collectors.toList()) : null)
+                .totalCommentCount(review.getCommentList().size())
+                .totalLikesCount(review.getTotalLikesCount() != null ? review.getTotalLikesCount() : 0L)
                 .build();
     }
     public static LimitedReviewResponseDTO.ReviewSlice toSliceDto(Slice<Review> reviewSlice,
@@ -40,6 +42,8 @@ public class ReviewConverter {
                         review.getImagePathList().stream()
                                 .map(ImagePath::getId)
                                 .collect(Collectors.toList()) : null)
+                .totalCommentCount(review.getCommentList().size())
+                .totalLikesCount(review.getTotalLikesCount() != null ? review.getTotalLikesCount() : 0L)
                 .build();
     }
     public static ReviewResponseDTO.ReviewSlice toSliceDTO(Slice<Review> reviewSlice,

@@ -20,6 +20,8 @@ public class LimitedReviewResponseDTO {
         private String content;
         private String writer;
         private List<Long> imagePathIdList;
+        private long totalCommentCount;
+        private Long totalLikesCount;
     }
 
     @Getter

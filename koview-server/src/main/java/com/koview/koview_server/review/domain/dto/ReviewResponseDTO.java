@@ -19,16 +19,8 @@ public class ReviewResponseDTO {
         private String content;
         private String writer;
         private List<Long> imagePathIdList;
-
-        public Single(Review review) {
-            this.reviewId = review.getId();
-            this.content = review.getContent();
-            this.writer = review.getMember().getNickname();
-            this.imagePathIdList = review.getImagePathList() != null ?
-                    review.getImagePathList().stream()
-                            .map(ImagePath::getId)
-                            .collect(Collectors.toList()) : null;
-        }
+        private long totalCommentCount;
+        private Long totalLikesCount;
     }
     @Getter
     @Builder
@@ -49,6 +41,8 @@ public class ReviewResponseDTO {
         private String content;
         private String writer;
         private List<Long> imagePathIdList;
+        private long totalCommentCount;
+        private Long totalLikesCount;
 
         public toReviewDTO(Review review) {
             this.reviewId = review.getId();
@@ -58,6 +52,8 @@ public class ReviewResponseDTO {
                     review.getImagePathList().stream()
                             .map(ImagePath::getId)
                             .collect(Collectors.toList()) : null;
+            this.totalCommentCount = review.getCommentList().size();
+            this.totalLikesCount = review.getTotalLikesCount();
         }
     }
 }

@@ -22,7 +22,7 @@ public class LikesController {
         return ApiResult.onSuccess(likesService.createLikes(reviewId));
     }
 
-    @DeleteMapping("/cancel")
+    @DeleteMapping("/delete")
     @Operation(description = "한 리뷰의 좋아요 취소")
     public ApiResult<LikeResponseDTO> cancelLikes(@RequestParam(name = "reviewId") Long reviewId) {
         return ApiResult.onSuccess(likesService.cancelLikes(reviewId));

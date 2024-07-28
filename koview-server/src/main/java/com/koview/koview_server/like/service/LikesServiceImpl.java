@@ -4,7 +4,7 @@ import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import com.koview.koview_server.global.apiPayload.exception.MemberException;
 import com.koview.koview_server.global.apiPayload.exception.ReviewException;
 import com.koview.koview_server.global.security.util.SecurityUtil;
-import com.koview.koview_server.like.domain.Likes;
+import com.koview.koview_server.like.domain.Like;
 import com.koview.koview_server.like.domain.dto.LikeResponseDTO;
 import com.koview.koview_server.like.repository.LikesRepository;
 import com.koview.koview_server.member.domain.Member;
@@ -29,7 +29,7 @@ public class LikesServiceImpl implements LikesService {
         Member currentMember = validateMember();
         Review review = validateReview(reviewId);
 
-        Likes newLike = Likes.builder()
+        Like newLike = Like.builder()
                 .review(review)
                 .member(currentMember)
                 .build();
@@ -44,15 +44,15 @@ public class LikesServiceImpl implements LikesService {
     @Override
     public LikeResponseDTO cancelLikes(Long reviewId) {
         Review review = validateReview(reviewId);
-        Likes likes = likesRepository.findByReviewId(reviewId)
+        Like like = likesRepository.findByReviewId(reviewId)
                 .orElseThrow(() -> new ReviewException(ErrorStatus.LIKES_NOT_FOUND));
 
         if (review.getTotalLikesCount() > 0) {
             review.decreaseTotalLikesCount();
             reviewRepository.save(review);
         }
-        likesRepository.delete(likes);
-        return new LikeResponseDTO(likes);
+        likesRepository.delete(like);
+        return new LikeResponseDTO(like);
     }
 
     private Member validateMember() {

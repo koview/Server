@@ -3,7 +3,7 @@ package com.koview.koview_server.review.domain;
 import com.koview.koview_server.comment.domain.Comment;
 import com.koview.koview_server.global.common.BaseTimeEntity;
 import com.koview.koview_server.imageTest.domain.ImagePath;
-import com.koview.koview_server.like.domain.Likes;
+import com.koview.koview_server.like.domain.Like;
 import com.koview.koview_server.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,7 +38,7 @@ public class Review extends BaseTimeEntity {
     private List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Likes> likeList = new ArrayList<>();
+    private List<Like> likeList = new ArrayList<>();
 
     private Long totalLikesCount = 0L;
 

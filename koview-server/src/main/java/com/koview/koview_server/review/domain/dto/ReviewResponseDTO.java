@@ -20,7 +20,7 @@ public class ReviewResponseDTO {
         private String writer;
         private List<Long> imagePathIdList;
         private long totalCommentCount;
-        private long totalLikesCount;
+        private Long totalLikesCount;
     }
     @Getter
     @Builder
@@ -42,7 +42,7 @@ public class ReviewResponseDTO {
         private String writer;
         private List<Long> imagePathIdList;
         private long totalCommentCount;
-        private long totalLikesCount;
+        private Long totalLikesCount;
 
         public toReviewDTO(Review review) {
             this.reviewId = review.getId();

@@ -40,14 +40,19 @@ public class Review extends BaseTimeEntity {
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likeList = new ArrayList<>();
 
-    @Column(nullable = false)
     private Long totalLikesCount = 0L;
 
-    public void increaseTotalLikesCount(Long totalLikesCount) {
-        this.totalLikesCount = totalLikesCount + 1;
+    public void increaseTotalLikesCount() {
+        if (this.totalLikesCount == null) {
+            this.totalLikesCount = 0L;
+        }
+        this.totalLikesCount++;
     }
 
-    public void decreaseTotalLikesCount(Long totalLikesCount) {
-        this.totalLikesCount = totalLikesCount - 1;
+    public void decreaseTotalLikesCount() {
+        if (this.totalLikesCount == null) {
+            this.totalLikesCount = 0L;
+        }
+        this.totalLikesCount--;
     }
 }

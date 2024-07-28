@@ -21,7 +21,7 @@ public class LimitedReviewResponseDTO {
         private String writer;
         private List<Long> imagePathIdList;
         private long totalCommentCount;
-        private long totalLikesCount;
+        private Long totalLikesCount;
     }
 
     @Getter

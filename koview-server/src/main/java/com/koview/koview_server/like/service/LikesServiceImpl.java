@@ -35,7 +35,7 @@ public class LikesServiceImpl implements LikesService {
                 .build();
         likesRepository.save(newLike);
 
-        review.increaseTotalLikesCount(review.getTotalLikesCount());
+        review.increaseTotalLikesCount();
         reviewRepository.save(review);
 
         return new LikeResponseDTO(newLike);
@@ -48,7 +48,7 @@ public class LikesServiceImpl implements LikesService {
                 .orElseThrow(() -> new ReviewException(ErrorStatus.LIKES_NOT_FOUND));
 
         if (review.getTotalLikesCount() > 0) {
-            review.decreaseTotalLikesCount(review.getTotalLikesCount());
+            review.decreaseTotalLikesCount();
             reviewRepository.save(review);
         }
         likesRepository.delete(likes);

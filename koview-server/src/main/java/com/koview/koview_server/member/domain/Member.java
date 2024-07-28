@@ -1,5 +1,6 @@
 package com.koview.koview_server.member.domain;
 
+import com.koview.koview_server.comment.domain.Comment;
 import com.koview.koview_server.global.common.BaseTimeEntity;
 import com.koview.koview_server.memberLikedShop.domain.MemberLikedShop;
 import com.koview.koview_server.review.domain.Review;
@@ -43,6 +44,9 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberLikedShop> memberLikedShopList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
 
     /* 패스워드 암호화 관련 */
     public void encodePassword(PasswordEncoder passwordEncoder){

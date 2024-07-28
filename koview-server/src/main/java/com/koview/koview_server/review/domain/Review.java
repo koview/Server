@@ -1,5 +1,6 @@
 package com.koview.koview_server.review.domain;
 
+import com.koview.koview_server.comment.domain.Comment;
 import com.koview.koview_server.global.common.BaseTimeEntity;
 import com.koview.koview_server.imageTest.domain.ImagePath;
 import com.koview.koview_server.member.domain.Member;
@@ -31,4 +32,7 @@ public class Review extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImagePath> imagePathList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
 }

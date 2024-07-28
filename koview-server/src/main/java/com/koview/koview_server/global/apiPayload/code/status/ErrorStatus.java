@@ -29,6 +29,9 @@ public enum ErrorStatus implements BaseErrorCode {
     // 리뷰 응답
     REVIEW_NOT_FOUND(HttpStatus.BAD_REQUEST, "REVIEW4001", "존재하지 않는 리뷰입니다."),
 
+    // 댓글 응답
+    COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMENT4001", "존재하지 않는 댓글입니다."),
+
     // 이미지 에러
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "IMAGE4001", "사진이 존재하지 않습니다."),
 

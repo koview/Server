@@ -58,4 +58,14 @@ public class ReviewController {
             @RequestParam Long clickedReviewId) {
         return ApiResult.onSuccess(reviewService.findAll(PageRequest.of(page-1, size), clickedReviewId));
     }
+
+    @GetMapping("/review/search")
+    @Operation(description = "리뷰 검색")
+    public ApiResult<ReviewResponseDTO.ReviewSlice> searchReviews(
+            @RequestParam String keyword,
+            @Parameter(description = "페이지 번호(1부터 시작), default: 1")
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ApiResult.onSuccess(reviewService.searchReviews(keyword, PageRequest.of(page-1, size)));
+    }
 }

@@ -1,7 +1,7 @@
 package com.koview.koview_server.review.service;
 
-import com.koview.koview_server.imageTest.domain.ImagePath;
-import com.koview.koview_server.imageTest.repository.ImagePathRepository;
+import com.koview.koview_server.imageTest.domain.ReviewImage;
+import com.koview.koview_server.imageTest.repository.ReviewImageRepository;
 import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.review.domain.Review;
@@ -32,7 +32,7 @@ class ReviewServiceImplTest {
     private ReviewRepository reviewRepository;
 
     @Mock
-    private ImagePathRepository imagePathRepository;
+    private ReviewImageRepository reviewImageRepository;
 
     @InjectMocks
     private ReviewServiceImpl reviewService;
@@ -49,11 +49,11 @@ class ReviewServiceImplTest {
         ReviewRequestDTO requestDTO = mock(ReviewRequestDTO.class);
         Member member = new Member();
         Review review = new Review();
-        List<ImagePath> images = List.of(new ImagePath(), new ImagePath());
+        List<ReviewImage> images = List.of(new ReviewImage(), new ReviewImage());
 
         when(memberRepository.findByEmail(any())).thenReturn(Optional.of(member));
         when(requestDTO.toEntity()).thenReturn(review);
-        when(imagePathRepository.findAllById(any())).thenReturn(images);
+        when(reviewImageRepository.findAllById(any())).thenReturn(images);
 
         // When
         ReviewResponseDTO.toReviewDTO result = reviewService.createReview(requestDTO);
@@ -63,7 +63,7 @@ class ReviewServiceImplTest {
         assertEquals(member, review.getMember());  // 멤버가 제대로 설정되었는지 확인
         verify(memberRepository, times(1)).findByEmail(any());
         verify(reviewRepository, times(1)).save(any(Review.class));
-        verify(imagePathRepository, times(1)).findAllById(any());
+        verify(reviewImageRepository, times(1)).findAllById(any());
     }
 
     @Test

@@ -4,8 +4,8 @@ import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import com.koview.koview_server.global.apiPayload.exception.GeneralException;
 import com.koview.koview_server.global.s3.AmazonS3Manager;
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
-import com.koview.koview_server.imageTest.domain.ImagePath;
-import com.koview.koview_server.imageTest.repository.ImagePathRepository;
+import com.koview.koview_server.imageTest.domain.ReviewImage;
+import com.koview.koview_server.imageTest.repository.ReviewImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,19 +19,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ImageServiceImpl {
     private final AmazonS3Manager s3Manager;
-    private final ImagePathRepository imagePathRepository;
+    private final ReviewImageRepository reviewImageRepository;
 
     @Transactional
     public ImageResponseDTO createReview(MultipartFile request) {
         String keyName = s3Manager.genReviewsKeyName(s3Manager.genRandomUuid());
 
-        ImagePath savedImagePath = imagePathRepository.save(
-                ImagePath.builder()
+        ReviewImage savedReviewImage = reviewImageRepository.save(
+                ReviewImage.builder()
                         .url(s3Manager.uploadFile(keyName, request))
                         .build()
         );
 
-        return new ImageResponseDTO(savedImagePath);
+        return new ImageResponseDTO(savedReviewImage);
     }
 
     @Transactional
@@ -46,9 +46,9 @@ public class ImageServiceImpl {
 
     @Transactional
     public String deleteReview(Long imageId) {
-        ImagePath imagePath = imagePathRepository.findById(imageId).orElseThrow(() -> new GeneralException(ErrorStatus.IMAGE_NOT_FOUND));
-        s3Manager.deleteFile(imagePath.getUrl());
-        imagePathRepository.delete(imagePath);
+        ReviewImage reviewImage = reviewImageRepository.findById(imageId).orElseThrow(() -> new GeneralException(ErrorStatus.IMAGE_NOT_FOUND));
+        s3Manager.deleteFile(reviewImage.getUrl());
+        reviewImageRepository.delete(reviewImage);
 
         return "삭제하였습니다.";
     }
@@ -61,10 +61,10 @@ public class ImageServiceImpl {
     }
 
     public List<ImageResponseDTO> findAll() {
-        List<ImagePath> imagePaths = imagePathRepository.findAll();
+        List<ReviewImage> reviewImages = reviewImageRepository.findAll();
         List<ImageResponseDTO> imageResponseDTOs = new ArrayList<>();
-        for (ImagePath imagePath : imagePaths) {
-            imageResponseDTOs.add(new ImageResponseDTO(imagePath));
+        for (ReviewImage reviewImage : reviewImages) {
+            imageResponseDTOs.add(new ImageResponseDTO(reviewImage));
         }
         return imageResponseDTOs;
     }

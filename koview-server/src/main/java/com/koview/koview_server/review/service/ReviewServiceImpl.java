@@ -3,8 +3,8 @@ package com.koview.koview_server.review.service;
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import com.koview.koview_server.global.apiPayload.exception.MemberException;
 import com.koview.koview_server.global.security.util.SecurityUtil;
-import com.koview.koview_server.imageTest.domain.ImagePath;
-import com.koview.koview_server.imageTest.repository.ImagePathRepository;
+import com.koview.koview_server.imageTest.domain.ReviewImage;
+import com.koview.koview_server.imageTest.repository.ReviewImageRepository;
 import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.purchaseLink.domain.PurchaseLink;
@@ -34,9 +34,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final MemberRepository memberRepository;
     private final ReviewRepository reviewRepository;
-    private final ImagePathRepository imagePathRepository;
     private final ReviewPurchaseLinkRepository reviewPurchaseLinkRepository;
     private final PurchaseLinkRepository purchaseLinkRepository;
+    private final ReviewImageRepository reviewImageRepository;
 
     @Override
     public ReviewResponseDTO.toReviewDTO createReview(ReviewRequestDTO requestDTO) {
@@ -45,11 +45,11 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = requestDTO.toEntity();
         review.setMember(member);
 
-        List<ImagePath> images = imagePathRepository.findAllById(requestDTO.getImagePathIdList());
-        for (ImagePath image : images) {
+        List<ReviewImage> images = reviewImageRepository.findAllById(requestDTO.getImagePathIdList());
+        for (ReviewImage image : images) {
             image.addReview(review);
         }
-        review.setImagePathList(images);
+        review.setReviewImageList(images);
 
         reviewRepository.save(review);
 
@@ -94,6 +94,12 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewResponseDTO.ReviewSlice findAll(Pageable pageable, Long clickedReviewId) {
         Slice<Review> reviewSlice = reviewRepository.findAllWithClickedReviewFirst(clickedReviewId, pageable);
 
+        return getReviewSlice(reviewSlice);
+    }
+
+    @Override
+    public ReviewResponseDTO.ReviewSlice searchReviews(String keyword, Pageable pageable) {
+        Slice<Review> reviewSlice = reviewRepository.findByContentContaining(keyword, pageable);
         return getReviewSlice(reviewSlice);
     }
 

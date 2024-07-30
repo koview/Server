@@ -1,7 +1,7 @@
 package com.koview.koview_server.review.domain.dto;
 
-import com.koview.koview_server.imageTest.domain.ImagePath;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
+import com.koview.koview_server.imageTest.domain.ReviewImage;
 import com.koview.koview_server.review.domain.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
@@ -16,12 +16,12 @@ public class ReviewConverter {
                 .reviewId(review.getId())
                 .content(review.getContent())
                 .writer(review.getMember().getNickname())
-                .imagePathIdList(review.getImagePathList() != null ?
-                        review.getImagePathList().stream()
+                .imagePathIdList(review.getReviewImageList() != null ?
+                        review.getReviewImageList().stream()
                                 .limit(2)
-                                .map(ImagePath::getId)
+                                .map(ReviewImage::getId)
                                 .collect(Collectors.toList()) : null)
-                .totalCommentCount(review.getCommentList().size())
+                .totalCommentCount((long) review.getCommentList().size())
                 .totalLikesCount(review.getTotalLikesCount() != null ? review.getTotalLikesCount() : 0L)
                 .build();
     }
@@ -40,11 +40,11 @@ public class ReviewConverter {
                 .reviewId(review.getId())
                 .content(review.getContent())
                 .writer(review.getMember().getNickname())
-                .imagePathIdList(review.getImagePathList() != null ?
-                        review.getImagePathList().stream()
-                                .map(ImagePath::getId)
+                .imagePathIdList(review.getReviewImageList() != null ?
+                        review.getReviewImageList().stream()
+                                .map(ReviewImage::getId)
                                 .collect(Collectors.toList()) : null)
-                .totalCommentCount(review.getCommentList().size())
+                .totalCommentCount((long) review.getCommentList().size())
                 .totalLikesCount(review.getTotalLikesCount() != null ? review.getTotalLikesCount() : 0L)
                 .purchaseLinkList(purchaseLink)
                 .build();

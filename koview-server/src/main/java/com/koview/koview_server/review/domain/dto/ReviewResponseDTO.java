@@ -1,7 +1,7 @@
 package com.koview.koview_server.review.domain.dto;
 
-import com.koview.koview_server.imageTest.domain.ImagePath;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
+import com.koview.koview_server.imageTest.domain.ReviewImage;
 import com.koview.koview_server.review.domain.Review;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +21,7 @@ public class ReviewResponseDTO {
         private String writer;
         private List<Long> imagePathIdList;
         private List<PurchaseLinkResponseDTO> purchaseLinkList;
-        private long totalCommentCount;
+        private Long totalCommentCount;
         private Long totalLikesCount;
     }
     @Getter
@@ -42,18 +42,18 @@ public class ReviewResponseDTO {
         private String content;
         private String writer;
         private List<Long> imagePathIdList;
-        private long totalCommentCount;
+        private Long totalCommentCount;
         private Long totalLikesCount;
 
         public toReviewDTO(Review review) {
             this.reviewId = review.getId();
             this.content = review.getContent();
             this.writer = review.getMember().getNickname();
-            this.imagePathIdList = review.getImagePathList() != null ?
-                    review.getImagePathList().stream()
-                            .map(ImagePath::getId)
+            this.imagePathIdList = review.getReviewImageList() != null ?
+                    review.getReviewImageList().stream()
+                            .map(ReviewImage::getId)
                             .collect(Collectors.toList()) : null;
-            this.totalCommentCount = review.getCommentList().size();
+            this.totalCommentCount = (long) review.getCommentList().size();
             this.totalLikesCount = review.getTotalLikesCount();
         }
     }

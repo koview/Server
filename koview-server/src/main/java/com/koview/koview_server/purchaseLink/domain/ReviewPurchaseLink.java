@@ -23,6 +23,5 @@ public class ReviewPurchaseLink {
     @ManyToOne
     @JoinColumn(name = "review_id", nullable = false)
     private Review review;
-
-    private int count;
+    private Integer count;
 }

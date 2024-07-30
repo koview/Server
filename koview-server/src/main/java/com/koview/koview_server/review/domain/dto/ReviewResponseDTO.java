@@ -1,6 +1,7 @@
 package com.koview.koview_server.review.domain.dto;
 
 import com.koview.koview_server.imageTest.domain.ImagePath;
+import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
 import com.koview.koview_server.review.domain.Review;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,7 @@ public class ReviewResponseDTO {
         private String content;
         private String writer;
         private List<Long> imagePathIdList;
+        private List<PurchaseLinkResponseDTO> purchaseLinkList;
         private long totalCommentCount;
         private Long totalLikesCount;
     }
@@ -32,7 +34,6 @@ public class ReviewResponseDTO {
         private boolean hasPrevious;
         private boolean hasNext;
     }
-
     @Getter
     @Builder
     @AllArgsConstructor

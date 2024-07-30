@@ -2,6 +2,7 @@ package com.koview.koview_server.review.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkRequestDTO;
 import com.koview.koview_server.review.domain.Review;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -22,6 +23,8 @@ public class ReviewRequestDTO {
 
     @Schema(description = "이미지 ID 리스트", example = "[1, 2, 3]")
     private List<Long> imagePathIdList;
+
+    private List<PurchaseLinkRequestDTO> purchaseLinkList;
 
     public Review toEntity() {
         return Review.builder()

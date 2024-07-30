@@ -29,9 +29,24 @@ public class LimitedReviewResponseDTO {
     @AllArgsConstructor
     public static class ReviewSlice {
 
-        private List<LimitedReviewResponseDTO.Single> reviewList;
+        private List<Single> reviewList;
         private int getNumber;
         private boolean hasPrevious;
         private boolean hasNext;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class ReviewPaging {
+
+        private List<Single> reviewList;
+        private int getNumber;
+        private boolean hasPrevious;
+        private boolean hasNext;
+        private int getTotalPages;
+        private long getTotalElements;
+        private boolean isFirst;
+        private boolean isLast;
     }
 }

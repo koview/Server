@@ -1,7 +1,6 @@
 package com.koview.koview_server.product.domain;
 
 import com.koview.koview_server.global.common.BaseTimeEntity;
-import com.koview.koview_server.global.common.purchaseLink.PurchaseLink;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,8 +24,9 @@ public class Product extends BaseTimeEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PurchaseLink> purchaseLinkList = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private CategoryType categoryType;
 
     private String productName;
 

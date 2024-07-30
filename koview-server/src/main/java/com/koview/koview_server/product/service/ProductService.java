@@ -11,5 +11,6 @@ public interface ProductService {
     ProductResponseDTO.ProductSlice getProductsByStatus(Long categoryId, StatusType status, Pageable pageable);
     ProductResponseDTO.ProductSlice getProducts(Long categoryId, Pageable pageable);
     List<Category> getCategories();
+    ProductResponseDTO.Detail getProductDetail(Long productId, Pageable pageable);
 
 }

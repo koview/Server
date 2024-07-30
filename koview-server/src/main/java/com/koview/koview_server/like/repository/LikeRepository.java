@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface LikesRepository extends JpaRepository<Like, Long> {
+public interface LikeRepository extends JpaRepository<Like, Long> {
     Optional<Like> findByReviewId(Long reviewId);
     Like findByReviewIdAndMemberId(Long reviewId, Long memberId);
 }

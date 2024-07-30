@@ -2,7 +2,7 @@ package com.koview.koview_server.like.controller;
 
 import com.koview.koview_server.global.apiPayload.ApiResult;
 import com.koview.koview_server.like.domain.dto.LikeResponseDTO;
-import com.koview.koview_server.like.service.LikesService;
+import com.koview.koview_server.like.service.LikeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/likes")
 @Tag(name = "Likes", description = "Likes API")
-public class LikesController {
+public class LikeController {
 
-    private final LikesService likesService;
+    private final LikeService likesService;
 
     @PostMapping("/create")
     @Operation(description = "한 리뷰의 좋아요 등록")

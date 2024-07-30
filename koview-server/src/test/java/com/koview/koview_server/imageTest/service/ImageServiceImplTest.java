@@ -2,8 +2,8 @@ package com.koview.koview_server.imageTest.service;
 
 import com.koview.koview_server.global.s3.AmazonS3Manager;
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
-import com.koview.koview_server.imageTest.domain.ImagePath;
-import com.koview.koview_server.imageTest.repository.ImagePathRepository;
+import com.koview.koview_server.imageTest.domain.ReviewImage;
+import com.koview.koview_server.imageTest.repository.ReviewImageRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class ImageServiceImplTest {
     private AmazonS3Manager s3Manager;
 
     @Mock
-    private ImagePathRepository imagePathRepository;
+    private ReviewImageRepository reviewImageRepository;
 
     @InjectMocks
     private ImageServiceImpl imageService;
@@ -46,11 +46,11 @@ class ImageServiceImplTest {
         when(s3Manager.genReviewsKeyName(any())).thenReturn("reviews/test-key");
         when(s3Manager.uploadFile(any(), any())).thenReturn(url);
 
-        ImagePath imagePath = ImagePath.builder()
+        ReviewImage reviewImage = ReviewImage.builder()
                 .url(url)
                 .build();
 
-        when(imagePathRepository.save(any(ImagePath.class))).thenReturn(imagePath);
+        when(reviewImageRepository.save(any(ReviewImage.class))).thenReturn(reviewImage);
 
         // When
         ImageResponseDTO result = imageService.createReview(file);
@@ -58,7 +58,7 @@ class ImageServiceImplTest {
         // Then
         assertNotNull(result);
         assertEquals(url, result.getUrl());
-        verify(imagePathRepository, times(1)).save(any(ImagePath.class));
+        verify(reviewImageRepository, times(1)).save(any(ReviewImage.class));
     }
 
     @Test
@@ -74,10 +74,10 @@ class ImageServiceImplTest {
         when(s3Manager.genReviewsKeyName(any())).thenReturn("reviews/test-key1", "reviews/test-key2");
         when(s3Manager.uploadFile(any(), any())).thenReturn(url1, url2);
 
-        ImagePath imagePath1 = ImagePath.builder().url(url1).build();
-        ImagePath imagePath2 = ImagePath.builder().url(url2).build();
+        ReviewImage reviewImage1 = ReviewImage.builder().url(url1).build();
+        ReviewImage reviewImage2 = ReviewImage.builder().url(url2).build();
 
-        when(imagePathRepository.save(any(ImagePath.class))).thenReturn(imagePath1, imagePath2);
+        when(reviewImageRepository.save(any(ReviewImage.class))).thenReturn(reviewImage1, reviewImage2);
 
         // When
         List<ImageResponseDTO> results = imageService.createReviews(files);
@@ -87,7 +87,7 @@ class ImageServiceImplTest {
         assertEquals(2, results.size());
         assertEquals(url1, results.get(0).getUrl());
         assertEquals(url2, results.get(1).getUrl());
-        verify(imagePathRepository, times(2)).save(any(ImagePath.class));
+        verify(reviewImageRepository, times(2)).save(any(ReviewImage.class));
     }
 
     @Test
@@ -97,12 +97,12 @@ class ImageServiceImplTest {
         Long imageId = 1L;
         String url = "https://s3.example.com/test-image.jpg";
 
-        ImagePath imagePath = ImagePath.builder()
+        ReviewImage reviewImage = ReviewImage.builder()
                 .id(imageId)
                 .url(url)
                 .build();
 
-        when(imagePathRepository.findById(imageId)).thenReturn(Optional.of(imagePath));
+        when(reviewImageRepository.findById(imageId)).thenReturn(Optional.of(reviewImage));
 
         // When
         String result = imageService.deleteReview(imageId);
@@ -110,7 +110,7 @@ class ImageServiceImplTest {
         // Then
         assertEquals("삭제하였습니다.", result);
         verify(s3Manager, times(1)).deleteFile(url);
-        verify(imagePathRepository, times(1)).delete(imagePath);
+        verify(reviewImageRepository, times(1)).delete(reviewImage);
     }
 
     @Test
@@ -124,11 +124,11 @@ class ImageServiceImplTest {
         String url1 = "https://s3.example.com/test-image1.jpg";
         String url2 = "https://s3.example.com/test-image2.jpg";
 
-        ImagePath imagePath1 = ImagePath.builder().id(imageId1).url(url1).build();
-        ImagePath imagePath2 = ImagePath.builder().id(imageId2).url(url2).build();
+        ReviewImage reviewImage1 = ReviewImage.builder().id(imageId1).url(url1).build();
+        ReviewImage reviewImage2 = ReviewImage.builder().id(imageId2).url(url2).build();
 
-        when(imagePathRepository.findById(imageId1)).thenReturn(Optional.of(imagePath1));
-        when(imagePathRepository.findById(imageId2)).thenReturn(Optional.of(imagePath2));
+        when(reviewImageRepository.findById(imageId1)).thenReturn(Optional.of(reviewImage1));
+        when(reviewImageRepository.findById(imageId2)).thenReturn(Optional.of(reviewImage2));
 
         // When
         String result = imageService.deleteReviews(imageIds);
@@ -137,7 +137,7 @@ class ImageServiceImplTest {
         assertEquals("이미지 리스트 삭제하였습니다.", result);
         verify(s3Manager, times(1)).deleteFile(url1);
         verify(s3Manager, times(1)).deleteFile(url2);
-        verify(imagePathRepository, times(1)).delete(imagePath1);
-        verify(imagePathRepository, times(1)).delete(imagePath2);
+        verify(reviewImageRepository, times(1)).delete(reviewImage1);
+        verify(reviewImageRepository, times(1)).delete(reviewImage2);
     }
 }

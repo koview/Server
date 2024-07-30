@@ -34,7 +34,7 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String nickname; // 닉네임
 
-    private int age; // 나이
+    private Integer age; // 나이
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)

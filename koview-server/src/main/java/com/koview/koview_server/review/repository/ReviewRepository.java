@@ -24,4 +24,5 @@ public interface ReviewRepository  extends JpaRepository<Review, Long> {
     @Query("SELECT COUNT(r) FROM Review r JOIN ReviewPurchaseLink rp ON r.id = rp.review.id WHERE rp.purchaseLink.product.id = :productId")
     long countByProductPurchaseLink(@Param("productId") Long productId);
 
+    Slice<Review> findByContentContaining(String keyword, Pageable pageable);
 }

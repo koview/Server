@@ -1,4 +1,4 @@
-package com.koview.koview_server.global.common.purchaseLink;
+package com.koview.koview_server.purchaseLink.domain;
 
 public enum VerifiedType {
     UNDEFINED,

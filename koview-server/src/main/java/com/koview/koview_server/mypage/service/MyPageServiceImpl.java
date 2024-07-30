@@ -5,6 +5,8 @@ import com.koview.koview_server.global.apiPayload.exception.MemberException;
 import com.koview.koview_server.global.security.util.SecurityUtil;
 import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
+import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
+import com.koview.koview_server.purchaseLink.repository.ReviewPurchaseLinkRepository;
 import com.koview.koview_server.review.domain.Review;
 import com.koview.koview_server.review.domain.dto.LimitedReviewResponseDTO;
 import com.koview.koview_server.review.domain.dto.ReviewConverter;
@@ -26,6 +28,7 @@ public class MyPageServiceImpl implements MypageService {
 
     private final MemberRepository memberRepository;
     private final ReviewRepository reviewRepository;
+    private final ReviewPurchaseLinkRepository reviewPurchaseLinkRepository;
 
     @Override
     public LimitedReviewResponseDTO.ReviewSlice findAllByMemberWithLimitedImages(Pageable pageable) {
@@ -61,13 +64,20 @@ public class MyPageServiceImpl implements MypageService {
     }
 
     private LimitedReviewResponseDTO.ReviewSlice getLimitedImageReviewSlice(Slice<Review> reviewSlice) {
-        List<LimitedReviewResponseDTO.Single> reviewList = reviewSlice.stream().map(ReviewConverter::toSingleDto).toList();
+        List<LimitedReviewResponseDTO.Single> reviewList = reviewSlice.stream().map(ReviewConverter::toLimitedSingleDto).toList();
 
-        return ReviewConverter.toSliceDto(reviewSlice, reviewList);
+        return ReviewConverter.toLimitedSliceDto(reviewSlice, reviewList);
     }
 
+    //TODO: ReviewQuerySerivce에서 메소드 재활용하기.
     private ReviewResponseDTO.ReviewSlice getReviewSlice(Slice<Review> reviewSlice) {
-        List<ReviewResponseDTO.Single> reviewList = reviewSlice.stream().map(ReviewConverter::toSingleDTO).toList();
+        List<ReviewResponseDTO.Single> reviewList = reviewSlice.stream().map(review ->{
+            List<PurchaseLinkResponseDTO> purchaseLinkList =
+                    reviewPurchaseLinkRepository.findPurchaseLinksByReviewId(review.getId()).stream()
+                            .map(PurchaseLinkResponseDTO::new).toList();
+
+            return ReviewConverter.toSingleDTO(review, purchaseLinkList);
+        }).toList();
 
         return ReviewConverter.toSliceDTO(reviewSlice, reviewList);
     }

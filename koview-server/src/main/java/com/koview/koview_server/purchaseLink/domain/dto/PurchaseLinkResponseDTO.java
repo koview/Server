@@ -1,5 +1,7 @@
-package com.koview.koview_server.global.common.purchaseLink;
+package com.koview.koview_server.purchaseLink.domain.dto;
 
+import com.koview.koview_server.purchaseLink.domain.PurchaseLink;
+import com.koview.koview_server.purchaseLink.domain.VerifiedType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

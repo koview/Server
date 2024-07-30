@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**","/v3/api-docs/**", "/member/**", "/image/**",
-                                "/shops", "/reviews", "/reviews/detail", "/comments", "/products", "/categories").permitAll()
+                                "/shops", "/reviews", "/reviews/detail", "/comments", "/products/**", "/categories").permitAll()
                         .anyRequest().authenticated()
                 )
 

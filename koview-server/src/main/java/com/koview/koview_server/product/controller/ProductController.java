@@ -5,6 +5,7 @@ import com.koview.koview_server.product.domain.Category;
 import com.koview.koview_server.product.domain.StatusType;
 import com.koview.koview_server.product.domain.dto.ProductResponseDTO;
 import com.koview.koview_server.product.service.ProductService;
+import com.koview.koview_server.review.domain.dto.LimitedReviewResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,6 +54,18 @@ public class ProductController {
             @RequestParam(defaultValue = "20") int size
     ){
       return ApiResult.onSuccess(productService.getProductDetail(productId,PageRequest.of(page-1,size)));
+    }
+
+    @GetMapping("products/{productId}/reviews")
+    @Operation(description = "상품 리뷰 조회")
+    public ApiResult<LimitedReviewResponseDTO.ReviewPaging> getReviewsByProduct(
+            @PathVariable Long productId,
+            @Parameter(description = "페이지 번호(1부터 시작)")
+            @RequestParam(defaultValue = "1") int page,
+            @Parameter(description = "페이지 크기(한 번에 보내는 리스트 양)")
+            @RequestParam(defaultValue = "20") int size
+    ){
+        return ApiResult.onSuccess(productService.getReviewsByProductId(productId,PageRequest.of(page-1,size)));
     }
 
 

@@ -81,6 +81,14 @@ public class ProductServiceImpl implements ProductService {
         return ProductConverter.toDetailDTO(detail,reviewPaging);
     }
 
+    @Override
+    public LimitedReviewResponseDTO.ReviewPaging getReviewsByProductId(Long productId, Pageable pageable) {
+        Page<Review> reviewPage = reviewRepository.findAllByProductPurchaseLink(productId,pageable);
+
+        List<LimitedReviewResponseDTO.Single> reviewList = reviewPage.stream().map(ReviewConverter::toLimitedSingleDto).toList();
+        return ReviewConverter.toLimitedPagingDTO(reviewPage,reviewList);
+    }
+
     private ProductResponseDTO.ProductSlice getProductSlice(Slice<Product> productSlice) {
 
         List<ProductResponseDTO.Single> productList = productSlice.stream().map(product -> {

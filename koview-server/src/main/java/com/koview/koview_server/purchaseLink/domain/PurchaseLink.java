@@ -1,4 +1,4 @@
-package com.koview.koview_server.global.common.purchaseLink;
+package com.koview.koview_server.purchaseLink.domain;
 
 import com.koview.koview_server.global.common.BaseTimeEntity;
 import com.koview.koview_server.product.domain.Product;
@@ -21,7 +21,7 @@ public class PurchaseLink extends BaseTimeEntity {
     @JoinColumn(name = "product_id", nullable = true)
     private Product product;
 
-    @Lob@Column(nullable = false)
+    @Lob@Column(nullable = false, unique = true)
     private String purchaseLink;
 
     private String shopName;

@@ -1,6 +1,7 @@
 package com.koview.koview_server.global.security.service;
 
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
+import com.koview.koview_server.global.apiPayload.exception.CustomAuthenticationException;
 import com.koview.koview_server.global.apiPayload.exception.GeneralException;
 import com.koview.koview_server.global.security.dto.JwtTokenDTO;
 import io.jsonwebtoken.*;
@@ -64,7 +65,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get("auth") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new JwtException("권한 정보가 없는 토큰입니다.");
         }
 
         Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get("auth").toString().split(","))
@@ -83,13 +84,13 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException e) {
-            throw new GeneralException(ErrorStatus.INCORRECT_FORMAT_TOKEN);
+            throw new JwtException("올바르지 않은 형식의 토큰입니다.");
         } catch (ExpiredJwtException e) {
-            throw new GeneralException(ErrorStatus.EXPIRED_TOKEN);
+            throw new CustomAuthenticationException(ErrorStatus.EXPIRED_TOKEN, e);
         } catch (UnsupportedJwtException e) {
-            throw new GeneralException(ErrorStatus.UNSUPPORTED_TOKEN);
+            throw new JwtException("지원되지 않는 형식의 토큰입니다.");
         } catch (IllegalArgumentException e) {
-            throw new GeneralException(ErrorStatus.TOKEN_WAS_EMPTY);
+            throw new JwtException("비어있거나 null인 토큰입니다.");
         }
     }
 

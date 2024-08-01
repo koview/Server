@@ -21,6 +21,7 @@ public enum ErrorStatus implements BaseErrorCode {
     EXPIRED_TOKEN(HttpStatus.BAD_REQUEST,"JWT_TOKEN4002" , "유효기간이 만료된 토큰입니다."),
     UNSUPPORTED_TOKEN(HttpStatus.BAD_REQUEST,"JWT_TOKEN4003" , "지원되지 않는 형식의 토큰입니다."),
     TOKEN_WAS_EMPTY(HttpStatus.BAD_REQUEST,"JWT_TOKEN4004" , "비어있거나 null인 토큰입니다."),
+    NOT_AUTHORIZED(HttpStatus.BAD_REQUEST,"JWT_TOKEN4004" , "권한 정보가 없는 토큰입니다."),
 
     // 유저 응답
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "유저가 존재하지 않습니다."),

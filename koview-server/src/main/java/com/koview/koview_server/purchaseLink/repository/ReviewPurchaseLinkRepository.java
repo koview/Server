@@ -11,4 +11,6 @@ import java.util.List;
 public interface ReviewPurchaseLinkRepository extends JpaRepository<ReviewPurchaseLink, Long> {
     @Query("SELECT rpl.purchaseLink FROM ReviewPurchaseLink rpl WHERE rpl.review.id = :reviewId")
     List<PurchaseLink> findPurchaseLinksByReviewId(@Param("reviewId") Long reviewId);
+
+    void deleteByReviewId(Long reviewId);
 }

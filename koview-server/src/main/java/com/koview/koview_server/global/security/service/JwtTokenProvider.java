@@ -1,7 +1,8 @@
 package com.koview.koview_server.global.security.service;
 
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
-import com.koview.koview_server.global.apiPayload.exception.MemberException;
+import com.koview.koview_server.global.apiPayload.exception.CustomAuthenticationException;
+import com.koview.koview_server.global.apiPayload.exception.GeneralException;
 import com.koview.koview_server.global.security.dto.JwtTokenDTO;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -64,7 +65,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get("auth") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new JwtException("권한 정보가 없는 토큰입니다.");
         }
 
         Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get("auth").toString().split(","))
@@ -83,16 +84,14 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.", e);
+            throw new JwtException("올바르지 않은 형식의 토큰입니다.");
         } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.", e);
-            return false;
+            throw new CustomAuthenticationException(ErrorStatus.EXPIRED_TOKEN, e);
         } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.", e);
+            throw new JwtException("지원되지 않는 형식의 토큰입니다.");
         } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.", e);
+            throw new JwtException("비어있거나 null인 토큰입니다.");
         }
-        return false;
     }
 
     private Claims parseClaims(String accessToken) {

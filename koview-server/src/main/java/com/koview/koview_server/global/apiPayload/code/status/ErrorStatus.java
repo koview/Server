@@ -16,6 +16,13 @@ public enum ErrorStatus implements BaseErrorCode {
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
     _NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON404","데이터를 찾지 못했습니다."),
 
+    // JWT 응답
+    INCORRECT_FORMAT_TOKEN(HttpStatus.BAD_REQUEST,"JWT_TOKEN4001" , "올바르지 않은 형식의 토큰입니다."),
+    EXPIRED_TOKEN(HttpStatus.BAD_REQUEST,"JWT_TOKEN4002" , "유효기간이 만료된 토큰입니다."),
+    UNSUPPORTED_TOKEN(HttpStatus.BAD_REQUEST,"JWT_TOKEN4003" , "지원되지 않는 형식의 토큰입니다."),
+    TOKEN_WAS_EMPTY(HttpStatus.BAD_REQUEST,"JWT_TOKEN4004" , "비어있거나 null인 토큰입니다."),
+    NOT_AUTHORIZED(HttpStatus.BAD_REQUEST,"JWT_TOKEN4004" , "권한 정보가 없는 토큰입니다."),
+
     // 유저 응답
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "유저가 존재하지 않습니다."),
     MEMBER_EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "MEMBER4002", "이미 존재하는 이메일입니다."),
@@ -44,7 +51,6 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 상점 응답
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND,"PRODUCT4001" , "해당 상품이 존재하지 않습니다.");
-
 
     private final HttpStatus httpStatus;
     private final String code;

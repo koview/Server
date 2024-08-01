@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             httpServletResponse.getWriter().write("유효하지 않은 토큰입니다.");
         } catch (CustomAuthenticationException ex) {
-            httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            httpServletResponse.setStatus(HttpServletResponse.SC_GONE);
             httpServletResponse.getWriter().write("만료된 토큰입니다.");
         }
     }

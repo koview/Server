@@ -1,7 +1,7 @@
 package com.koview.koview_server.global.security.service;
 
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
-import com.koview.koview_server.global.apiPayload.exception.MemberException;
+import com.koview.koview_server.global.apiPayload.exception.GeneralException;
 import com.koview.koview_server.global.security.dto.JwtTokenDTO;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -83,16 +83,14 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.", e);
+            throw new GeneralException(ErrorStatus.INCORRECT_FORMAT_TOKEN);
         } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.", e);
-            return false;
+            throw new GeneralException(ErrorStatus.EXPIRED_TOKEN);
         } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.", e);
+            throw new GeneralException(ErrorStatus.UNSUPPORTED_TOKEN);
         } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.", e);
+            throw new GeneralException(ErrorStatus.TOKEN_WAS_EMPTY);
         }
-        return false;
     }
 
     private Claims parseClaims(String accessToken) {

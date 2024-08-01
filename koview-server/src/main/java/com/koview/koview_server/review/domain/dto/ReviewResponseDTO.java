@@ -53,7 +53,7 @@ public class ReviewResponseDTO {
                     review.getReviewImageList().stream()
                             .map(ReviewImage::getId)
                             .collect(Collectors.toList()) : null;
-            this.totalCommentCount = (long) review.getCommentList().size();
+            this.totalCommentCount = review.getCommentList() != null ? (long) review.getCommentList().size() : 0L;
             this.totalLikesCount = review.getTotalLikesCount();
         }
     }

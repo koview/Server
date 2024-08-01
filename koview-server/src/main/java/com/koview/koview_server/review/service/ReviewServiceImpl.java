@@ -73,12 +73,14 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void deleteReview(Long reviewId) {
+        reviewPurchaseLinkRepository.deleteByReviewId(reviewId);
         reviewRepository.deleteById(reviewId);
     }
 
     @Override
     public void deleteReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO) {
         for (Long reviewId : reviewIdListDTO.getReviewIdList()) {
+            reviewPurchaseLinkRepository.deleteByReviewId(reviewId);
             reviewRepository.deleteById(reviewId);
         }
     }

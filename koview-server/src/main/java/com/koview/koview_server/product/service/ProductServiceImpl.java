@@ -41,10 +41,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDTO.ProductSlice getProductsByStatus(Long categoryId, StatusType status, Pageable pageable) {
         Slice<Product> productSlice;
-        if(categoryId==null) productSlice = productRepository.findAllByStatusOrderByIdDesc(status, pageable);
+        if(categoryId==null) {
+            if(status==StatusType.RESTRICTED)
+                productSlice = productRepository.findAllByStatusOrderByRestrictedDateDesc(status, pageable);
+
+            else productSlice = productRepository.findAllByStatusOrderByIdDesc(status, pageable);
+        }
         else {
             Category category = getCategory(categoryId);
-            productSlice = productRepository.findAllByCategoryAndStatusOrderByIdDesc(category,status, pageable);
+            if(status==StatusType.RESTRICTED)
+                productSlice = productRepository.findAllByCategoryAndStatusOrderByRestrictedDateDesc(category, status, pageable);
+
+            else productSlice = productRepository.findAllByCategoryAndStatusOrderByIdDesc(category,status, pageable);
         }
         return getProductSlice(productSlice);
     }
@@ -88,8 +96,8 @@ public class ProductServiceImpl implements ProductService {
         List<LimitedReviewResponseDTO.Single> reviewList = reviewPage.stream().map(ReviewConverter::toLimitedSingleDto).toList();
         return ReviewConverter.toLimitedPagingDTO(reviewPage,reviewList);
     }
-
-    private ProductResponseDTO.ProductSlice getProductSlice(Slice<Product> productSlice) {
+    @Transactional
+    protected ProductResponseDTO.ProductSlice getProductSlice(Slice<Product> productSlice) {
 
         List<ProductResponseDTO.Single> productList = productSlice.stream().map(product -> {
             List<ImageResponseDTO> imagePaths =
@@ -98,6 +106,10 @@ public class ProductServiceImpl implements ProductService {
             List<PurchaseLinkResponseDTO> purchaseLinkList =
                     purchaseLinkRepository.findAllByProduct(product).stream().map(PurchaseLinkResponseDTO::new).toList();
             Long reviewCount = reviewRepository.countByProductPurchaseLink(product.getId());
+            if(reviewCount>=10 && product.getStatus().equals(StatusType.NORMAL)) {
+                product.setStatus(StatusType.FAMOUS);
+                productRepository.save(product);
+            }
             return ProductConverter.toSingleDTO(product, reviewCount, imagePaths, purchaseLinkList);
         }).toList();
 

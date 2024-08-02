@@ -48,5 +48,13 @@ public class ProductResponseDTO {
         private LimitedReviewResponseDTO.ReviewPaging reviewPaging;
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class NameWithImage{
+        private String productName;
+        private ImageResponseDTO image;
+    }
+
 
 }

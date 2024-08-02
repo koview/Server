@@ -1,7 +1,7 @@
 package com.koview.koview_server.review.service;
 
-import com.koview.koview_server.imageTest.domain.ReviewImage;
-import com.koview.koview_server.imageTest.repository.ReviewImageRepository;
+import com.koview.koview_server.image.domain.ReviewImage;
+import com.koview.koview_server.image.repository.ReviewImageRepository;
 import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.review.domain.Review;

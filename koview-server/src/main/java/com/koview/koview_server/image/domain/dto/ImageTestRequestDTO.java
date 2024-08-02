@@ -1,4 +1,4 @@
-package com.koview.koview_server.imageTest.domain.dto;
+package com.koview.koview_server.image.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

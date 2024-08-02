@@ -1,6 +1,6 @@
 package com.koview.koview_server.global.common.image;
 
-import com.koview.koview_server.imageTest.domain.ReviewImage;
+import com.koview.koview_server.image.domain.ReviewImage;
 import com.koview.koview_server.product.domain.ProductImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,9 +1,9 @@
-package com.koview.koview_server.imageTest.controller;
+package com.koview.koview_server.image.controller;
 
 import com.koview.koview_server.global.apiPayload.ApiResult;
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
-import com.koview.koview_server.imageTest.domain.dto.ImageTestRequestDTO;
-import com.koview.koview_server.imageTest.service.ImageServiceImpl;
+import com.koview.koview_server.image.domain.dto.ImageTestRequestDTO;
+import com.koview.koview_server.image.service.ImageServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

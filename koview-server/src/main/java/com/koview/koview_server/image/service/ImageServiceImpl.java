@@ -1,11 +1,11 @@
-package com.koview.koview_server.imageTest.service;
+package com.koview.koview_server.image.service;
 
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import com.koview.koview_server.global.apiPayload.exception.GeneralException;
 import com.koview.koview_server.global.s3.AmazonS3Manager;
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
-import com.koview.koview_server.imageTest.domain.ReviewImage;
-import com.koview.koview_server.imageTest.repository.ReviewImageRepository;
+import com.koview.koview_server.image.domain.ReviewImage;
+import com.koview.koview_server.image.repository.ReviewImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum CategoryType {
-    ALL("전체 선택"),
     CLOTHES("의류"), ACCESSORIES("패션 소품"), STATIONARY("학용품"), TOY("완구"), CHILDREN_ETC("기타"),
     SANITARY("학용품"), FOOD_CONTAINER("식품 용기"), GENERAL_ETC("기타");
 

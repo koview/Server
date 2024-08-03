@@ -2,6 +2,7 @@ package com.koview.koview_server.product.controller;
 
 import com.koview.koview_server.global.apiPayload.ApiResult;
 import com.koview.koview_server.product.domain.Category;
+import com.koview.koview_server.product.domain.CategoryType;
 import com.koview.koview_server.product.domain.StatusType;
 import com.koview.koview_server.product.domain.dto.ProductResponseDTO;
 import com.koview.koview_server.product.service.ProductService;
@@ -27,9 +28,9 @@ public class ProductController {
         return ApiResult.onSuccess(productService.getCategories());
     }
 
-    @GetMapping("products")
-    @Operation(description = "전체/유해/인기 상품 조회")
-    public ApiResult<ProductResponseDTO.ProductSlice> getProductsBy(
+    @GetMapping("products/v1")
+    @Operation(description = "전체/유해/인기 상품 조회 : categoryId 사용")
+    public ApiResult<ProductResponseDTO.ProductSlice> getProductsByV1(
             @Parameter(description = "상품 상태 필터(null 입력시 적용 안됨)")
             @RequestParam(required = false) StatusType status,
             @Parameter(description = "카테고리 필터(null 입력시 적용 안됨)")
@@ -42,6 +43,22 @@ public class ProductController {
             return ApiResult.onSuccess(productService.getProducts(categoryId,PageRequest.of(page-1,size)));
         else  // 유해, 인기 상품 조회 로직
             return ApiResult.onSuccess(productService.getProductsByStatus(categoryId, status, PageRequest.of(page-1,size)));
+    }
+    @GetMapping("products/v2")
+    @Operation(description = "전체/유해/인기 상품 조회 : cateogryType 사용")
+    public ApiResult<ProductResponseDTO.ProductSlice> getProductsByV2(
+            @Parameter(description = "상품 상태 필터(null 입력시 적용 안됨)")
+            @RequestParam(required = false) StatusType status,
+            @Parameter(description = "카테고리 필터(null 입력시 적용 안됨)")
+            @RequestParam(required = false) CategoryType category,
+            @Parameter(description = "페이지 번호(1부터 시작)")
+            @RequestParam(defaultValue = "1") int page,
+            @Parameter(description = "페이지 크기(한 번에 보내는 리스트 양)")
+            @RequestParam(defaultValue = "20") int size) {
+        if (status == null) // 전체 상품 조회 로직
+            return ApiResult.onSuccess(productService.getProductsByCategorytype(category,PageRequest.of(page-1,size)));
+        else  // 유해, 인기 상품 조회 로직
+            return ApiResult.onSuccess(productService.getProductsByStatusAndCategoryType(category, status, PageRequest.of(page-1,size)));
     }
 
     @GetMapping("products/{productId}")

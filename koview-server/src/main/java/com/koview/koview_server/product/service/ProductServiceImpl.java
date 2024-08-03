@@ -3,6 +3,7 @@ package com.koview.koview_server.product.service;
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import com.koview.koview_server.global.apiPayload.exception.GeneralException;
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
+import com.koview.koview_server.product.domain.CategoryType;
 import com.koview.koview_server.purchaseLink.repository.PurchaseLinkRepository;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
 import com.koview.koview_server.product.domain.Category;
@@ -65,6 +66,33 @@ public class ProductServiceImpl implements ProductService {
             Category category = getCategory(categoryId);
             productSlice = productRepository.findAllByCategory(category,pageable);
         }
+        return getProductSlice(productSlice);
+    }
+
+    @Override
+    public ProductResponseDTO.ProductSlice getProductsByStatusAndCategoryType(CategoryType category, StatusType status, Pageable pageable) {
+        Slice<Product> productSlice;
+        if(category==null) {
+            if(status==StatusType.RESTRICTED)
+                productSlice = productRepository.findAllByStatusOrderByRestrictedDateDesc(status, pageable);
+
+            else productSlice = productRepository.findAllByStatusOrderByIdDesc(status, pageable);
+        }
+        else {
+            if(status==StatusType.RESTRICTED)
+                productSlice = productRepository.findAllByCategoryTypeAndStatusOrderByRestrictedDateDesc(category, status, pageable);
+
+            else productSlice = productRepository.findAllByCategoryTypeAndStatusOrderByIdDesc(category,status, pageable);
+        }
+        return getProductSlice(productSlice);
+    }
+
+    @Override
+    public ProductResponseDTO.ProductSlice getProductsByCategorytype(CategoryType category, Pageable pageable) {
+        Slice<Product> productSlice;
+        if(category==null) productSlice = productRepository.findAllBy(pageable);
+        else productSlice = productRepository.findAllByCategoryType(category,pageable);
+
         return getProductSlice(productSlice);
     }
 

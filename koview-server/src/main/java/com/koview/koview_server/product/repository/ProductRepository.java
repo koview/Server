@@ -1,6 +1,7 @@
 package com.koview.koview_server.product.repository;
 
 import com.koview.koview_server.product.domain.Category;
+import com.koview.koview_server.product.domain.CategoryType;
 import com.koview.koview_server.product.domain.Product;
 import com.koview.koview_server.product.domain.StatusType;
 import org.springframework.data.domain.Pageable;
@@ -35,5 +36,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Slice<Product> findAllBy(Pageable pageable);
 
+    // categoryType
     Slice<Product> findAllByCategory(Category category,Pageable pageable);
+
+    Slice<Product> findAllByCategoryType(CategoryType category, Pageable pageable);
+
+    Slice<Product> findAllByCategoryTypeAndStatusOrderByIdDesc(CategoryType category, StatusType status, Pageable pageable);
+
+    Slice<Product> findAllByCategoryTypeAndStatusOrderByRestrictedDateDesc(CategoryType category, StatusType status, Pageable pageable);
+
+
 }

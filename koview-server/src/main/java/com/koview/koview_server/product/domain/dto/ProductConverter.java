@@ -20,7 +20,7 @@ public class ProductConverter {
                 .createdDate(product.getCreatedDate().toLocalDate())
                 .reviewCount(reviewsCount)
                 .restrictedDate(product.getRestrictedDate())
-                .status(product.getStatus())
+                .status(product.getStatusType())
                 .productImageUrls(productImages)
                 .purchaseLinkList(purchaseLinkList)
                 //.category(product.getCategory())TODO: 런칭 때는 이걸로 바꿔야함

@@ -32,7 +32,7 @@ public class Product extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private StatusType status ; // NONE, 일반, 인기, 규제
+    private StatusType statusType ; // 일반, 인기, 규제
 
     private LocalDate restrictedDate;
 }

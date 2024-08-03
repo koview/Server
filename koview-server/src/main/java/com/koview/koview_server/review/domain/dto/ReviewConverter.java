@@ -1,7 +1,7 @@
 package com.koview.koview_server.review.domain.dto;
 
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
-import com.koview.koview_server.imageTest.domain.ReviewImage;
+import com.koview.koview_server.image.domain.ReviewImage;
 import com.koview.koview_server.review.domain.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;

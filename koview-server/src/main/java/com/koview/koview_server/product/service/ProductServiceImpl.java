@@ -3,6 +3,7 @@ package com.koview.koview_server.product.service;
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import com.koview.koview_server.global.apiPayload.exception.GeneralException;
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
+import com.koview.koview_server.product.domain.CategoryType;
 import com.koview.koview_server.purchaseLink.repository.PurchaseLinkRepository;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
 import com.koview.koview_server.product.domain.Category;
@@ -39,24 +40,19 @@ public class ProductServiceImpl implements ProductService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public ProductResponseDTO.ProductSlice getProductsByStatus(Long categoryId, StatusType status, Pageable pageable) {
-        Slice<Product> productSlice;
-        if(categoryId==null) productSlice = productRepository.findAllByStatusOrderByIdDesc(status, pageable);
-        else {
-            Category category = getCategory(categoryId);
-            productSlice = productRepository.findAllByCategoryAndStatusOrderByIdDesc(category,status, pageable);
-        }
+    public ProductResponseDTO.ProductSlice getProductsByStatusTypeAndCategory(Long categoryId, StatusType status,
+                                                                              String searchTerm, Pageable pageable) {
+        Category category = getCategory(categoryId);
+        Slice<Product> productSlice =
+                productRepository.findAllByCategoryAndStatusTypeAndSearchTerm(category,status,searchTerm,pageable);
         return getProductSlice(productSlice);
     }
 
     @Override
-    public ProductResponseDTO.ProductSlice getProducts(Long categoryId, Pageable pageable) {
-        Slice<Product> productSlice;
-        if(categoryId==null) productSlice = productRepository.findAllBy(pageable);
-        else {
-            Category category = getCategory(categoryId);
-            productSlice = productRepository.findAllByCategory(category,pageable);
-        }
+    public ProductResponseDTO.ProductSlice getProductsByStatusTypeAndCategoryType(CategoryType category, StatusType status,
+                                                                                  String searchTerm, Pageable pageable) {
+        Slice<Product> productSlice =
+                productRepository.findAllByCategoryTypeAndStatusTypeAndSearchTerm(category, status, searchTerm,pageable);
         return getProductSlice(productSlice);
     }
 
@@ -88,8 +84,8 @@ public class ProductServiceImpl implements ProductService {
         List<LimitedReviewResponseDTO.Single> reviewList = reviewPage.stream().map(ReviewConverter::toLimitedSingleDto).toList();
         return ReviewConverter.toLimitedPagingDTO(reviewPage,reviewList);
     }
-
-    private ProductResponseDTO.ProductSlice getProductSlice(Slice<Product> productSlice) {
+    @Transactional
+    protected ProductResponseDTO.ProductSlice getProductSlice(Slice<Product> productSlice) {
 
         List<ProductResponseDTO.Single> productList = productSlice.stream().map(product -> {
             List<ImageResponseDTO> imagePaths =
@@ -98,6 +94,10 @@ public class ProductServiceImpl implements ProductService {
             List<PurchaseLinkResponseDTO> purchaseLinkList =
                     purchaseLinkRepository.findAllByProduct(product).stream().map(PurchaseLinkResponseDTO::new).toList();
             Long reviewCount = reviewRepository.countByProductPurchaseLink(product.getId());
+            if(reviewCount>=10 && product.getStatusType().equals(StatusType.NORMAL)) {
+                product.setStatusType(StatusType.FAMOUS);
+                productRepository.save(product);
+            }
             return ProductConverter.toSingleDTO(product, reviewCount, imagePaths, purchaseLinkList);
         }).toList();
 

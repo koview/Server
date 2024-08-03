@@ -28,10 +28,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p " +
             "WHERE (:category IS NULL OR p.category = :category) " +
             "AND (:status IS NULL OR p.statusType = :status) " +
+            "AND (:searchTerm IS NULL OR LOWER(p.productName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+            "OR LOWER(p.productName) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) " +
             "ORDER BY CASE WHEN :status = 'RESTRICTED' THEN p.restrictedDate ELSE p.id END DESC")
-    Slice<Product> findAllByCategoryAndStatusType(@Param("category") Category category,
-                                                      @Param("status") StatusType status,
-                                                      Pageable pageable);
+    Slice<Product> findAllByCategoryAndStatusTypeAndSearchTerm(@Param("category") Category category,
+                                                           @Param("status") StatusType status,
+                                                           @Param("searchTerm") String searchTerm,
+                                                           Pageable pageable);
+
 
     // categoryType
     List<Product> findTop4ByStatusTypeOrderByRestrictedDateDesc(StatusType status, Pageable pageable);
@@ -39,10 +43,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p " +
             "WHERE (:category IS NULL OR p.categoryType = :category) " +
             "AND (:status IS NULL OR p.statusType = :status) " +
+            "AND (:searchTerm IS NULL OR LOWER(p.productName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+            "OR LOWER(p.productName) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) " +
             "ORDER BY CASE WHEN :status = 'RESTRICTED' THEN p.restrictedDate ELSE p.id END DESC")
-    Slice<Product> findAllByCategoryTypeAndStatusType(@Param("category") CategoryType category,
-                                              @Param("status") StatusType status,
-                                              Pageable pageable);
+    Slice<Product> findAllByCategoryTypeAndStatusTypeAndSearchTerm(@Param("category") CategoryType category,
+                                                           @Param("status") StatusType status,
+                                                           @Param("searchTerm") String searchTerm,
+                                                           Pageable pageable);
 
 
 }

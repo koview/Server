@@ -40,15 +40,19 @@ public class ProductServiceImpl implements ProductService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public ProductResponseDTO.ProductSlice getProductsByStatusTypeAndCategory(Long categoryId, StatusType status, Pageable pageable) {
+    public ProductResponseDTO.ProductSlice getProductsByStatusTypeAndCategory(Long categoryId, StatusType status,
+                                                                              String searchTerm, Pageable pageable) {
         Category category = getCategory(categoryId);
-        Slice<Product> productSlice = productRepository.findAllByCategoryAndStatusType(category,status, pageable);
+        Slice<Product> productSlice =
+                productRepository.findAllByCategoryAndStatusTypeAndSearchTerm(category,status,searchTerm,pageable);
         return getProductSlice(productSlice);
     }
 
     @Override
-    public ProductResponseDTO.ProductSlice getProductsByStatusTypeAndCategoryType(CategoryType category, StatusType status, Pageable pageable) {
-        Slice<Product> productSlice = productRepository.findAllByCategoryTypeAndStatusType(category, status, pageable);
+    public ProductResponseDTO.ProductSlice getProductsByStatusTypeAndCategoryType(CategoryType category, StatusType status,
+                                                                                  String searchTerm, Pageable pageable) {
+        Slice<Product> productSlice =
+                productRepository.findAllByCategoryTypeAndStatusTypeAndSearchTerm(category, status, searchTerm,pageable);
         return getProductSlice(productSlice);
     }
 

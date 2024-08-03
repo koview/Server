@@ -40,59 +40,15 @@ public class ProductServiceImpl implements ProductService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public ProductResponseDTO.ProductSlice getProductsByStatus(Long categoryId, StatusType status, Pageable pageable) {
-        Slice<Product> productSlice;
-        if(categoryId==null) {
-            if(status==StatusType.RESTRICTED)
-                productSlice = productRepository.findAllByStatusOrderByRestrictedDateDesc(status, pageable);
-
-            else productSlice = productRepository.findAllByStatusOrderByIdDesc(status, pageable);
-        }
-        else {
-            Category category = getCategory(categoryId);
-            if(status==StatusType.RESTRICTED)
-                productSlice = productRepository.findAllByCategoryAndStatusOrderByRestrictedDateDesc(category, status, pageable);
-
-            else productSlice = productRepository.findAllByCategoryAndStatusOrderByIdDesc(category,status, pageable);
-        }
+    public ProductResponseDTO.ProductSlice getProductsByStatusTypeAndCategory(Long categoryId, StatusType status, Pageable pageable) {
+        Category category = getCategory(categoryId);
+        Slice<Product> productSlice = productRepository.findAllByCategoryAndStatusType(category,status, pageable);
         return getProductSlice(productSlice);
     }
 
     @Override
-    public ProductResponseDTO.ProductSlice getProducts(Long categoryId, Pageable pageable) {
-        Slice<Product> productSlice;
-        if(categoryId==null) productSlice = productRepository.findAllBy(pageable);
-        else {
-            Category category = getCategory(categoryId);
-            productSlice = productRepository.findAllByCategory(category,pageable);
-        }
-        return getProductSlice(productSlice);
-    }
-
-    @Override
-    public ProductResponseDTO.ProductSlice getProductsByStatusAndCategoryType(CategoryType category, StatusType status, Pageable pageable) {
-        Slice<Product> productSlice;
-        if(category==null) {
-            if(status==StatusType.RESTRICTED)
-                productSlice = productRepository.findAllByStatusOrderByRestrictedDateDesc(status, pageable);
-
-            else productSlice = productRepository.findAllByStatusOrderByIdDesc(status, pageable);
-        }
-        else {
-            if(status==StatusType.RESTRICTED)
-                productSlice = productRepository.findAllByCategoryTypeAndStatusOrderByRestrictedDateDesc(category, status, pageable);
-
-            else productSlice = productRepository.findAllByCategoryTypeAndStatusOrderByIdDesc(category,status, pageable);
-        }
-        return getProductSlice(productSlice);
-    }
-
-    @Override
-    public ProductResponseDTO.ProductSlice getProductsByCategorytype(CategoryType category, Pageable pageable) {
-        Slice<Product> productSlice;
-        if(category==null) productSlice = productRepository.findAllBy(pageable);
-        else productSlice = productRepository.findAllByCategoryType(category,pageable);
-
+    public ProductResponseDTO.ProductSlice getProductsByStatusTypeAndCategoryType(CategoryType category, StatusType status, Pageable pageable) {
+        Slice<Product> productSlice = productRepository.findAllByCategoryTypeAndStatusType(category, status, pageable);
         return getProductSlice(productSlice);
     }
 
@@ -134,8 +90,8 @@ public class ProductServiceImpl implements ProductService {
             List<PurchaseLinkResponseDTO> purchaseLinkList =
                     purchaseLinkRepository.findAllByProduct(product).stream().map(PurchaseLinkResponseDTO::new).toList();
             Long reviewCount = reviewRepository.countByProductPurchaseLink(product.getId());
-            if(reviewCount>=10 && product.getStatus().equals(StatusType.NORMAL)) {
-                product.setStatus(StatusType.FAMOUS);
+            if(reviewCount>=10 && product.getStatusType().equals(StatusType.NORMAL)) {
+                product.setStatusType(StatusType.FAMOUS);
                 productRepository.save(product);
             }
             return ProductConverter.toSingleDTO(product, reviewCount, imagePaths, purchaseLinkList);

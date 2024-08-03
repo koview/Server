@@ -23,7 +23,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     private final ProductImageRepository productImageRepository;
     @Override
     public List<ProductResponseDTO.NameWithImage> getFourRestrictedProducts() {
-        return productRepository.findTop4ByStatusOrderByRestrictedDateDesc(
+        return productRepository.findTop4ByStatusTypeOrderByRestrictedDateDesc(
                 StatusType.RESTRICTED,PageRequest.of(0,4)).stream().map(product -> {
                     ProductImage first = productImageRepository.findAllByProduct(product).getFirst();
                     return new ProductResponseDTO.NameWithImage(product.getProductName(), new ImageResponseDTO((first)));

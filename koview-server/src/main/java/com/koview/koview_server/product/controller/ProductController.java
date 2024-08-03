@@ -33,32 +33,18 @@ public class ProductController {
     public ApiResult<ProductResponseDTO.ProductSlice> getProductsByV1(
             @Parameter(description = "상품 상태 필터(null 입력시 적용 안됨)")
             @RequestParam(required = false) StatusType status,
-            @Parameter(description = "카테고리 필터(null 입력시 적용 안됨)")
+            @Parameter(description = "Id 카테고리 필터(null 입력시 적용 안됨)")
             @RequestParam(required = false) Long categoryId,
-            @Parameter(description = "페이지 번호(1부터 시작)")
-            @RequestParam(defaultValue = "1") int page,
-            @Parameter(description = "페이지 크기(한 번에 보내는 리스트 양)")
-            @RequestParam(defaultValue = "20") int size) {
-        if (status == null) // 전체 상품 조회 로직
-            return ApiResult.onSuccess(productService.getProducts(categoryId,PageRequest.of(page-1,size)));
-        else  // 유해, 인기 상품 조회 로직
-            return ApiResult.onSuccess(productService.getProductsByStatus(categoryId, status, PageRequest.of(page-1,size)));
-    }
-    @GetMapping("products/v2")
-    @Operation(description = "전체/유해/인기 상품 조회 : cateogryType 사용")
-    public ApiResult<ProductResponseDTO.ProductSlice> getProductsByV2(
-            @Parameter(description = "상품 상태 필터(null 입력시 적용 안됨)")
-            @RequestParam(required = false) StatusType status,
-            @Parameter(description = "카테고리 필터(null 입력시 적용 안됨)")
+            @Parameter(description = "Enum 카테고리 필터(null 입력시 적용 안됨)")
             @RequestParam(required = false) CategoryType category,
             @Parameter(description = "페이지 번호(1부터 시작)")
             @RequestParam(defaultValue = "1") int page,
             @Parameter(description = "페이지 크기(한 번에 보내는 리스트 양)")
             @RequestParam(defaultValue = "20") int size) {
-        if (status == null) // 전체 상품 조회 로직
-            return ApiResult.onSuccess(productService.getProductsByCategorytype(category,PageRequest.of(page-1,size)));
-        else  // 유해, 인기 상품 조회 로직
-            return ApiResult.onSuccess(productService.getProductsByStatusAndCategoryType(category, status, PageRequest.of(page-1,size)));
+        if (categoryId == null) // 카테고리 Enum 검색
+            return ApiResult.onSuccess(productService.getProductsByStatusTypeAndCategoryType(category,status, PageRequest.of(page-1,size)));
+        else  // 카테고리 id 조회
+            return ApiResult.onSuccess(productService.getProductsByStatusTypeAndCategory(categoryId, status, PageRequest.of(page-1,size)));
     }
 
     @GetMapping("products/{productId}")

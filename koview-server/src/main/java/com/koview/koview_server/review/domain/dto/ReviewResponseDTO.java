@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,8 @@ public class ReviewResponseDTO {
         private List<PurchaseLinkResponseDTO> purchaseLinkList;
         private Long totalCommentCount;
         private Long totalLikesCount;
+        private LocalDate createdAt;
+        private LocalDate updatedAt;
     }
     @Getter
     @Builder
@@ -30,9 +33,9 @@ public class ReviewResponseDTO {
     public static class ReviewSlice {
 
         private List<ReviewResponseDTO.Single> reviewList;
-        private int getNumber;
-        private boolean hasPrevious;
-        private boolean hasNext;
+        private Integer getNumber;
+        private Boolean hasPrevious;
+        private Boolean hasNext;
     }
     @Getter
     @Builder
@@ -44,6 +47,9 @@ public class ReviewResponseDTO {
         private List<Long> imagePathIdList;
         private Long totalCommentCount;
         private Long totalLikesCount;
+        private LocalDate createdAt;
+        private LocalDate updatedAt;
+
 
         public toReviewDTO(Review review) {
             this.reviewId = review.getId();
@@ -55,6 +61,9 @@ public class ReviewResponseDTO {
                             .collect(Collectors.toList()) : null;
             this.totalCommentCount = review.getCommentList() != null ? (long) review.getCommentList().size() : 0L;
             this.totalLikesCount = review.getTotalLikesCount();
+            this.createdAt = review.getCreatedDate().toLocalDate();
+            this.updatedAt = review.getLastModifiedDate().toLocalDate();
+
         }
     }
 }

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -22,6 +24,8 @@ public class LimitedReviewResponseDTO {
         private List<Long> imagePathIdList;
         private Long totalCommentCount;
         private Long totalLikesCount;
+        private LocalDate createdAt;
+        private LocalDate updatedAt;
     }
 
     @Getter

@@ -5,6 +5,7 @@ import com.koview.koview_server.global.apiPayload.exception.MemberException;
 import com.koview.koview_server.global.security.util.SecurityUtil;
 import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
+import com.koview.koview_server.mypage.domain.ProfileImage;
 import com.koview.koview_server.mypage.domain.dto.MyProfileResponseDTO;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
 import com.koview.koview_server.purchaseLink.repository.ReviewPurchaseLinkRepository;
@@ -64,6 +65,12 @@ public class MyPageServiceImpl implements MypageService {
     @Override
     public MyProfileResponseDTO findMyProfile() {
         Member member = validateMember();
+        ProfileImage profileImage = member.getProfileImage();
+
+        if (profileImage == null)
+            return MyProfileResponseDTO.builder()
+                    .nickname(member.getNickname())
+                    .build();
 
         return MyProfileResponseDTO.builder()
                 .imageId(member.getProfileImage().getId())

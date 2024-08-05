@@ -5,6 +5,7 @@ import com.koview.koview_server.global.apiPayload.exception.MemberException;
 import com.koview.koview_server.global.security.util.SecurityUtil;
 import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
+import com.koview.koview_server.mypage.domain.dto.MyProfileResponseDTO;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
 import com.koview.koview_server.purchaseLink.repository.ReviewPurchaseLinkRepository;
 import com.koview.koview_server.review.domain.Review;
@@ -58,6 +59,17 @@ public class MyPageServiceImpl implements MypageService {
             reviewPurchaseLinkRepository.deleteByReviewId(reviewId);
             reviewRepository.deleteById(reviewId);
         }
+    }
+
+    @Override
+    public MyProfileResponseDTO findMyProfile() {
+        Member member = validateMember();
+
+        return MyProfileResponseDTO.builder()
+                .imageId(member.getProfileImage().getId())
+                .url(member.getProfileImage().getUrl())
+                .nickname(member.getNickname())
+                .build();
     }
 
     private Member validateMember() {

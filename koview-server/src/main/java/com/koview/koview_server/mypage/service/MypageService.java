@@ -1,5 +1,6 @@
 package com.koview.koview_server.mypage.service;
 
+import com.koview.koview_server.mypage.domain.dto.MyProfileResponseDTO;
 import com.koview.koview_server.review.domain.dto.LimitedReviewResponseDTO;
 import com.koview.koview_server.review.domain.dto.ReviewRequestDTO;
 import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
@@ -10,4 +11,5 @@ public interface MypageService {
     ReviewResponseDTO.ReviewSlice findAllByMember(Pageable pageable, Long clickedReviewId);
     void deleteMyReview(Long reviewId);
     void deleteMyReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO);
+    MyProfileResponseDTO findMyProfile();
 }

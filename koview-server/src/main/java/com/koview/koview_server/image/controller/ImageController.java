@@ -18,31 +18,37 @@ import java.util.List;
 @Tag(name = "Image", description = "Image API")
 public class ImageController {
 
-    private final ImageServiceImpl reviewImageService;
+    private final ImageServiceImpl imageService;
 
     @PostMapping(value = "/review", consumes = "multipart/form-data")
     public ApiResult<ImageResponseDTO> postReviewImage(@RequestPart MultipartFile image) {
-        return ApiResult.onSuccess(reviewImageService.createReview(image));
+        return ApiResult.onSuccess(imageService.createReview(image));
     }
 
     @PostMapping(value = "/reviews", consumes = "multipart/form-data")
     public ApiResult<List<ImageResponseDTO>> postReviewImage(@RequestPart List<MultipartFile> images) {
-        return ApiResult.onSuccess(reviewImageService.createReviews(images));
+        return ApiResult.onSuccess(imageService.createReviews(images));
     }
 
     @DeleteMapping(value = "/reviews/{reviewId}")
     public ApiResult<String> deleteReviewImage(@PathVariable Long reviewId) {
-        return ApiResult.onSuccess(reviewImageService.deleteReview(reviewId));
+        return ApiResult.onSuccess(imageService.deleteReview(reviewId));
     }
 
     @DeleteMapping(value = "/reviews")
     public ApiResult<String> deleteReviewImages(@RequestBody ImageTestRequestDTO.ImageIdListDTO request) {
-        return ApiResult.onSuccess(reviewImageService.deleteReviews(request.getImageIdList()));
+        return ApiResult.onSuccess(imageService.deleteReviews(request.getImageIdList()));
     }
 
     @GetMapping
     @Operation(description = "이미지 데이터 받아오는 API")
     public ApiResult<List<ImageResponseDTO>> findAllImages() {
-        return ApiResult.onSuccess(reviewImageService.findAll());
+        return ApiResult.onSuccess(imageService.findAll());
+    }
+
+    @PostMapping(value = "/profile", consumes = "multipart/form-data")
+    @Operation(description = "프로필 등록 API")
+    public ApiResult<ImageResponseDTO> postProfileImage(@RequestPart MultipartFile image) {
+        return ApiResult.onSuccess(imageService.createProfile(image));
     }
 }

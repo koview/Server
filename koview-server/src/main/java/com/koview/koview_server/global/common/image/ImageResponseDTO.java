@@ -1,6 +1,7 @@
 package com.koview.koview_server.global.common.image;
 
 import com.koview.koview_server.image.domain.ReviewImage;
+import com.koview.koview_server.mypage.domain.ProfileImage;
 import com.koview.koview_server.product.domain.ProductImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,5 +21,9 @@ public class ImageResponseDTO {
     public ImageResponseDTO(ProductImage reviewImage) {
         this.imageId = reviewImage.getId();
         this.url = reviewImage.getUrl();
+    }
+    public ImageResponseDTO(ProfileImage profileImage) {
+        this.imageId = profileImage.getId();
+        this.url = profileImage.getUrl();
     }
 }

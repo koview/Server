@@ -2,6 +2,7 @@ package com.koview.koview_server.member.domain;
 
 import com.koview.koview_server.comment.domain.Comment;
 import com.koview.koview_server.global.common.BaseTimeEntity;
+import com.koview.koview_server.mypage.domain.ProfileImage;
 import com.koview.koview_server.like.domain.Like;
 import com.koview.koview_server.memberLikedShop.domain.MemberLikedShop;
 import com.koview.koview_server.review.domain.Review;
@@ -52,6 +53,10 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likeList = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "profile_image_id")
+    private ProfileImage profileImage;
+
     /* 패스워드 암호화 관련 */
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.loginPw = passwordEncoder.encode(loginPw);
@@ -70,5 +75,9 @@ public class Member extends BaseTimeEntity {
                     .build();
             this.memberLikedShopList.add(memberLikedShop);
         }
+    }
+
+    public void addProfileImage(ProfileImage profileImage) {
+        this.profileImage = profileImage;
     }
 }

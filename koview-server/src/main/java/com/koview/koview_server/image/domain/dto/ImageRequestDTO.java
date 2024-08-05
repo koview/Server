@@ -9,8 +9,8 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-@Schema(description = "ImageTest Request")
-public class ImageTestRequestDTO {
+@Schema(description = "Image Request")
+public class ImageRequestDTO {
     @Builder
     @Getter
     public static class ImageIdDTO{

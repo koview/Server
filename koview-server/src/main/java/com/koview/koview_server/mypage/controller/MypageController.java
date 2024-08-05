@@ -28,8 +28,8 @@ public class MypageController {
     @GetMapping("/myreviews")
     @Operation(description = "나의 리뷰 전체 조회")
     public ApiResult<LimitedReviewResponseDTO.ReviewSlice> findAllMyReview(
-            @Parameter(description = "페이지 번호(0부터 시작), default: 0")
-            @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "페이지 번호(1부터 시작)")
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size) {
         return ApiResult.onSuccess(mypageService.findAllByMemberWithLimitedImages(PageRequest.of(page-1, size)));
     }
@@ -37,8 +37,8 @@ public class MypageController {
     @GetMapping("/myreviews/detail")
     @Operation(description = "나의 리뷰 상세 조회")
     public ApiResult<ReviewResponseDTO.ReviewSlice> findAllMyReviewDetail(
-            @Parameter(description = "페이지 번호(0부터 시작), default: 0")
-            @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "페이지 번호(1부터 시작)")
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam Long clickedReviewId) {
         return ApiResult.onSuccess(mypageService.findAllByMember(PageRequest.of(page-1, size), clickedReviewId));

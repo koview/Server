@@ -12,6 +12,10 @@ import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.mypage.domain.ProfileImage;
 import com.koview.koview_server.mypage.repository.ProfileImageRepository;
+import com.koview.koview_server.product.domain.Product;
+import com.koview.koview_server.product.domain.ProductImage;
+import com.koview.koview_server.product.repository.ProductImageRepository;
+import com.koview.koview_server.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +31,10 @@ public class ImageServiceImpl {
     private final AmazonS3Manager s3Manager;
     private final ReviewImageRepository reviewImageRepository;
     private final ProfileImageRepository profileImageRepository;
+    private final ProductImageRepository productImageRepository;
+
     private final MemberRepository memberRepository;
+    private final ProductRepository productRepository;
 
     @Transactional
     public ImageResponseDTO createReview(MultipartFile request) {
@@ -93,6 +100,32 @@ public class ImageServiceImpl {
         memberRepository.save(member);
 
         return new ImageResponseDTO(savedProfileImage);
+    }
+
+    @Transactional
+    public List<ImageResponseDTO> createProducts(Long productId, List<MultipartFile> requests) {
+        List<ImageResponseDTO> urls = new ArrayList<>();
+        Product product = productRepository.findById(productId).
+                orElseThrow(()->new GeneralException(ErrorStatus.PRODUCT_NOT_FOUND));
+
+        for (MultipartFile request : requests)
+            urls.add(createProduct(product, request));
+
+        return urls;
+    }
+
+    @Transactional
+    protected ImageResponseDTO createProduct(Product product, MultipartFile request) {
+        String keyName = s3Manager.genProductsKeyName(s3Manager.genRandomUuid());
+
+        ProductImage savedProductImage = productImageRepository.save(
+                ProductImage.builder()
+                        .url(s3Manager.uploadFile(keyName, request))
+                        .product(product)
+                        .build()
+        );
+
+        return new ImageResponseDTO(savedProductImage);
     }
 
     private Member validateMember() {

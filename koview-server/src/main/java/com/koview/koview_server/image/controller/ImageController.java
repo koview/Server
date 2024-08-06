@@ -2,7 +2,7 @@ package com.koview.koview_server.image.controller;
 
 import com.koview.koview_server.global.apiPayload.ApiResult;
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
-import com.koview.koview_server.image.domain.dto.ImageTestRequestDTO;
+import com.koview.koview_server.image.domain.dto.ImageRequestDTO;
 import com.koview.koview_server.image.service.ImageServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,7 +36,7 @@ public class ImageController {
     }
 
     @DeleteMapping(value = "/reviews")
-    public ApiResult<String> deleteReviewImages(@RequestBody ImageTestRequestDTO.ImageIdListDTO request) {
+    public ApiResult<String> deleteReviewImages(@RequestBody ImageRequestDTO.ImageIdListDTO request) {
         return ApiResult.onSuccess(imageService.deleteReviews(request.getImageIdList()));
     }
 
@@ -50,5 +50,12 @@ public class ImageController {
     @Operation(description = "프로필 등록 API")
     public ApiResult<ImageResponseDTO> postProfileImage(@RequestPart MultipartFile image) {
         return ApiResult.onSuccess(imageService.createProfile(image));
+    }
+
+    @PostMapping(value = "/products/{productId}", consumes = "multipart/form-data")
+    @Operation(description = "상품 이미지 API")
+    public ApiResult<List<ImageResponseDTO>> postProductImage(@PathVariable("productId") Long productId,
+                                                              @RequestPart("imageList") List<MultipartFile> imageList) {
+        return ApiResult.onSuccess(imageService.createProducts(productId, imageList));
     }
 }

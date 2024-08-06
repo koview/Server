@@ -23,6 +23,8 @@ public class ReviewConverter {
                                 .collect(Collectors.toList()) : null)
                 .totalCommentCount((long) review.getCommentList().size())
                 .totalLikesCount(review.getTotalLikesCount() != null ? review.getTotalLikesCount() : 0L)
+                .createdAt(review.getCreatedDate().toLocalDate())
+                .updatedAt(review.getLastModifiedDate().toLocalDate())
                 .build();
     }
     public static LimitedReviewResponseDTO.ReviewSlice toLimitedSliceDto(Slice<Review> reviewSlice,
@@ -47,6 +49,8 @@ public class ReviewConverter {
                 .totalCommentCount((long) review.getCommentList().size())
                 .totalLikesCount(review.getTotalLikesCount() != null ? review.getTotalLikesCount() : 0L)
                 .purchaseLinkList(purchaseLink)
+                .createdAt(review.getCreatedDate().toLocalDate())
+                .updatedAt(review.getLastModifiedDate().toLocalDate())
                 .build();
     }
     public static ReviewResponseDTO.ReviewSlice toSliceDTO(Slice<Review> reviewSlice,

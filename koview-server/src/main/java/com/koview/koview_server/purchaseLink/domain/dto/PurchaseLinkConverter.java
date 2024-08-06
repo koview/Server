@@ -19,6 +19,7 @@ public class PurchaseLinkConverter {
         return ReviewPurchaseLink.builder()
                 .purchaseLink(purchaseLink)
                 .review(review)
+                .count(0)
                 .build();
     }
 }

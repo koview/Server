@@ -18,8 +18,10 @@ public class PurchaseLinkResponseDTO {
 
     /* Entity -> DTO */
     public PurchaseLinkResponseDTO(PurchaseLink purchaseLink) {
+        boolean isProduct = purchaseLink.getProduct() == null;
+
         this.purchaseLinkId = purchaseLink.getId();
-        this.productId = purchaseLink.getProduct().getId();
+        this.productId = isProduct ? null : purchaseLink.getProduct().getId();
         this.purchaseUrl = purchaseLink.getPurchaseLink();
         this.shopName = purchaseLink.getShopName();
         this.verifiedType=purchaseLink.getVerifiedType();

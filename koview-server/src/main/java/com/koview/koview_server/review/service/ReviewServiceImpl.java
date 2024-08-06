@@ -91,14 +91,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public LimitedReviewResponseDTO.ReviewSlice findAllWithLimitedImages(Pageable pageable) {
+    public ReviewResponseDTO.ReviewSlice findAll(Pageable pageable) {
         Slice<Review> reviewSlice = reviewRepository.findAll(pageable);
 
-        return getLimitedImageReviewSlice(reviewSlice);
+        return getReviewSlice(reviewSlice);
     }
 
     @Override
-    public ReviewResponseDTO.ReviewSlice findAll(Pageable pageable, Long clickedReviewId) {
+    public ReviewResponseDTO.ReviewSlice findAllDetail(Pageable pageable, Long clickedReviewId) {
         Slice<Review> reviewSlice = reviewRepository.findAllWithClickedReviewFirst(clickedReviewId, pageable);
 
         return getReviewSlice(reviewSlice);

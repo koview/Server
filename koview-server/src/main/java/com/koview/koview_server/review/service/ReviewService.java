@@ -10,7 +10,7 @@ public interface ReviewService {
     ReviewResponseDTO.toReviewDTO createReview(ReviewRequestDTO requestDTO);
     void deleteReview(Long reviewId);
     void deleteReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO);
-    LimitedReviewResponseDTO.ReviewSlice findAllWithLimitedImages(Pageable pageable);
-    ReviewResponseDTO.ReviewSlice findAll(Pageable pageable, Long clickedReviewId);
+    ReviewResponseDTO.ReviewSlice findAll(Pageable pageable);
+    ReviewResponseDTO.ReviewSlice findAllDetail(Pageable pageable, Long clickedReviewId);
     ReviewResponseDTO.ReviewSlice searchReviews(String keyword, Pageable pageable);
 }

@@ -41,12 +41,12 @@ public class ReviewController {
     }
 
     @GetMapping("/reviews")
-    @Operation(description = "리뷰 전체 조회(이미지 2개 제한)")
-    public ApiResult<LimitedReviewResponseDTO.ReviewSlice> getAllReviews(
+    @Operation(description = "리뷰 전체 조회(코뷰 메인화면)")
+    public ApiResult<ReviewResponseDTO.ReviewSlice> getAllReviews(
             @Parameter(description = "페이지 번호(1부터 시작), default: 1")
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size) {
-        return ApiResult.onSuccess(reviewService.findAllWithLimitedImages(PageRequest.of(page-1, size)));
+        return ApiResult.onSuccess(reviewService.findAll(PageRequest.of(page-1, size)));
     }
 
     @GetMapping("/reviews/detail")
@@ -56,7 +56,7 @@ public class ReviewController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam Long clickedReviewId) {
-        return ApiResult.onSuccess(reviewService.findAll(PageRequest.of(page-1, size), clickedReviewId));
+        return ApiResult.onSuccess(reviewService.findAllDetail(PageRequest.of(page-1, size), clickedReviewId));
     }
 
     @GetMapping("/review/search")

@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,13 +46,17 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = requestDTO.toEntity();
         review.setMember(member);
 
-        List<ReviewImage> images = reviewImageRepository.findAllById(requestDTO.getImagePathIdList());
-        for (ReviewImage image : images) {
-            image.addReview(review);
-        }
-        review.setReviewImageList(images);
+        List<ReviewImage> images = reviewImageRepository.findAllById(requestDTO.getImagePathIdList()).stream()
+            .map(image -> ReviewImage.builder()
+                .url(image.getUrl())
+                .review(review)
+                .build())
+            .collect(Collectors.toList());
 
+        reviewImageRepository.saveAll(images);
+        review.addReviewImages(images);
         reviewRepository.save(review);
+
 
         if (requestDTO.getPurchaseLinkList() != null) {
             requestDTO.getPurchaseLinkList().stream()

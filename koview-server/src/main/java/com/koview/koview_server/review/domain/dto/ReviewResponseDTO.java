@@ -60,6 +60,7 @@ public class ReviewResponseDTO {
             this.writer = review.getMember().getNickname();
             this.imageList = review.getReviewImageList() != null ?
                     review.getReviewImageList().stream()
+                            .distinct()
                             .map(ImageResponseDTO::new)
                             .collect(Collectors.toList()) : null;
             this.totalCommentCount = review.getCommentList() != null ? (long) review.getCommentList().size() : 0L;

@@ -1,15 +1,28 @@
 package com.koview.koview_server.review.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.koview.koview_server.comment.domain.Comment;
 import com.koview.koview_server.global.common.BaseTimeEntity;
 import com.koview.koview_server.image.domain.ReviewImage;
 import com.koview.koview_server.like.domain.Like;
 import com.koview.koview_server.member.domain.Member;
-import jakarta.persistence.*;
-import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -54,5 +67,17 @@ public class Review extends BaseTimeEntity {
             this.totalLikesCount = 0L;
         }
         this.totalLikesCount--;
+    }
+
+    public void addReviewImages(List<ReviewImage> reviewImages) {
+        if(this.reviewImageList ==  null) {
+            this.reviewImageList = new ArrayList<>();
+        }
+        for (ReviewImage image : reviewImages) {
+            if (!this.reviewImageList.contains(image)) {
+                image.addReview(this);
+                this.reviewImageList.add(image);
+            }
+        }
     }
 }

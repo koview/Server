@@ -1,17 +1,20 @@
 package com.koview.koview_server.review.domain.dto;
 
+import com.koview.koview_server.global.common.image.ImageResponseDTO;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
-import com.koview.koview_server.image.domain.ReviewImage;
 import com.koview.koview_server.review.domain.Review;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ReviewResponseDTO {
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     @Getter
     @Builder
     @AllArgsConstructor
@@ -20,12 +23,12 @@ public class ReviewResponseDTO {
         private Long reviewId;
         private String content;
         private String writer;
-        private List<Long> imagePathIdList;
+        private List<ImageResponseDTO> imageList;
         private List<PurchaseLinkResponseDTO> purchaseLinkList;
         private Long totalCommentCount;
         private Long totalLikesCount;
-        private LocalDate createdAt;
-        private LocalDate updatedAt;
+        private String createdAt;
+        private String updatedAt;
     }
     @Getter
     @Builder
@@ -44,25 +47,25 @@ public class ReviewResponseDTO {
         private Long reviewId;
         private String content;
         private String writer;
-        private List<Long> imagePathIdList;
+        private List<ImageResponseDTO> imageList;
         private Long totalCommentCount;
         private Long totalLikesCount;
-        private LocalDate createdAt;
-        private LocalDate updatedAt;
+        private String createdAt;
+        private String updatedAt;
 
 
         public toReviewDTO(Review review) {
             this.reviewId = review.getId();
             this.content = review.getContent();
             this.writer = review.getMember().getNickname();
-            this.imagePathIdList = review.getReviewImageList() != null ?
+            this.imageList = review.getReviewImageList() != null ?
                     review.getReviewImageList().stream()
-                            .map(ReviewImage::getId)
+                            .map(ImageResponseDTO::new)
                             .collect(Collectors.toList()) : null;
             this.totalCommentCount = review.getCommentList() != null ? (long) review.getCommentList().size() : 0L;
             this.totalLikesCount = review.getTotalLikesCount();
-            this.createdAt = review.getCreatedDate().toLocalDate();
-            this.updatedAt = review.getLastModifiedDate().toLocalDate();
+            this.createdAt = review.getCreatedDate().format(formatter);
+            this.updatedAt = review.getLastModifiedDate().format(formatter);
 
         }
     }

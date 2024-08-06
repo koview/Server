@@ -1,8 +1,6 @@
 package com.koview.koview_server.mypage.controller;
 
 import com.koview.koview_server.global.apiPayload.ApiResult;
-import com.koview.koview_server.global.common.image.ImageResponseDTO;
-import com.koview.koview_server.image.service.ImageServiceImpl;
 import com.koview.koview_server.mypage.domain.dto.MyProfileResponseDTO;
 import com.koview.koview_server.mypage.service.MypageService;
 import com.koview.koview_server.review.domain.dto.LimitedReviewResponseDTO;
@@ -14,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class MypageController {
 
     private final MypageService mypageService;
-    private final ImageServiceImpl imageService;
 
     @GetMapping("/myreviews")
     @Operation(description = "나의 리뷰 전체 조회")

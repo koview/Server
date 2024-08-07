@@ -58,4 +58,11 @@ public class ImageController {
                                                               @RequestPart("imageList") List<MultipartFile> imageList) {
         return ApiResult.onSuccess(imageService.createProducts(productId, imageList));
     }
+
+    @PostMapping(value = "/queries/{queryId}", consumes = "multipart/form-data")
+    @Operation(description = "질문 이미지 API")
+    public ApiResult<List<ImageResponseDTO>> postQueryImage(@PathVariable("queryId") Long queryId,
+        @RequestPart("imageList") List<MultipartFile> imageList) {
+        return ApiResult.onSuccess(imageService.createQueries(queryId, imageList));
+    }
 }

@@ -16,6 +16,11 @@ import com.koview.koview_server.product.domain.Product;
 import com.koview.koview_server.product.domain.ProductImage;
 import com.koview.koview_server.product.repository.ProductImageRepository;
 import com.koview.koview_server.product.repository.ProductRepository;
+import com.koview.koview_server.query.domain.Query;
+import com.koview.koview_server.query.domain.QueryImage;
+import com.koview.koview_server.query.repository.QueryImageRepository;
+import com.koview.koview_server.query.repository.QueryRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +37,8 @@ public class ImageServiceImpl {
     private final ReviewImageRepository reviewImageRepository;
     private final ProfileImageRepository profileImageRepository;
     private final ProductImageRepository productImageRepository;
+    private final QueryRepository queryRepository;
+    private final QueryImageRepository queryImageRepository;
 
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
@@ -126,6 +133,32 @@ public class ImageServiceImpl {
         );
 
         return new ImageResponseDTO(savedProductImage);
+    }
+
+    @Transactional
+    public List<ImageResponseDTO> createQueries(Long queryId, List<MultipartFile> requests) {
+        List<ImageResponseDTO> urls = new ArrayList<>();
+        Query query = queryRepository.findById(queryId).
+            orElseThrow(() -> new GeneralException(ErrorStatus.QUERY_NOT_FOUND));
+
+        for (MultipartFile request : requests)
+            urls.add(createQuery(query, request));
+
+        return urls;
+    }
+
+    @Transactional
+    protected ImageResponseDTO createQuery(Query query, MultipartFile request) {
+        String keyName = s3Manager.genQueriesKeyName(s3Manager.genRandomUuid());
+
+        QueryImage savedQueryImage = queryImageRepository.save(
+            QueryImage.builder()
+                .url(s3Manager.uploadFile(keyName, request))
+                .query(query)
+                .build()
+        );
+
+        return new ImageResponseDTO(savedQueryImage);
     }
 
     private Member validateMember() {

@@ -50,7 +50,10 @@ public enum ErrorStatus implements BaseErrorCode {
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND,"CATEGORY4001", "카테고리가 존재하지 않습니다."),
 
     // 상점 응답
-    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND,"PRODUCT4001" , "해당 상품이 존재하지 않습니다.");
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND,"PRODUCT4001" , "해당 상품이 존재하지 않습니다."),
+
+    // 질문 응답
+    QUERY_NOT_FOUND(HttpStatus.NOT_FOUND,"QUERY4001" , "해당 질문이 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

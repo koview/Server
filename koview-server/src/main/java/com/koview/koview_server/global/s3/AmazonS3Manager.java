@@ -79,4 +79,7 @@ public class AmazonS3Manager{
     public String genUserProfilesKeyName(String uuid) {
         return "user-profiles" + '/' + uuid;
     }
+    public String genQueriesKeyName(String uuid) {
+        return "queries" + '/' + uuid;
+    }
 }

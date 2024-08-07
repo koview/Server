@@ -2,6 +2,7 @@ package com.koview.koview_server.query.controller;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,13 +41,9 @@ public class QueryController {
 		return ApiResult.onSuccess(queryService.findAll(PageRequest.of(page - 1, size)));
 	}
 
-	@GetMapping("/queries/detail")
+	@GetMapping("/queries/{queryId}")
 	@Operation(description = "질문 상세 조회")
-	public ApiResult<QueryResponseDTO.QuerySlice> getQuery(
-		@Parameter(description = "페이지 번호(1부터 시작), default: 1")
-		@RequestParam(defaultValue = "1") int page,
-		@RequestParam(defaultValue = "20") int size,
-		@RequestParam Long clickedQueryId) {
-		return ApiResult.onSuccess(queryService.findAllDetail(PageRequest.of(page-1, size), clickedQueryId));
+	public ApiResult<QueryResponseDTO.toQueryDTO> getQuery(@PathVariable(name = "queryId") Long queryId) {
+		return ApiResult.onSuccess(queryService.findById(queryId));
 	}
 }

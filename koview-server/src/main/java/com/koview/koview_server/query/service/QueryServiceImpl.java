@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
+import com.koview.koview_server.global.apiPayload.exception.GeneralException;
 import com.koview.koview_server.global.apiPayload.exception.MemberException;
 import com.koview.koview_server.global.security.util.SecurityUtil;
-import com.koview.koview_server.image.domain.ReviewImage;
 import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.query.domain.Query;
@@ -62,10 +62,10 @@ public class QueryServiceImpl implements QueryService {
 	}
 
 	@Override
-	public QueryResponseDTO.QuerySlice findAllDetail(org.springframework.data.domain.Pageable pageable, Long clickedQueryId) {
-		Slice<Query> querySlice = queryRepository.findAllWithClickedQueryFirst(clickedQueryId, pageable);
+	public QueryResponseDTO.toQueryDTO findById(Long queryId) {
+		Query query = queryRepository.findById(queryId).orElseThrow(() -> new GeneralException(ErrorStatus.QUERY_NOT_FOUND));
 
-		return getQuerySlice(querySlice);
+		return new QueryResponseDTO.toQueryDTO(query);
 	}
 
 	private Member validateMember() {

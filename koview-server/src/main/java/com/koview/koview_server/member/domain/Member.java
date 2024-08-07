@@ -1,18 +1,36 @@
 package com.koview.koview_server.member.domain;
 
-import com.koview.koview_server.comment.domain.Comment;
-import com.koview.koview_server.global.common.BaseTimeEntity;
-import com.koview.koview_server.mypage.domain.ProfileImage;
-import com.koview.koview_server.like.domain.Like;
-import com.koview.koview_server.memberLikedShop.domain.MemberLikedShop;
-import com.koview.koview_server.review.domain.Review;
-import com.koview.koview_server.shop.domain.Shop;
-import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.koview.koview_server.comment.domain.Comment;
+import com.koview.koview_server.global.common.BaseTimeEntity;
+import com.koview.koview_server.like.domain.Like;
+import com.koview.koview_server.memberLikedShop.domain.MemberLikedShop;
+import com.koview.koview_server.mypage.domain.ProfileImage;
+import com.koview.koview_server.query.domain.Query;
+import com.koview.koview_server.review.domain.Review;
+import com.koview.koview_server.shop.domain.Shop;
+import com.koview.koview_server.withQuery.domain.WithQuery;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -56,6 +74,12 @@ public class Member extends BaseTimeEntity {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "profile_image_id")
     private ProfileImage profileImage;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Query> queryList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WithQuery> withQueryList = new ArrayList<>();
 
     /* 패스워드 암호화 관련 */
     public void encodePassword(PasswordEncoder passwordEncoder){

@@ -1,0 +1,52 @@
+package com.koview.koview_server.query.controller;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.koview.koview_server.global.apiPayload.ApiResult;
+import com.koview.koview_server.query.domain.dto.QueryRequestDTO;
+import com.koview.koview_server.query.domain.dto.QueryResponseDTO;
+import com.koview.koview_server.query.service.QueryService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequiredArgsConstructor
+@Tag(name = "Query", description = "Query API")
+public class QueryController {
+
+	private final QueryService queryService;
+
+	@PostMapping("/query/create")
+	@Operation(description = "질문 등록")
+	public ApiResult<QueryResponseDTO.toQueryDTO> createQuery(@RequestBody QueryRequestDTO requestDTO) {
+		QueryResponseDTO.toQueryDTO responseDTO = queryService.createQuery(requestDTO);
+		return ApiResult.onSuccess(responseDTO);
+	}
+
+	@GetMapping("/queries")
+	@Operation(description = "질문 전체 조회")
+	public ApiResult<QueryResponseDTO.QuerySlice> getAllQueries(
+		@Parameter(description = "페이지 번호(1부터 시작), default: 1")
+		@RequestParam(defaultValue = "1") int page,
+		@RequestParam(defaultValue = "20") int size) {
+		return ApiResult.onSuccess(queryService.findAll(PageRequest.of(page - 1, size)));
+	}
+
+	@GetMapping("/queries/detail")
+	@Operation(description = "질문 상세 조회")
+	public ApiResult<QueryResponseDTO.QuerySlice> getQuery(
+		@Parameter(description = "페이지 번호(1부터 시작), default: 1")
+		@RequestParam(defaultValue = "1") int page,
+		@RequestParam(defaultValue = "20") int size,
+		@RequestParam Long clickedQueryId) {
+		return ApiResult.onSuccess(queryService.findAllDetail(PageRequest.of(page-1, size), clickedQueryId));
+	}
+}

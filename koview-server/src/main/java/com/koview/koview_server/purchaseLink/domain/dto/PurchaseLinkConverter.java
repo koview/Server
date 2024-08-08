@@ -10,7 +10,7 @@ public class PurchaseLinkConverter {
         return PurchaseLink.builder()
                 .purchaseLink(requestDTO.purchaseLink)
                 .shopName(requestDTO.shopName)
-                .verifiedType(VerifiedType.UNDEFINED)
+                .verifiedType(VerifiedType.UNVERIFIED)
                 //.product() null 저장
                 .build();
     }

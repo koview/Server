@@ -29,5 +29,5 @@ public class PurchaseLink extends BaseTimeEntity {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private VerifiedType verifiedType = VerifiedType.UNDEFINED; // 판매 종료된, 미확인, 검증된 상태
+    private VerifiedType verifiedType = VerifiedType.UNVERIFIED; // 판매 종료된, 미확인, 검증된 상태
 }

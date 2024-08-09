@@ -1,6 +1,8 @@
 package com.koview.koview_server.comment.domain.dto;
 
 import com.koview.koview_server.comment.domain.Comment;
+import com.koview.koview_server.global.common.image.ImageResponseDTO;
+
 import org.springframework.data.domain.Page;
 
 import java.time.format.DateTimeFormatter;
@@ -14,6 +16,8 @@ public class CommentConverter {
         return CommentResponseDTO.Single.builder()
                 .commentId(comment.getId())
                 .content(comment.getContent())
+                .profileImage(comment.getMember().getProfileImage() != null ?
+                        new ImageResponseDTO(comment.getMember().getProfileImage()) : null)
                 .writer(comment.getMember().getNickname())
                 .createdDate(comment.getCreatedDate().format(formatter))
                 .build();

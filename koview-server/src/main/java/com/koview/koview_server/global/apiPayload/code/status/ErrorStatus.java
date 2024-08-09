@@ -30,8 +30,8 @@ public enum ErrorStatus implements BaseErrorCode {
     MEMBER_PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "MEMBER4004", "비밀번호가 일치하지 않습니다."),
     NOT_MATCHING_MEMBER_TOKEN(HttpStatus.BAD_REQUEST, "MEMBER4005", "토큰과 로그인 된 멤버가 일치하지 않습니다."),
     MEMBER_ACCESS_TOKEN_IS_EXPIRED(HttpStatus.BAD_REQUEST, "MEMBER4006", "만료된 Access Token 입니다. 재발급을 요청하세요."),
-    MEMBER_REFRESH_TOKEN_IS_EXPIRED(HttpStatus.BAD_REQUEST, "MEMBER4007", "만료된 Access Token 입니다. 재발급을 요청하세요."),
-    MEMBER_WAS_SIGN_OUT(HttpStatus.BAD_REQUEST, "MEMBER4007", "로그아웃 된 사용자입니다."),
+    MEMBER_REFRESH_TOKEN_IS_EXPIRED(HttpStatus.BAD_REQUEST, "MEMBER4007", "만료된 Refresh Token 입니다. 재발급을 요청하세요."),
+    MEMBER_WAS_SIGN_OUT(HttpStatus.BAD_REQUEST, "MEMBER4008", "로그아웃 된 사용자입니다."),
 
     // 리뷰 응답
     REVIEW_NOT_FOUND(HttpStatus.BAD_REQUEST, "REVIEW4001", "존재하지 않는 리뷰입니다."),
@@ -53,7 +53,10 @@ public enum ErrorStatus implements BaseErrorCode {
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND,"PRODUCT4001" , "해당 상품이 존재하지 않습니다."),
 
     // 질문 응답
-    QUERY_NOT_FOUND(HttpStatus.NOT_FOUND,"QUERY4001" , "해당 질문이 존재하지 않습니다.");
+    QUERY_NOT_FOUND(HttpStatus.NOT_FOUND,"QUERY4001" , "해당 질문이 존재하지 않습니다."),
+
+    // 나도 공감 응답
+    WITH_QUERY_NOT_FOUND(HttpStatus.NOT_FOUND,"WITH_QUERY4001" , "나도 공감이 등록되지 않았습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

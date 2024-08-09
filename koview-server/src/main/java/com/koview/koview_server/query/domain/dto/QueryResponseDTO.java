@@ -23,7 +23,9 @@ public class QueryResponseDTO {
 		private Long queryId;
 		private String content;
 		private String writer;
+		private ImageResponseDTO profileImage;
 		private List<String> imageList;
+		private Long totalWithQueriesCount;
 		private String createdAt;
 		private String updatedAt;
 	}
@@ -45,7 +47,9 @@ public class QueryResponseDTO {
 		private Long queryId;
 		private String content;
 		private String writer;
+		private ImageResponseDTO profileImage;
 		private List<ImageResponseDTO> imageList;
+		private Long totalWithQueriesCount;
 		private String createdAt;
 		private String updatedAt;
 
@@ -54,11 +58,14 @@ public class QueryResponseDTO {
 			this.queryId = query.getId();
 			this.content = query.getContent();
 			this.writer = query.getMember().getNickname();
+			this.profileImage = query.getMember().getProfileImage() != null ?
+				new ImageResponseDTO(query.getMember().getProfileImage()) : null;
 			this.imageList = query.getQueryImageList() != null ?
 				query.getQueryImageList().stream()
 					.distinct()
 					.map(ImageResponseDTO::new)
 					.collect(Collectors.toList()) : null;
+			this.totalWithQueriesCount = query.getTotalWithQueriesCount() != null ? query.getTotalWithQueriesCount() : 0L;
 			this.createdAt = query.getCreatedDate().format(formatter);
 			this.updatedAt = query.getLastModifiedDate().format(formatter);
 		}

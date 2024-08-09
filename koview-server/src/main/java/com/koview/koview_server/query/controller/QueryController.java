@@ -1,6 +1,7 @@
 package com.koview.koview_server.query.controller;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,13 @@ public class QueryController {
 	public ApiResult<QueryResponseDTO.toQueryDTO> createQuery(@RequestBody QueryRequestDTO requestDTO) {
 		QueryResponseDTO.toQueryDTO responseDTO = queryService.createQuery(requestDTO);
 		return ApiResult.onSuccess(responseDTO);
+	}
+
+	@DeleteMapping("/queries/{queryId}/delete")
+	@Operation(description = "질문 삭제")
+	public ApiResult<?> deleteQuery(@PathVariable Long queryId) {
+		queryService.deleteQuery(queryId);
+		return ApiResult.onSuccess();
 	}
 
 	@GetMapping("/queries")

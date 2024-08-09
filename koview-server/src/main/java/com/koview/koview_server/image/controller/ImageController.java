@@ -59,10 +59,23 @@ public class ImageController {
         return ApiResult.onSuccess(imageService.createProducts(productId, imageList));
     }
 
-    @PostMapping(value = "/queries/{queryId}", consumes = "multipart/form-data")
-    @Operation(description = "질문 이미지 API")
-    public ApiResult<List<ImageResponseDTO>> postQueryImage(@PathVariable("queryId") Long queryId,
-        @RequestPart("imageList") List<MultipartFile> imageList) {
-        return ApiResult.onSuccess(imageService.createQueries(queryId, imageList));
+    @PostMapping(value = "/query", consumes = "multipart/form-data")
+    public ApiResult<ImageResponseDTO> postQueryImage(@RequestPart MultipartFile image) {
+        return ApiResult.onSuccess(imageService.createQueryImage(image));
+    }
+
+    @PostMapping(value = "/queries", consumes = "multipart/form-data")
+    public ApiResult<List<ImageResponseDTO>> postQueryImage(@RequestPart List<MultipartFile> images) {
+        return ApiResult.onSuccess(imageService.createQueryImages(images));
+    }
+
+    @DeleteMapping(value = "/queries/{queryId}")
+    public ApiResult<String> deleteQueryImage(@PathVariable Long queryId) {
+        return ApiResult.onSuccess(imageService.deleteQueryImage(queryId));
+    }
+
+    @DeleteMapping(value = "/queries")
+    public ApiResult<String> deleteQueryImages(@RequestBody ImageRequestDTO.ImageIdListDTO request) {
+        return ApiResult.onSuccess(imageService.deleteQueryImages(request.getImageIdList()));
     }
 }

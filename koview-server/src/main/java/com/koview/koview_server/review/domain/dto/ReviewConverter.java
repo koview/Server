@@ -19,6 +19,8 @@ public class ReviewConverter {
                 .reviewId(review.getId())
                 .content(review.getContent())
                 .writer(review.getMember().getNickname())
+                .profileImage(review.getMember().getProfileImage() != null ?
+                        new ImageResponseDTO(review.getMember().getProfileImage()) : null)
                 .imageList(review.getReviewImageList() != null ?
                         review.getReviewImageList().stream()
                                 .limit(2)
@@ -45,6 +47,8 @@ public class ReviewConverter {
                 .reviewId(review.getId())
                 .content(review.getContent())
                 .writer(review.getMember().getNickname())
+                .profileImage(review.getMember().getProfileImage() != null ?
+                        new ImageResponseDTO(review.getMember().getProfileImage()) : null)
                 .imageList(review.getReviewImageList() != null ?
                         review.getReviewImageList().stream()
                                 .map(ImageResponseDTO::new)

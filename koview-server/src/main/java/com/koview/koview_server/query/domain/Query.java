@@ -44,11 +44,27 @@ public class Query extends BaseTimeEntity {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
+	private Long totalWithQueriesCount = 0L;
+
 	@OneToMany(mappedBy = "query", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<WithQuery> withQueryList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "query", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<QueryImage> queryImageList = new ArrayList<>();
+
+	public void increaseTotalWithQueriesCount() {
+		if (this.totalWithQueriesCount == null) {
+			this.totalWithQueriesCount = 0L;
+		}
+		this.totalWithQueriesCount++;
+	}
+
+	public void decreaseTotalWithQueriesCount() {
+		if (this.totalWithQueriesCount == null) {
+			this.totalWithQueriesCount = 0L;
+		}
+		this.totalWithQueriesCount--;
+	}
 
 	public void addQueryImages(List<QueryImage> queryImages) {
 		if(this.queryImageList ==  null) {

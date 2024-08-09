@@ -1,6 +1,8 @@
 package com.koview.koview_server.comment.domain.dto;
 
 import com.koview.koview_server.comment.domain.Comment;
+import com.koview.koview_server.global.common.image.ImageResponseDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +25,7 @@ public class CommentResponseDTO {
         private Long commentId;
         private String content;
         private String writer;
+        private ImageResponseDTO profileImage;
         private String createdDate;
     }
 
@@ -48,12 +51,15 @@ public class CommentResponseDTO {
         private Long commentId;
         private String content;
         private String writer;
+        private ImageResponseDTO profileImage;
         private String createdDate;
 
         public toCommentDTO(Comment comment) {
             this.commentId = comment.getId();
             this.content = comment.getContent();
             this.writer = comment.getMember().getNickname();
+            this.profileImage = comment.getMember().getProfileImage() != null ?
+                new ImageResponseDTO(comment.getMember().getProfileImage()) : null;
             this.createdDate = comment.getCreatedDate().format(formatter);
         }
     }

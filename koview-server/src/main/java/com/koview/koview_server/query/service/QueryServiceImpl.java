@@ -55,6 +55,11 @@ public class QueryServiceImpl implements QueryService {
 	}
 
 	@Override
+	public void deleteQuery(Long queryId) {
+		queryRepository.deleteById(queryId);
+	}
+
+	@Override
 	public QueryResponseDTO.QuerySlice findAll(Pageable pageable) {
 		Slice<Query> querySlice = queryRepository.findAll(pageable);
 

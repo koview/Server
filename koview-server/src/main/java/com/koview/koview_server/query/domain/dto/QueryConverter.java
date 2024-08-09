@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Slice;
 
+import com.koview.koview_server.global.common.image.ImageResponseDTO;
 import com.koview.koview_server.query.domain.Query;
 import com.koview.koview_server.query.domain.QueryImage;
 
@@ -18,10 +19,13 @@ public class QueryConverter {
 			.queryId(query.getId())
 			.content(query.getContent())
 			.writer(query.getMember().getNickname())
+			.profileImage(query.getMember().getProfileImage() != null ?
+				new ImageResponseDTO(query.getMember().getProfileImage()) : null)
 			.imageList(query.getQueryImageList() != null ?
 				query.getQueryImageList().stream()
 					.map(QueryImage::getUrl)
 					.collect(Collectors.toList()) : null)
+			.totalWithQueriesCount(query.getTotalWithQueriesCount() != null ? query.getTotalWithQueriesCount() : 0L)
 			.createdAt(query.getCreatedDate().format(formatter))
 			.updatedAt(query.getLastModifiedDate().format(formatter))
 			.build();

@@ -22,6 +22,7 @@ public class LimitedReviewResponseDTO {
         private Long reviewId;
         private String content;
         private String writer;
+        private ImageResponseDTO profileImage;
         private List<ImageResponseDTO> imageList;
         private Long totalCommentCount;
         private Long totalLikesCount;

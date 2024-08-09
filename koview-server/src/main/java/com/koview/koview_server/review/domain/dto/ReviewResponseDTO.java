@@ -23,6 +23,7 @@ public class ReviewResponseDTO {
         private Long reviewId;
         private String content;
         private String writer;
+        private ImageResponseDTO profileImage;
         private List<ImageResponseDTO> imageList;
         private List<PurchaseLinkResponseDTO> purchaseLinkList;
         private Long totalCommentCount;
@@ -47,6 +48,7 @@ public class ReviewResponseDTO {
         private Long reviewId;
         private String content;
         private String writer;
+        private ImageResponseDTO profileImage;
         private List<ImageResponseDTO> imageList;
         private Long totalCommentCount;
         private Long totalLikesCount;
@@ -58,6 +60,8 @@ public class ReviewResponseDTO {
             this.reviewId = review.getId();
             this.content = review.getContent();
             this.writer = review.getMember().getNickname();
+            this.profileImage = review.getMember().getProfileImage() != null ?
+                new ImageResponseDTO(review.getMember().getProfileImage()) : null;
             this.imageList = review.getReviewImageList() != null ?
                     review.getReviewImageList().stream()
                             .distinct()

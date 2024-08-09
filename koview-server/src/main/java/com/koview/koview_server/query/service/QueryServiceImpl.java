@@ -69,6 +69,8 @@ public class QueryServiceImpl implements QueryService {
 	@Override
 	public QueryResponseDTO.toQueryDTO findById(Long queryId) {
 		Query query = queryRepository.findById(queryId).orElseThrow(() -> new GeneralException(ErrorStatus.QUERY_NOT_FOUND));
+		query.increaseTotalViewCount();
+		queryRepository.save(query);
 
 		return new QueryResponseDTO.toQueryDTO(query);
 	}

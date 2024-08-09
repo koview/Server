@@ -26,6 +26,7 @@ public class QueryConverter {
 					.map(QueryImage::getUrl)
 					.collect(Collectors.toList()) : null)
 			.totalWithQueriesCount(query.getTotalWithQueriesCount() != null ? query.getTotalWithQueriesCount() : 0L)
+			.totalViewCount(query.getTotalViewCount() != null ? query.getTotalViewCount() : 0L)
 			.createdAt(query.getCreatedDate().format(formatter))
 			.updatedAt(query.getLastModifiedDate().format(formatter))
 			.build();

@@ -26,6 +26,7 @@ public class QueryResponseDTO {
 		private ImageResponseDTO profileImage;
 		private List<String> imageList;
 		private Long totalWithQueriesCount;
+		private Long totalViewCount;
 		private String createdAt;
 		private String updatedAt;
 	}
@@ -50,6 +51,7 @@ public class QueryResponseDTO {
 		private ImageResponseDTO profileImage;
 		private List<ImageResponseDTO> imageList;
 		private Long totalWithQueriesCount;
+		private Long totalViewCount;
 		private String createdAt;
 		private String updatedAt;
 
@@ -66,6 +68,7 @@ public class QueryResponseDTO {
 					.map(ImageResponseDTO::new)
 					.collect(Collectors.toList()) : null;
 			this.totalWithQueriesCount = query.getTotalWithQueriesCount() != null ? query.getTotalWithQueriesCount() : 0L;
+			this.totalViewCount = query.getTotalViewCount() != null ? query.getTotalViewCount() : 0L;
 			this.createdAt = query.getCreatedDate().format(formatter);
 			this.updatedAt = query.getLastModifiedDate().format(formatter);
 		}

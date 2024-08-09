@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.koview.koview_server.global.common.BaseTimeEntity;
-import com.koview.koview_server.image.domain.ReviewImage;
 import com.koview.koview_server.member.domain.Member;
-import com.koview.koview_server.review.domain.Review;
 import com.koview.koview_server.withQuery.domain.WithQuery;
 
 import jakarta.persistence.CascadeType;
@@ -45,6 +43,7 @@ public class Query extends BaseTimeEntity {
 	private Member member;
 
 	private Long totalWithQueriesCount = 0L;
+	private Long totalViewCount = 0L;
 
 	@OneToMany(mappedBy = "query", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<WithQuery> withQueryList = new ArrayList<>();
@@ -64,6 +63,13 @@ public class Query extends BaseTimeEntity {
 			this.totalWithQueriesCount = 0L;
 		}
 		this.totalWithQueriesCount--;
+	}
+
+	public void increaseTotalViewCount() {
+		if (this.totalViewCount == null) {
+			this.totalViewCount = 0L;
+		}
+		this.totalViewCount++;
 	}
 
 	public void addQueryImages(List<QueryImage> queryImages) {

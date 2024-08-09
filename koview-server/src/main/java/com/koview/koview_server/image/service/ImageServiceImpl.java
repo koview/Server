@@ -136,29 +136,42 @@ public class ImageServiceImpl {
     }
 
     @Transactional
-    public List<ImageResponseDTO> createQueries(Long queryId, List<MultipartFile> requests) {
-        List<ImageResponseDTO> urls = new ArrayList<>();
-        Query query = queryRepository.findById(queryId).
-            orElseThrow(() -> new GeneralException(ErrorStatus.QUERY_NOT_FOUND));
-
-        for (MultipartFile request : requests)
-            urls.add(createQuery(query, request));
-
-        return urls;
-    }
-
-    @Transactional
-    protected ImageResponseDTO createQuery(Query query, MultipartFile request) {
+    public ImageResponseDTO createQueryImage(MultipartFile request) {
         String keyName = s3Manager.genQueriesKeyName(s3Manager.genRandomUuid());
 
         QueryImage savedQueryImage = queryImageRepository.save(
             QueryImage.builder()
                 .url(s3Manager.uploadFile(keyName, request))
-                .query(query)
                 .build()
         );
 
         return new ImageResponseDTO(savedQueryImage);
+    }
+
+    @Transactional
+    public List<ImageResponseDTO> createQueryImages(List<MultipartFile> requests) {
+        List<ImageResponseDTO> urls = new ArrayList<>();
+
+        for (MultipartFile request : requests)
+            urls.add(createQueryImage(request));
+
+        return urls;
+    }
+
+    @Transactional
+    public String deleteQueryImage(Long imageId) {
+        QueryImage queryImage = queryImageRepository.findById(imageId).orElseThrow(() -> new GeneralException(ErrorStatus.IMAGE_NOT_FOUND));
+        s3Manager.deleteFile(queryImage.getUrl());
+        queryImageRepository.delete(queryImage);
+
+        return "삭제하였습니다.";
+    }
+
+    @Transactional
+    public String deleteQueryImages(List<Long> imageIds) {
+        for (Long imageId : imageIds)
+            deleteQueryImage(imageId);
+        return "이미지 리스트 삭제하였습니다.";
     }
 
     private Member validateMember() {

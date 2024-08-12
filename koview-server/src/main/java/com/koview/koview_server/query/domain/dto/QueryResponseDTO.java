@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
+import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
 import com.koview.koview_server.query.domain.Query;
 
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class QueryResponseDTO {
 		private Long totalWithQueriesCount;
 		private Boolean isCurrentMemberWithQuery;
 		private Long totalViewCount;
+		private List<PurchaseLinkResponseDTO> purchaseLinkList;
 		private String createdAt;
 		private String updatedAt;
 	}

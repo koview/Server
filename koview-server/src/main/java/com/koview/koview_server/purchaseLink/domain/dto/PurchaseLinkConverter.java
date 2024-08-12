@@ -1,8 +1,10 @@
 package com.koview.koview_server.purchaseLink.domain.dto;
 
 import com.koview.koview_server.purchaseLink.domain.PurchaseLink;
+import com.koview.koview_server.purchaseLink.domain.QueryPurchaseLink;
 import com.koview.koview_server.purchaseLink.domain.ReviewPurchaseLink;
 import com.koview.koview_server.purchaseLink.domain.VerifiedType;
+import com.koview.koview_server.query.domain.Query;
 import com.koview.koview_server.review.domain.Review;
 
 public class PurchaseLinkConverter {
@@ -20,6 +22,13 @@ public class PurchaseLinkConverter {
                 .purchaseLink(purchaseLink)
                 .review(review)
                 .count(0)
+                .build();
+    }
+
+    public static QueryPurchaseLink toQueryPurchaseLink(PurchaseLink purchaseLink, Query query){
+        return QueryPurchaseLink.builder()
+                .purchaseLink(purchaseLink)
+                .query(query)
                 .build();
     }
 }

@@ -1,8 +1,14 @@
 package com.koview.koview_server.query.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.koview.koview_server.purchaseLink.domain.PurchaseLink;
+import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkConverter;
+import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
+import com.koview.koview_server.purchaseLink.repository.PurchaseLinkRepository;
+import com.koview.koview_server.purchaseLink.repository.QueryPurchaseLinkRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -32,6 +38,8 @@ public class QueryServiceImpl implements QueryService {
 	private final MemberRepository memberRepository;
 	private final QueryRepository queryRepository;
 	private final QueryImageRepository queryImageRepository;
+	private final QueryPurchaseLinkRepository queryPurchaseLinkRepository;
+	private final PurchaseLinkRepository purchaseLinkRepository;
 
 	@Override
 	public QueryResponseDTO.toQueryDTO createQuery(QueryRequestDTO requestDTO) {
@@ -49,7 +57,22 @@ public class QueryServiceImpl implements QueryService {
 
 		queryImageRepository.saveAll(images);
 		query.addQueryImages(images);
-		queryRepository.save(query);
+		Query saveQuery = queryRepository.save(query);
+
+		if (requestDTO.getPurchaseLinkList() != null) {
+			requestDTO.getPurchaseLinkList().stream()
+					.map(linkDTO -> {
+						// PurchaseLink에 같은 링크가 있는지 확인
+						Optional<PurchaseLink> optionalPurchaseLink = purchaseLinkRepository.findByPurchaseLink(linkDTO.purchaseLink);
+						// 없으면, 새로 저장
+						return optionalPurchaseLink.orElseGet(() -> {
+							PurchaseLink newPurchaseLink = PurchaseLinkConverter.toPurchaseLink(linkDTO);
+							return purchaseLinkRepository.save(newPurchaseLink);
+						});
+					})
+					.map(purchaseLink -> PurchaseLinkConverter.toQueryPurchaseLink(purchaseLink, saveQuery))
+					.forEach(queryPurchaseLinkRepository::save);
+		}
 
 		return new QueryResponseDTO.toQueryDTO(query);
 	}
@@ -82,7 +105,12 @@ public class QueryServiceImpl implements QueryService {
 
 	private QueryResponseDTO.QuerySlice getQuerySlice(Slice<Query> querySlice) {
 		List<QueryResponseDTO.Single> queryList = querySlice.stream()
-			.map(QueryConverter::toSingleDTO)
+			.map(query -> {
+				List<PurchaseLinkResponseDTO> purchaseLinkList =
+						queryPurchaseLinkRepository.findPurchaseLinksByQueryId(query.getId()).stream()
+								.map(PurchaseLinkResponseDTO::new).toList();
+				return QueryConverter.toSingleDTO(query, purchaseLinkList);
+			})
 			.collect(Collectors.toList());
 
 		return QueryConverter.toSliceDTO(querySlice, queryList);

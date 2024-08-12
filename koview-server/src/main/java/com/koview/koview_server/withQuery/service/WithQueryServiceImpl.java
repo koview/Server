@@ -40,11 +40,15 @@ public class WithQueryServiceImpl implements WithQueryService {
 		query.increaseTotalWithQueriesCount();
 		queryRepository.save(query);
 
+		currentMember.isCurrentMemberWithQueryTrue();
+		memberRepository.save(currentMember);
+
 		return new WithQueryResponseDTO(newWithQuery);
 	}
 
 	@Override
 	public WithQueryResponseDTO cancelWithQuery(Long queryId) {
+		Member currentMember = validateMember();
 		Query query = validateQuery(queryId);
 		WithQuery withQuery = withQueryRepository.findByQueryId(queryId)
 			.orElseThrow(() -> new GeneralException(ErrorStatus.WITH_QUERY_NOT_FOUND));
@@ -54,6 +58,10 @@ public class WithQueryServiceImpl implements WithQueryService {
 			queryRepository.save(query);
 		}
 		withQueryRepository.delete(withQuery);
+
+		currentMember.isCurrentMemberWithQueryFalse();
+		memberRepository.save(currentMember);
+
 		return new WithQueryResponseDTO(withQuery);
 	}
 

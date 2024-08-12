@@ -38,6 +38,9 @@ public class LikeServiceImpl implements LikeService {
         review.increaseTotalLikesCount();
         reviewRepository.save(review);
 
+        currentMember.isCurrentMemberLikedTrue();
+        memberRepository.save(currentMember);
+
         return new LikeResponseDTO(newLike);
     }
 
@@ -52,6 +55,11 @@ public class LikeServiceImpl implements LikeService {
             reviewRepository.save(review);
         }
         likesRepository.delete(like);
+
+        Member currentMember = validateMember();
+        currentMember.isCurrentMemberLikedFalse();
+        memberRepository.save(currentMember);
+
         return new LikeResponseDTO(like);
     }
 

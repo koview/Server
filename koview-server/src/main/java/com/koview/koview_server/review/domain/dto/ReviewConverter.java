@@ -28,6 +28,7 @@ public class ReviewConverter {
                                 .collect(Collectors.toList()) : null)
                 .totalCommentCount((long) review.getCommentList().size())
                 .totalLikesCount(review.getTotalLikesCount() != null ? review.getTotalLikesCount() : 0L)
+                .isCurrentMemberLiked(review.getMember().getIsCurrentMemberLiked())
                 .createdAt(review.getCreatedDate().format(formatter))
                 .updatedAt(review.getLastModifiedDate().format(formatter))
                 .build();
@@ -56,6 +57,7 @@ public class ReviewConverter {
                 .totalCommentCount((long) review.getCommentList().size())
                 .totalLikesCount(review.getTotalLikesCount() != null ? review.getTotalLikesCount() : 0L)
                 .purchaseLinkList(purchaseLink)
+                .isCurrentMemberLiked(review.getMember().getIsCurrentMemberLiked())
                 .createdAt(review.getCreatedDate().format(formatter))
                 .updatedAt(review.getLastModifiedDate().format(formatter))
                 .build();

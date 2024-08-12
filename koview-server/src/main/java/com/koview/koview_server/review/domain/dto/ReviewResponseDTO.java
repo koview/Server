@@ -1,6 +1,7 @@
 package com.koview.koview_server.review.domain.dto;
 
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
+import com.koview.koview_server.like.service.LikeService;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
 import com.koview.koview_server.review.domain.Review;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class ReviewResponseDTO {
         private List<PurchaseLinkResponseDTO> purchaseLinkList;
         private Long totalCommentCount;
         private Long totalLikesCount;
+        private Boolean isCurrentMemberLiked;
         private String createdAt;
         private String updatedAt;
     }
@@ -52,6 +54,7 @@ public class ReviewResponseDTO {
         private List<ImageResponseDTO> imageList;
         private Long totalCommentCount;
         private Long totalLikesCount;
+        private Boolean isCurrentMemberLiked;
         private String createdAt;
         private String updatedAt;
 
@@ -69,6 +72,7 @@ public class ReviewResponseDTO {
                             .collect(Collectors.toList()) : null;
             this.totalCommentCount = review.getCommentList() != null ? (long) review.getCommentList().size() : 0L;
             this.totalLikesCount = review.getTotalLikesCount();
+            this.isCurrentMemberLiked = review.getMember().getIsCurrentMemberLiked();
             this.createdAt = review.getCreatedDate().format(formatter);
             this.updatedAt = review.getLastModifiedDate().format(formatter);
 

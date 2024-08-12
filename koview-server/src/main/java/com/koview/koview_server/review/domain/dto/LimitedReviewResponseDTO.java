@@ -26,6 +26,7 @@ public class LimitedReviewResponseDTO {
         private List<ImageResponseDTO> imageList;
         private Long totalCommentCount;
         private Long totalLikesCount;
+        private Boolean isCurrentMemberLiked;
         private String createdAt;
         private String updatedAt;
     }

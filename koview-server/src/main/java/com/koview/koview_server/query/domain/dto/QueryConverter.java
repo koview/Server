@@ -23,7 +23,7 @@ public class QueryConverter {
 				new ImageResponseDTO(query.getMember().getProfileImage()) : null)
 			.imageList(query.getQueryImageList() != null ?
 				query.getQueryImageList().stream()
-					.map(QueryImage::getUrl)
+					.map(ImageResponseDTO::new)
 					.collect(Collectors.toList()) : null)
 			.totalWithQueriesCount(query.getTotalWithQueriesCount() != null ? query.getTotalWithQueriesCount() : 0L)
 			.isCurrentMemberWithQuery(query.getMember().getIsCurrentMemberWithQuery())

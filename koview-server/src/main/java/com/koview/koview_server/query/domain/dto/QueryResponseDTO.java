@@ -24,7 +24,7 @@ public class QueryResponseDTO {
 		private String content;
 		private String writer;
 		private ImageResponseDTO profileImage;
-		private List<String> imageList;
+		private List<ImageResponseDTO> imageList;
 		private Long totalWithQueriesCount;
 		private Boolean isCurrentMemberWithQuery;
 		private Long totalViewCount;

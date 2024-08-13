@@ -41,8 +41,9 @@ public class Query extends BaseTimeEntity {
 	@ManyToOne
 	@JoinColumn(name = "member_id")
 	private Member member;
-
+	@Builder.Default
 	private Long totalWithQueriesCount = 0L;
+	@Builder.Default
 	private Long totalViewCount = 0L;
 
 	@OneToMany(mappedBy = "query", cascade = CascadeType.ALL, orphanRemoval = true)

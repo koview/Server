@@ -14,7 +14,7 @@ public class QueryConverter {
 
 	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-	public static QueryResponseDTO.Single toSingleDTO(Query query, Boolean isWithQuery,
+	public static QueryResponseDTO.Single toSingleDTO(Query query, Boolean isWithQuery, Long totalAnswerCount,
 													  List<PurchaseLinkResponseDTO> purchaseLinkList) {
 		return QueryResponseDTO.Single.builder()
 				.queryId(query.getId())
@@ -26,7 +26,8 @@ public class QueryConverter {
                         query.getQueryImageList().stream()
                                 .map(ImageResponseDTO::new)
                                 .collect(Collectors.toList()) : null)
-                .totalWithQueriesCount(query.getTotalWithQueriesCount() != null ? query.getTotalWithQueriesCount() : 0L)
+                .totalWithQueryCount(query.getTotalWithQueriesCount() != null ? query.getTotalWithQueriesCount() : 0L)
+				.totalAnswerCount(totalAnswerCount)
                 .isWithQuery(isWithQuery)
                 .totalViewCount(query.getTotalViewCount() != null ? query.getTotalViewCount() : 0L)
                 .purchaseLinkList(purchaseLinkList)

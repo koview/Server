@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface QueryAnswerRepository extends JpaRepository<QueryAnswer, Long> {
     Page<QueryAnswer> findAllByQueryOrderById(Query query, Pageable pageable);
+    Long countByQuery(Query query);
 }

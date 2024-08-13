@@ -113,7 +113,8 @@ public class QueryServiceImpl implements QueryService {
 						.map(PurchaseLinkResponseDTO::new).toList();
 		Boolean isWithQuery = withQueryRepository.existsByMemberAndQuery(member, query);
 
-		QueryResponseDTO.Single queryDTO = QueryConverter.toSingleDTO(query, isWithQuery, purchaseLinkList);
+		Long answerCount = queryAnswerRepository.countByQuery(query);
+		QueryResponseDTO.Single queryDTO = QueryConverter.toSingleDTO(query, isWithQuery, answerCount, purchaseLinkList);
 
 		Page<QueryAnswer> answerPaging = queryAnswerRepository.findAllByQueryOrderById(query, pageable);
 		List<AnswerResponseDTO.Single> answerList = answerPaging.stream().map(queryAnswer -> {
@@ -142,7 +143,9 @@ public class QueryServiceImpl implements QueryService {
 								.map(PurchaseLinkResponseDTO::new).toList();
 
 				Boolean isWithQuery = withQueryRepository.existsByMemberAndQuery(member, query);
-				return QueryConverter.toSingleDTO(query, isWithQuery, purchaseLinkList);
+				Long answerCount = queryAnswerRepository.countByQuery(query);
+
+				return QueryConverter.toSingleDTO(query, isWithQuery, answerCount, purchaseLinkList);
 			})
 			.collect(Collectors.toList());
 

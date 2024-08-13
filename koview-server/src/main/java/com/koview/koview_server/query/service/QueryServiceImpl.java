@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.koview.koview_server.like.repository.LikeRepository;
 import com.koview.koview_server.purchaseLink.domain.PurchaseLink;
+import com.koview.koview_server.purchaseLink.domain.QueryPurchaseLink;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkConverter;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
 import com.koview.koview_server.purchaseLink.repository.PurchaseLinkRepository;
@@ -77,8 +78,11 @@ public class QueryServiceImpl implements QueryService {
 							return purchaseLinkRepository.save(newPurchaseLink);
 						});
 					})
-					.map(purchaseLink -> PurchaseLinkConverter.toQueryPurchaseLink(purchaseLink, saveQuery))
-					.forEach(queryPurchaseLinkRepository::save);
+					.map(purchaseLink -> {
+						QueryPurchaseLink queryPurchaseLink = PurchaseLinkConverter.toQueryPurchaseLink(purchaseLink, saveQuery);
+						queryPurchaseLink.setQuery(saveQuery);
+						return queryPurchaseLink;
+					});
 		}
 
 		return new QueryResponseDTO.toQueryDTO(query, false);

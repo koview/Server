@@ -28,8 +28,8 @@ public class ReviewResponseDTO {
         private List<ImageResponseDTO> imageList;
         private List<PurchaseLinkResponseDTO> purchaseLinkList;
         private Long totalCommentCount;
-        private Long totalLikesCount;
-        private Boolean isCurrentMemberLiked;
+        private Long totalLikeCount;
+        private Boolean isLiked;
         private String createdAt;
         private String updatedAt;
     }
@@ -53,13 +53,13 @@ public class ReviewResponseDTO {
         private ImageResponseDTO profileImage;
         private List<ImageResponseDTO> imageList;
         private Long totalCommentCount;
-        private Long totalLikesCount;
-        private Boolean isCurrentMemberLiked;
+        private Long totalLikeCount;
+        private Boolean isLiked;
         private String createdAt;
         private String updatedAt;
 
 
-        public toReviewDTO(Review review) {
+        public toReviewDTO(Review review, Boolean isLiked) {
             this.reviewId = review.getId();
             this.content = review.getContent();
             this.writer = review.getMember().getNickname();
@@ -71,8 +71,8 @@ public class ReviewResponseDTO {
                             .map(ImageResponseDTO::new)
                             .collect(Collectors.toList()) : null;
             this.totalCommentCount = review.getCommentList() != null ? (long) review.getCommentList().size() : 0L;
-            this.totalLikesCount = review.getTotalLikesCount();
-            this.isCurrentMemberLiked = review.getMember().getIsCurrentMemberLiked();
+            this.totalLikeCount = review.getTotalLikesCount();
+            this.isLiked = isLiked;
             this.createdAt = review.getCreatedDate().format(formatter);
             this.updatedAt = review.getLastModifiedDate().format(formatter);
 

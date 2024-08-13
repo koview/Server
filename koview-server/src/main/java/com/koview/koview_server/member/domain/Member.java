@@ -58,8 +58,9 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private RoleType role; // 권한
-
-    private Boolean isCurrentMemberLiked = false;
+//    @Builder.Default
+//    private Boolean isCurrentMemberLiked = false;
+    @Builder.Default
     private Boolean isCurrentMemberWithQuery = false;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -108,6 +109,7 @@ public class Member extends BaseTimeEntity {
         this.profileImage = profileImage;
     }
 
+    /*
     public void isCurrentMemberLikedTrue() {
         this.isCurrentMemberLiked = true;
     }
@@ -123,4 +125,5 @@ public class Member extends BaseTimeEntity {
     public void isCurrentMemberWithQueryFalse() {
         this.isCurrentMemberWithQuery = false;
     }
+     */
 }

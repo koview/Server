@@ -40,7 +40,6 @@ public class WithQueryServiceImpl implements WithQueryService {
 		query.increaseTotalWithQueriesCount();
 		queryRepository.save(query);
 
-		currentMember.isCurrentMemberWithQueryTrue();
 		memberRepository.save(currentMember);
 
 		return new WithQueryResponseDTO(newWithQuery);
@@ -59,7 +58,6 @@ public class WithQueryServiceImpl implements WithQueryService {
 		}
 		withQueryRepository.delete(withQuery);
 
-		currentMember.isCurrentMemberWithQueryFalse();
 		memberRepository.save(currentMember);
 
 		return new WithQueryResponseDTO(withQuery);

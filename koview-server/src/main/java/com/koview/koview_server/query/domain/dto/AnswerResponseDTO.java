@@ -17,10 +17,23 @@ public class AnswerResponseDTO {
         private String content;
         private String writer;
         private List<ImageResponseDTO> imageList;
-        private Long likeCount;
-        private Boolean isLike;
+        private Long totalLikeCount;
+        private Boolean isLiked;
         private Long commentCount;
         private LocalDate createdAt;
         private LocalDate updatedAt;
+    }
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class AnswerPaging {
+        private List<Single> answerList;
+        private Integer getNumber;
+        private Boolean hasPrevious;
+        private Boolean hasNext;
+        private Integer getTotalPages;
+        private Long getTotalElements;
+        private Boolean isFirst;
+        private Boolean isLast;
     }
 }

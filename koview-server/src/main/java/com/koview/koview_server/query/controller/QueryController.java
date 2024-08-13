@@ -47,7 +47,7 @@ public class QueryController {
 	@GetMapping("/queries")
 	@Operation(description = "질문 전체 조회")
 	public ApiResult<QueryResponseDTO.QuerySlice> getAllQueries(
-		@Parameter(description = "페이지 번호(1부터 시작), default: 1")
+		@Parameter(description = "페이지 번호(1부터 시작)")
 		@RequestParam(defaultValue = "1") int page,
 		@RequestParam(defaultValue = "20") int size) {
 		return ApiResult.onSuccess(queryService.findAll(PageRequest.of(page - 1, size)));
@@ -64,5 +64,14 @@ public class QueryController {
 	public ApiResult<AnswerResponseDTO.Single> postAnswer(@PathVariable(name = "queryId") Long queryId,
 														  @RequestBody AnswerRequestDTO requestDTO) {
 		return ApiResult.onSuccess(queryAnswerService.createAnswer(requestDTO, queryId));
+	}
+	@GetMapping("/queries/{queryId}/answers")
+	@Operation(description = "답변 리스트 조회")
+	public ApiResult<AnswerResponseDTO.AnswerPaging> getAnswers(
+			@PathVariable(name = "queryId") Long queryId,
+			@Parameter(description = "페이지 번호(1부터 시작)")
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "20") int size) {
+		return ApiResult.onSuccess(queryAnswerService.findAll(queryId, PageRequest.of(page-1, size)));
 	}
 }

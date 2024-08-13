@@ -17,8 +17,12 @@ import com.koview.koview_server.query.repository.QueryRepository;
 import com.koview.koview_server.review.domain.Review;
 import com.koview.koview_server.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +53,20 @@ public class QueryAnswerServiceImpl implements QueryAnswerService{
         QueryAnswer saveAnswer = queryAnswerRepository.save(answer);
 
         return AnswerConverter.toSingleDTO(saveAnswer, false);
+    }
+
+    @Override
+    public AnswerResponseDTO.AnswerPaging findAll(Long queryId, Pageable pageable) {
+        Member member = validateMember();
+        Query query = getQueryById(queryId);
+        Page<QueryAnswer> answerPaging = queryAnswerRepository.findAllByQueryOrderById(query, pageable);
+
+        List<AnswerResponseDTO.Single> answerList = answerPaging.stream().map(queryAnswer -> {
+            Boolean isLiked = likeRepository.existsByMemberAndReview(member, queryAnswer.getReview());
+            return AnswerConverter.toSingleDTO(queryAnswer, isLiked);
+        }).toList();
+
+        return AnswerConverter.toPagingDTO(answerPaging, answerList);
     }
 
     private Query getQueryById(Long queryId) {

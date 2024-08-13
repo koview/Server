@@ -5,6 +5,7 @@ import com.koview.koview_server.global.apiPayload.exception.MemberException;
 import com.koview.koview_server.global.security.util.SecurityUtil;
 import com.koview.koview_server.image.domain.ReviewImage;
 import com.koview.koview_server.image.repository.ReviewImageRepository;
+import com.koview.koview_server.like.repository.LikeRepository;
 import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.purchaseLink.domain.PurchaseLink;
@@ -38,6 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewPurchaseLinkRepository reviewPurchaseLinkRepository;
     private final PurchaseLinkRepository purchaseLinkRepository;
     private final ReviewImageRepository reviewImageRepository;
+    private final LikeRepository likeRepository;
 
     @Override
     public ReviewResponseDTO.toReviewDTO createReview(ReviewRequestDTO requestDTO) {
@@ -73,7 +75,7 @@ public class ReviewServiceImpl implements ReviewService {
                     .forEach(reviewPurchaseLinkRepository::save);
         }
 
-        return new ReviewResponseDTO.toReviewDTO(review);
+        return new ReviewResponseDTO.toReviewDTO(review, false);
     }
 
     @Override
@@ -116,18 +118,27 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private LimitedReviewResponseDTO.ReviewSlice getLimitedImageReviewSlice(Slice<Review> reviewSlice) {
-        List<LimitedReviewResponseDTO.Single> reviewList = reviewSlice.stream().map(ReviewConverter::toLimitedSingleDto).toList();
+        Member member = validateMember();
+
+        List<LimitedReviewResponseDTO.Single> reviewList = reviewSlice.stream().map(review -> {
+            Boolean isLiked = likeRepository.existsByMemberAndReview(member, review);
+            return ReviewConverter.toLimitedSingleDto(review, isLiked);
+        }).toList();
 
         return ReviewConverter.toLimitedSliceDto(reviewSlice, reviewList);
     }
 
     private ReviewResponseDTO.ReviewSlice getReviewSlice(Slice<Review> reviewSlice) {
+        Member member = validateMember();
+
         List<ReviewResponseDTO.Single> reviewList = reviewSlice.stream().map(review ->{
             List<PurchaseLinkResponseDTO> purchaseLinkList =
                     reviewPurchaseLinkRepository.findPurchaseLinksByReviewId(review.getId()).stream()
                             .map(PurchaseLinkResponseDTO::new).toList();
 
-            return ReviewConverter.toSingleDTO(review, purchaseLinkList);
+            Boolean isLiked = likeRepository.existsByMemberAndReview(member, review);
+
+            return ReviewConverter.toSingleDTO(review, isLiked, purchaseLinkList);
         }).toList();
 
         return ReviewConverter.toSliceDTO(reviewSlice, reviewList);

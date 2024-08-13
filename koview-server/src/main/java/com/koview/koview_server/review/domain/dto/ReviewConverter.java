@@ -14,7 +14,8 @@ public class ReviewConverter {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public static LimitedReviewResponseDTO.Single toLimitedSingleDto(Review review){
+    public static LimitedReviewResponseDTO.Single toLimitedSingleDto(Review review, Boolean isLiked){
+        Long likeCount = review.getTotalLikesCount();
         return LimitedReviewResponseDTO.Single.builder()
                 .reviewId(review.getId())
                 .content(review.getContent())
@@ -27,8 +28,8 @@ public class ReviewConverter {
                                 .map(ImageResponseDTO::new)
                                 .collect(Collectors.toList()) : null)
                 .totalCommentCount((long) review.getCommentList().size())
-                .totalLikesCount(review.getTotalLikesCount() != null ? review.getTotalLikesCount() : 0L)
-                .isCurrentMemberLiked(review.getMember().getIsCurrentMemberLiked())
+                .totalLikesCount(likeCount != null ? likeCount : 0L)
+                .isCurrentMemberLiked(isLiked) // null일때는 false
                 .createdAt(review.getCreatedDate().format(formatter))
                 .updatedAt(review.getLastModifiedDate().format(formatter))
                 .build();
@@ -43,7 +44,8 @@ public class ReviewConverter {
                 .build();
     }
 
-    public static ReviewResponseDTO.Single toSingleDTO(Review review, List<PurchaseLinkResponseDTO> purchaseLink){
+    public static ReviewResponseDTO.Single toSingleDTO(Review review, Boolean isLiked,
+                                                       List<PurchaseLinkResponseDTO> purchaseLink){
         return ReviewResponseDTO.Single.builder()
                 .reviewId(review.getId())
                 .content(review.getContent())
@@ -55,9 +57,9 @@ public class ReviewConverter {
                                 .map(ImageResponseDTO::new)
                                 .collect(Collectors.toList()) : null)
                 .totalCommentCount((long) review.getCommentList().size())
-                .totalLikesCount(review.getTotalLikesCount() != null ? review.getTotalLikesCount() : 0L)
+                .totalLikeCount(review.getTotalLikesCount() != null ? review.getTotalLikesCount() : 0L)
                 .purchaseLinkList(purchaseLink)
-                .isCurrentMemberLiked(review.getMember().getIsCurrentMemberLiked())
+                .isLiked(isLiked)
                 .createdAt(review.getCreatedDate().format(formatter))
                 .updatedAt(review.getLastModifiedDate().format(formatter))
                 .build();

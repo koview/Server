@@ -21,7 +21,7 @@ public class AnswerConverter {
                 .content(queryAnswer.getContent())
                 .writer(queryAnswer.getMember().getNickname())
                 .commentCount((long) review.getCommentList().size())
-                .likeCount(likeCount != null ? likeCount : 0)
+                .totalLikeCount(likeCount != null ? likeCount : 0)
                 .isLiked(isLiked)
                 .updatedAt(queryAnswer.getLastModifiedDate().toLocalDate())
                 .createdAt(queryAnswer.getCreatedDate().toLocalDate())

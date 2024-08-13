@@ -27,7 +27,7 @@ public class QueryResponseDTO {
 		private ImageResponseDTO profileImage;
 		private List<ImageResponseDTO> imageList;
 		private Long totalWithQueriesCount;
-		private Boolean isCurrentMemberWithQuery;
+		private Boolean isWithQuery;
 		private Long totalViewCount;
 		private List<PurchaseLinkResponseDTO> purchaseLinkList;
 		private String createdAt;
@@ -54,12 +54,12 @@ public class QueryResponseDTO {
 		private ImageResponseDTO profileImage;
 		private List<ImageResponseDTO> imageList;
 		private Long totalWithQueriesCount;
-		private Boolean isCurrentMemberWithQuery;
+		private Boolean isWithQuery;
 		private Long totalViewCount;
 		private String createdAt;
 		private String updatedAt;
 
-		public toQueryDTO(Query query) {
+		public toQueryDTO(Query query, Boolean isWithQuery) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			this.queryId = query.getId();
 			this.content = query.getContent();
@@ -72,7 +72,7 @@ public class QueryResponseDTO {
 					.map(ImageResponseDTO::new)
 					.collect(Collectors.toList()) : null;
 			this.totalWithQueriesCount = query.getTotalWithQueriesCount() != null ? query.getTotalWithQueriesCount() : 0L;
-			this.isCurrentMemberWithQuery = query.getMember().getIsCurrentMemberWithQuery();
+			this.isWithQuery = isWithQuery;
 			this.totalViewCount = query.getTotalViewCount() != null ? query.getTotalViewCount() : 0L;
 			this.createdAt = query.getCreatedDate().format(formatter);
 			this.updatedAt = query.getLastModifiedDate().format(formatter);

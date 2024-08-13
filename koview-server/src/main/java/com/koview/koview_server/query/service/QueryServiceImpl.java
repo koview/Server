@@ -9,6 +9,7 @@ import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkConverter;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
 import com.koview.koview_server.purchaseLink.repository.PurchaseLinkRepository;
 import com.koview.koview_server.purchaseLink.repository.QueryPurchaseLinkRepository;
+import com.koview.koview_server.withQuery.repository.WithQueryRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ public class QueryServiceImpl implements QueryService {
 	private final QueryImageRepository queryImageRepository;
 	private final QueryPurchaseLinkRepository queryPurchaseLinkRepository;
 	private final PurchaseLinkRepository purchaseLinkRepository;
+	private final WithQueryRepository withQueryRepository;
 
 	@Override
 	public QueryResponseDTO.toQueryDTO createQuery(QueryRequestDTO requestDTO) {
@@ -74,7 +76,7 @@ public class QueryServiceImpl implements QueryService {
 					.forEach(queryPurchaseLinkRepository::save);
 		}
 
-		return new QueryResponseDTO.toQueryDTO(query);
+		return new QueryResponseDTO.toQueryDTO(query, false);
 	}
 
 	@Override
@@ -91,11 +93,14 @@ public class QueryServiceImpl implements QueryService {
 
 	@Override
 	public QueryResponseDTO.toQueryDTO findById(Long queryId) {
+		Member member = validateMember();
+
 		Query query = queryRepository.findById(queryId).orElseThrow(() -> new GeneralException(ErrorStatus.QUERY_NOT_FOUND));
 		query.increaseTotalViewCount();
-		queryRepository.save(query);
+		Query saveQuery = queryRepository.save(query);
 
-		return new QueryResponseDTO.toQueryDTO(query);
+		Boolean isWithQuery = withQueryRepository.existsByMemberAndQuery(member, saveQuery);
+		return new QueryResponseDTO.toQueryDTO(saveQuery, isWithQuery);
 	}
 
 	private Member validateMember() {
@@ -104,12 +109,16 @@ public class QueryServiceImpl implements QueryService {
 	}
 
 	private QueryResponseDTO.QuerySlice getQuerySlice(Slice<Query> querySlice) {
+		Member member = validateMember();
+
 		List<QueryResponseDTO.Single> queryList = querySlice.stream()
 			.map(query -> {
 				List<PurchaseLinkResponseDTO> purchaseLinkList =
 						queryPurchaseLinkRepository.findPurchaseLinksByQueryId(query.getId()).stream()
 								.map(PurchaseLinkResponseDTO::new).toList();
-				return QueryConverter.toSingleDTO(query, purchaseLinkList);
+
+				Boolean isWithQuery = withQueryRepository.existsByMemberAndQuery(member, query);
+				return QueryConverter.toSingleDTO(query, isWithQuery, purchaseLinkList);
 			})
 			.collect(Collectors.toList());
 

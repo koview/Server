@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
+import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
 import com.koview.koview_server.query.domain.Query;
 
 import lombok.AllArgsConstructor;
@@ -26,8 +27,9 @@ public class QueryResponseDTO {
 		private ImageResponseDTO profileImage;
 		private List<ImageResponseDTO> imageList;
 		private Long totalWithQueriesCount;
-		private Boolean isCurrentMemberWithQuery;
+		private Boolean isWithQuery;
 		private Long totalViewCount;
+		private List<PurchaseLinkResponseDTO> purchaseLinkList;
 		private String createdAt;
 		private String updatedAt;
 	}
@@ -45,6 +47,14 @@ public class QueryResponseDTO {
 	@Getter
 	@Builder
 	@AllArgsConstructor
+	public static class DetailDTO {
+		private Single detail;
+		private AnswerResponseDTO.AnswerPaging answerPaging;
+	}
+
+	@Getter
+	@Builder
+	@AllArgsConstructor
 	public static class toQueryDTO {
 		private Long queryId;
 		private String content;
@@ -52,12 +62,12 @@ public class QueryResponseDTO {
 		private ImageResponseDTO profileImage;
 		private List<ImageResponseDTO> imageList;
 		private Long totalWithQueriesCount;
-		private Boolean isCurrentMemberWithQuery;
+		private Boolean isWithQuery;
 		private Long totalViewCount;
 		private String createdAt;
 		private String updatedAt;
 
-		public toQueryDTO(Query query) {
+		public toQueryDTO(Query query, Boolean isWithQuery) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			this.queryId = query.getId();
 			this.content = query.getContent();
@@ -70,7 +80,7 @@ public class QueryResponseDTO {
 					.map(ImageResponseDTO::new)
 					.collect(Collectors.toList()) : null;
 			this.totalWithQueriesCount = query.getTotalWithQueriesCount() != null ? query.getTotalWithQueriesCount() : 0L;
-			this.isCurrentMemberWithQuery = query.getMember().getIsCurrentMemberWithQuery();
+			this.isWithQuery = isWithQuery;
 			this.totalViewCount = query.getTotalViewCount() != null ? query.getTotalViewCount() : 0L;
 			this.createdAt = query.getCreatedDate().format(formatter);
 			this.updatedAt = query.getLastModifiedDate().format(formatter);

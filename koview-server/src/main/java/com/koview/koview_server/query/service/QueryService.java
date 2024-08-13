@@ -9,5 +9,5 @@ public interface QueryService {
 	QueryResponseDTO.toQueryDTO createQuery(QueryRequestDTO requestDTO);
 	void deleteQuery(Long queryId);
 	QueryResponseDTO.QuerySlice findAll(Pageable pageable);
-	QueryResponseDTO.toQueryDTO findById(Long queryId);
+	QueryResponseDTO.DetailDTO findById(Long queryId, Pageable pageable);
 }

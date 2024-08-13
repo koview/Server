@@ -2,6 +2,7 @@ package com.koview.koview_server.query.domain.dto;
 
 import java.util.List;
 
+import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkRequestDTO;
 import com.koview.koview_server.query.domain.Query;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +25,9 @@ public class QueryRequestDTO {
 
 	@Schema(description = "이미지 ID 리스트", example = "[1, 2, 3]")
 	private List<Long> imagePathIdList;
+
+	@NotBlank
+	private List<PurchaseLinkRequestDTO> purchaseLinkList;
 
 	public Query toEntity() {
 		return Query.builder()

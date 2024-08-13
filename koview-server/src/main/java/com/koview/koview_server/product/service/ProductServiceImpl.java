@@ -2,7 +2,12 @@ package com.koview.koview_server.product.service;
 
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
 import com.koview.koview_server.global.apiPayload.exception.GeneralException;
+import com.koview.koview_server.global.apiPayload.exception.MemberException;
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
+import com.koview.koview_server.global.security.util.SecurityUtil;
+import com.koview.koview_server.like.repository.LikeRepository;
+import com.koview.koview_server.member.domain.Member;
+import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.product.domain.CategoryType;
 import com.koview.koview_server.purchaseLink.repository.PurchaseLinkRepository;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
@@ -38,6 +43,8 @@ public class ProductServiceImpl implements ProductService {
     private final PurchaseLinkRepository purchaseLinkRepository;
     private final CategoryRepository categoryRepository;
     private final ReviewRepository reviewRepository;
+    private final LikeRepository likeRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public ProductResponseDTO.ProductSlice getProductsByStatusTypeAndCategory(Long categoryId, StatusType status,
@@ -63,6 +70,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseDTO.Detail getProductDetail(Long productId, Pageable pageable) {
+        Member member = validateMember();
         Product product = getProduct(productId);
         List<ImageResponseDTO> imagePaths =
                 productImageRepository.findAllByProduct(product).stream().map(ProductConverter::toImageDTO).toList();
@@ -71,7 +79,11 @@ public class ProductServiceImpl implements ProductService {
         Page<Review> reviewPage = reviewRepository.findAllByProductPurchaseLink(productId,pageable);
 
         ProductResponseDTO.Single detail = ProductConverter.toSingleDTO(product, reviewPage.getTotalElements(), imagePaths, purchaseLinkList);
-        List<LimitedReviewResponseDTO.Single> reviewList = reviewPage.stream().map(ReviewConverter::toLimitedSingleDto).toList();
+        List<LimitedReviewResponseDTO.Single> reviewList = reviewPage.stream().map(review -> {
+            Boolean isLiked = likeRepository.existsByMemberAndReview(member, review);
+            return ReviewConverter.toLimitedSingleDto(review, isLiked);
+        }).toList();
+
         LimitedReviewResponseDTO.ReviewPaging reviewPaging = ReviewConverter.toLimitedPagingDTO(reviewPage,reviewList);
 
         return ProductConverter.toDetailDTO(detail,reviewPaging);
@@ -79,9 +91,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public LimitedReviewResponseDTO.ReviewPaging getReviewsByProductId(Long productId, Pageable pageable) {
+        Member member = validateMember();
         Page<Review> reviewPage = reviewRepository.findAllByProductPurchaseLink(productId,pageable);
 
-        List<LimitedReviewResponseDTO.Single> reviewList = reviewPage.stream().map(ReviewConverter::toLimitedSingleDto).toList();
+        List<LimitedReviewResponseDTO.Single> reviewList = reviewPage.stream().map(review -> {
+            Boolean isLiked = likeRepository.existsByMemberAndReview(member, review);
+            return ReviewConverter.toLimitedSingleDto(review, isLiked);
+        }).toList();
+
         return ReviewConverter.toLimitedPagingDTO(reviewPage,reviewList);
     }
     @Transactional
@@ -111,6 +128,11 @@ public class ProductServiceImpl implements ProductService {
 
     private Product getProduct(Long productId){
         return productRepository.findById(productId).orElseThrow(()->new GeneralException(ErrorStatus.PRODUCT_NOT_FOUND));
+    }
+
+    private Member validateMember() {
+        return memberRepository.findByEmail(SecurityUtil.getEmail()).orElseThrow(
+                () -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
     }
 
 

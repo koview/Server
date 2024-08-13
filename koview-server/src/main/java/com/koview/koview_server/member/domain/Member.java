@@ -59,9 +59,6 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false, length = 30)
     private RoleType role; // 권한
 
-    private Boolean isCurrentMemberLiked = false;
-    private Boolean isCurrentMemberWithQuery = false;
-
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviewList = new ArrayList<>();
 
@@ -106,21 +103,5 @@ public class Member extends BaseTimeEntity {
 
     public void addProfileImage(ProfileImage profileImage) {
         this.profileImage = profileImage;
-    }
-
-    public void isCurrentMemberLikedTrue() {
-        this.isCurrentMemberLiked = true;
-    }
-
-    public void isCurrentMemberLikedFalse() {
-        this.isCurrentMemberLiked = false;
-    }
-
-    public void isCurrentMemberWithQueryTrue() {
-        this.isCurrentMemberWithQuery = true;
-    }
-
-    public void isCurrentMemberWithQueryFalse() {
-        this.isCurrentMemberWithQuery = false;
     }
 }

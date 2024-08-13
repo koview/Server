@@ -26,7 +26,7 @@ public class LimitedReviewResponseDTO {
         private List<ImageResponseDTO> imageList;
         private Long totalCommentCount;
         private Long totalLikesCount;
-        private Boolean isCurrentMemberLiked;
+        private Boolean isLiked;
         private String createdAt;
         private String updatedAt;
     }
@@ -37,9 +37,9 @@ public class LimitedReviewResponseDTO {
     public static class ReviewSlice {
 
         private List<Single> reviewList;
-        private int getNumber;
-        private boolean hasPrevious;
-        private boolean hasNext;
+        private Integer getNumber;
+        private Boolean hasPrevious;
+        private Boolean hasNext;
     }
 
     @Getter
@@ -48,12 +48,12 @@ public class LimitedReviewResponseDTO {
     public static class ReviewPaging {
 
         private List<Single> reviewList;
-        private int getNumber;
-        private boolean hasPrevious;
-        private boolean hasNext;
-        private int getTotalPages;
-        private long getTotalElements;
-        private boolean isFirst;
-        private boolean isLast;
+        private Integer getNumber;
+        private Boolean hasPrevious;
+        private Boolean hasNext;
+        private Integer getTotalPages;
+        private Long getTotalElements;
+        private Boolean isFirst;
+        private Boolean isLast;
     }
 }

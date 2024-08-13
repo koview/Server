@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.koview.koview_server.global.common.BaseTimeEntity;
 import com.koview.koview_server.member.domain.Member;
+import com.koview.koview_server.purchaseLink.domain.QueryPurchaseLink;
 import com.koview.koview_server.withQuery.domain.WithQuery;
 
 import jakarta.persistence.CascadeType;
@@ -45,6 +46,9 @@ public class Query extends BaseTimeEntity {
 	private Long totalWithQueriesCount = 0L;
 	@Builder.Default
 	private Long totalViewCount = 0L;
+
+	@OneToMany(mappedBy = "query_purchase_link_id", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<QueryPurchaseLink> queryPurchaseLinkList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "query", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<WithQuery> withQueryList = new ArrayList<>();

@@ -29,7 +29,7 @@ public class ReviewConverter {
                                 .collect(Collectors.toList()) : null)
                 .totalCommentCount((long) review.getCommentList().size())
                 .totalLikesCount(likeCount != null ? likeCount : 0L)
-                .isCurrentMemberLiked(isLiked) // null일때는 false
+                .isLiked(isLiked) // null일때는 false
                 .createdAt(review.getCreatedDate().format(formatter))
                 .updatedAt(review.getLastModifiedDate().format(formatter))
                 .build();

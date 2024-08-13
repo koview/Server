@@ -1,5 +1,8 @@
 package com.koview.koview_server.query.controller;
 
+import com.koview.koview_server.query.domain.dto.AnswerRequestDTO;
+import com.koview.koview_server.query.domain.dto.AnswerResponseDTO;
+import com.koview.koview_server.query.service.QueryAnswerService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class QueryController {
 
 	private final QueryService queryService;
+	private final QueryAnswerService queryAnswerService;
 
 	@PostMapping("/query/create")
 	@Operation(description = "질문 등록")
@@ -53,5 +57,12 @@ public class QueryController {
 	@Operation(description = "질문 상세 조회")
 	public ApiResult<QueryResponseDTO.toQueryDTO> getQuery(@PathVariable(name = "queryId") Long queryId) {
 		return ApiResult.onSuccess(queryService.findById(queryId));
+	}
+
+	@PostMapping("/queries/{queryId}/answer")
+	@Operation(description = "답변 등록")
+	public ApiResult<AnswerResponseDTO.Single> postAnswer(@PathVariable(name = "queryId") Long queryId,
+														  @RequestBody AnswerRequestDTO requestDTO) {
+		return ApiResult.onSuccess(queryAnswerService.createAnswer(requestDTO, queryId));
 	}
 }

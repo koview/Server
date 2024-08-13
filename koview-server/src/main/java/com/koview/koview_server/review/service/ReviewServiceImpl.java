@@ -55,7 +55,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         reviewImageRepository.saveAll(images);
         review.addReviewImages(images);
-        reviewRepository.save(review);
+        Review saveReview = reviewRepository.save(review);
 
 
         if (requestDTO.getPurchaseLinkList() != null) {
@@ -69,7 +69,7 @@ public class ReviewServiceImpl implements ReviewService {
                             return purchaseLinkRepository.save(newPurchaseLink);
                         });
                     })
-                    .map(purchaseLink -> PurchaseLinkConverter.toReviewPurchaseLink(purchaseLink, review))
+                    .map(purchaseLink -> PurchaseLinkConverter.toReviewPurchaseLink(purchaseLink, saveReview))
                     .forEach(reviewPurchaseLinkRepository::save);
         }
 

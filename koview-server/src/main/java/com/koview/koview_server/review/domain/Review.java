@@ -9,6 +9,7 @@ import com.koview.koview_server.image.domain.ReviewImage;
 import com.koview.koview_server.like.domain.Like;
 import com.koview.koview_server.member.domain.Member;
 
+import com.koview.koview_server.query.domain.QueryAnswer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -52,6 +53,9 @@ public class Review extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QueryAnswer> answerList = new ArrayList<>();
 
     private Long totalLikesCount = 0L;
 

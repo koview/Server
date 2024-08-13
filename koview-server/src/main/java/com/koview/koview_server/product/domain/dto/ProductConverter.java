@@ -31,7 +31,7 @@ public class ProductConverter {
                                                              List<ProductResponseDTO.Single> productList){
         return ProductResponseDTO.ProductSlice.builder()
                 .productList(productList)
-                .getNumber(productSlice.getNumber())
+                .getNumber(productSlice.getNumber()+1)
                 .hasNext(productSlice.hasNext())
                 .hasPrevious(productSlice.hasPrevious())
                 .build();

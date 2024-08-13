@@ -32,7 +32,7 @@ public class AnswerConverter {
 
         return AnswerResponseDTO.AnswerPaging.builder()
                 .answerList(answerList)
-                .getNumber(queryAnswerPage.getNumber())
+                .getNumber(queryAnswerPage.getNumber()+1)
                 .hasPrevious(queryAnswerPage.hasPrevious())
                 .hasNext(queryAnswerPage.hasNext())
                 .getTotalPages(queryAnswerPage.getTotalPages())

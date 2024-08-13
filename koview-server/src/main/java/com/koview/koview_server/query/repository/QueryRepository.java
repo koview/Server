@@ -1,6 +1,10 @@
 package com.koview.koview_server.query.repository;
 
+import com.koview.koview_server.query.domain.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface QueryRepository extends JpaRepository<com.koview.koview_server.query.domain.Query, Long> {
+import java.util.List;
+
+public interface QueryRepository extends JpaRepository<Query, Long> {
+    List<Query> findTop4ByOrderById();
 }

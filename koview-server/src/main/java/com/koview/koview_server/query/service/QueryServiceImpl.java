@@ -4,12 +4,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.koview.koview_server.like.repository.LikeRepository;
 import com.koview.koview_server.purchaseLink.domain.PurchaseLink;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkConverter;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
 import com.koview.koview_server.purchaseLink.repository.PurchaseLinkRepository;
 import com.koview.koview_server.purchaseLink.repository.QueryPurchaseLinkRepository;
+import com.koview.koview_server.query.domain.QueryAnswer;
+import com.koview.koview_server.query.domain.dto.*;
+import com.koview.koview_server.query.repository.QueryAnswerRepository;
 import com.koview.koview_server.withQuery.repository.WithQueryRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -23,9 +29,6 @@ import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.query.domain.Query;
 import com.koview.koview_server.query.domain.QueryImage;
-import com.koview.koview_server.query.domain.dto.QueryConverter;
-import com.koview.koview_server.query.domain.dto.QueryRequestDTO;
-import com.koview.koview_server.query.domain.dto.QueryResponseDTO;
 import com.koview.koview_server.query.repository.QueryImageRepository;
 import com.koview.koview_server.query.repository.QueryRepository;
 
@@ -42,6 +45,8 @@ public class QueryServiceImpl implements QueryService {
 	private final QueryPurchaseLinkRepository queryPurchaseLinkRepository;
 	private final PurchaseLinkRepository purchaseLinkRepository;
 	private final WithQueryRepository withQueryRepository;
+	private final QueryAnswerRepository queryAnswerRepository;
+	private final LikeRepository likeRepository;
 
 	@Override
 	public QueryResponseDTO.toQueryDTO createQuery(QueryRequestDTO requestDTO) {
@@ -92,15 +97,30 @@ public class QueryServiceImpl implements QueryService {
 	}
 
 	@Override
-	public QueryResponseDTO.toQueryDTO findById(Long queryId) {
+	public QueryResponseDTO.DetailDTO findById(Long queryId, Pageable pageable) {
 		Member member = validateMember();
 
 		Query query = queryRepository.findById(queryId).orElseThrow(() -> new GeneralException(ErrorStatus.QUERY_NOT_FOUND));
 		query.increaseTotalViewCount();
-		Query saveQuery = queryRepository.save(query);
+		queryRepository.save(query);
 
-		Boolean isWithQuery = withQueryRepository.existsByMemberAndQuery(member, saveQuery);
-		return new QueryResponseDTO.toQueryDTO(saveQuery, isWithQuery);
+		List<PurchaseLinkResponseDTO> purchaseLinkList =
+				queryPurchaseLinkRepository.findPurchaseLinksByQueryId(query.getId()).stream()
+						.map(PurchaseLinkResponseDTO::new).toList();
+		Boolean isWithQuery = withQueryRepository.existsByMemberAndQuery(member, query);
+
+		QueryResponseDTO.Single queryDTO = QueryConverter.toSingleDTO(query, isWithQuery, purchaseLinkList);
+
+		Page<QueryAnswer> answerPaging = queryAnswerRepository.findAllByQueryOrderById(query, pageable);
+		List<AnswerResponseDTO.Single> answerList = answerPaging.stream().map(queryAnswer -> {
+					Boolean isLiked = likeRepository.existsByMemberAndReview(member, queryAnswer.getReview());
+
+					return AnswerConverter.toSingleDTO(queryAnswer, isLiked);
+				}).toList();
+
+		AnswerResponseDTO.AnswerPaging answerPagingDTO = AnswerConverter.toPagingDTO(answerPaging, answerList);
+
+		return QueryConverter.toDetailDTO(queryDTO, answerPagingDTO);
 	}
 
 	private Member validateMember() {

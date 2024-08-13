@@ -47,6 +47,14 @@ public class QueryResponseDTO {
 	@Getter
 	@Builder
 	@AllArgsConstructor
+	public static class DetailDTO {
+		private Single detail;
+		private AnswerResponseDTO.AnswerPaging answerPaging;
+	}
+
+	@Getter
+	@Builder
+	@AllArgsConstructor
 	public static class toQueryDTO {
 		private Long queryId;
 		private String content;

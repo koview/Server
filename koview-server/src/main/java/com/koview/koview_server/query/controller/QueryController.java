@@ -54,9 +54,13 @@ public class QueryController {
 	}
 
 	@GetMapping("/queries/{queryId}")
-	@Operation(description = "질문 상세 조회")
-	public ApiResult<QueryResponseDTO.toQueryDTO> getQuery(@PathVariable(name = "queryId") Long queryId) {
-		return ApiResult.onSuccess(queryService.findById(queryId));
+	@Operation(description = "질문 상세 조회 (새로 고침 용으로 답변 스크롤은 답변 리스트 조회 Api를 써주세요)")
+	public ApiResult<QueryResponseDTO.DetailDTO> getQuery(
+			@PathVariable(name = "queryId") Long queryId,
+			@Parameter(description = "페이지 번호(1부터 시작)")
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "20") int size) {
+		return ApiResult.onSuccess(queryService.findById(queryId, PageRequest.of(page-1,size)));
 	}
 
 	@PostMapping("/queries/{queryId}/answer")

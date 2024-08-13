@@ -43,4 +43,12 @@ public class QueryConverter {
 			.hasPrevious(querySlice.hasPrevious())
 			.build();
 	}
+
+	public static QueryResponseDTO.DetailDTO toDetailDTO(QueryResponseDTO.Single detail,
+														 AnswerResponseDTO.AnswerPaging answerPaging){
+		return QueryResponseDTO.DetailDTO.builder()
+				.detail(detail)
+				.answerPaging(answerPaging)
+				.build();
+	}
 }

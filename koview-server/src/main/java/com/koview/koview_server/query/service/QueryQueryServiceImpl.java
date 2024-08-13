@@ -8,6 +8,7 @@ import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.member.repository.MemberRepository;
 import com.koview.koview_server.query.domain.dto.QueryConverter;
 import com.koview.koview_server.query.domain.dto.QueryResponseDTO;
+import com.koview.koview_server.query.repository.QueryAnswerRepository;
 import com.koview.koview_server.query.repository.QueryRepository;
 import com.koview.koview_server.withQuery.repository.WithQueryRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +24,15 @@ public class QueryQueryServiceImpl implements QueryQueryService{
     private  final MemberRepository memberRepository;
     private final QueryRepository queryRepository;
     private final WithQueryRepository withQueryRepository;
+    private final QueryAnswerRepository queryAnswerRepository;
     @Override
     public List<QueryResponseDTO.Single> getFourQueries() {
         Member member = validateMember();
 
         return queryRepository.findTop4ByOrderById().stream().map(query -> {
+            Long answerCount = queryAnswerRepository.countByQuery(query);
             Boolean isLiked = withQueryRepository.existsByMemberAndQuery(member, query);
-            return QueryConverter.toSingleDTO(query, isLiked, null);
+            return QueryConverter.toSingleDTO(query, isLiked, answerCount, null);
         }).toList();
     }
 

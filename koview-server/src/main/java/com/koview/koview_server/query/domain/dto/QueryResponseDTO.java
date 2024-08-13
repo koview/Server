@@ -26,9 +26,10 @@ public class QueryResponseDTO {
 		private String writer;
 		private ImageResponseDTO profileImage;
 		private List<ImageResponseDTO> imageList;
-		private Long totalWithQueriesCount;
+		private Long totalWithQueryCount;
 		private Boolean isWithQuery;
 		private Long totalViewCount;
+		private Long totalAnswerCount;
 		private List<PurchaseLinkResponseDTO> purchaseLinkList;
 		private String createdAt;
 		private String updatedAt;

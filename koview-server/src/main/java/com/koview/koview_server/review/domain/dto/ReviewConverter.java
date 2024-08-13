@@ -38,7 +38,7 @@ public class ReviewConverter {
                                                            List<LimitedReviewResponseDTO.Single> reviewList){
         return LimitedReviewResponseDTO.ReviewSlice.builder()
                 .reviewList(reviewList)
-                .getNumber(reviewSlice.getNumber())
+                .getNumber(reviewSlice.getNumber()+1)
                 .hasNext(reviewSlice.hasNext())
                 .hasPrevious(reviewSlice.hasPrevious())
                 .build();
@@ -68,7 +68,7 @@ public class ReviewConverter {
                                                              List<ReviewResponseDTO.Single> reviewList){
         return ReviewResponseDTO.ReviewSlice.builder()
                 .reviewList(reviewList)
-                .getNumber(reviewSlice.getNumber())
+                .getNumber(reviewSlice.getNumber()+1)
                 .hasNext(reviewSlice.hasNext())
                 .hasPrevious(reviewSlice.hasPrevious())
                 .build();
@@ -79,7 +79,7 @@ public class ReviewConverter {
         return LimitedReviewResponseDTO.ReviewPaging.builder()
                 .reviewList(reviewList)
                 .getTotalPages(reviewPage.getTotalPages())
-                .getNumber(reviewPage.getNumber())
+                .getNumber(reviewPage.getNumber()+1)
                 .getTotalElements(reviewPage.getTotalElements())
                 .isFirst(reviewPage.isFirst())
                 .isLast(reviewPage.isLast())

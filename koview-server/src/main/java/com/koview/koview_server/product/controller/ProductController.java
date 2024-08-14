@@ -1,5 +1,13 @@
 package com.koview.koview_server.product.controller;
 
+import java.util.List;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.koview.koview_server.global.apiPayload.ApiResult;
 import com.koview.koview_server.product.domain.Category;
 import com.koview.koview_server.product.domain.CategoryType;
@@ -7,14 +15,15 @@ import com.koview.koview_server.product.domain.StatusType;
 import com.koview.koview_server.product.domain.dto.ProductResponseDTO;
 import com.koview.koview_server.product.service.ProductService;
 import com.koview.koview_server.review.domain.dto.LimitedReviewResponseDTO;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +39,10 @@ public class ProductController {
 
     @GetMapping("products")
     @Operation(description = "전체/유해/인기 상품 조회 : categoryId 사용")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "전체/유해/인기 상품 조회 성공",
+            content = @Content(schema = @Schema(implementation = ProductResponseDTO.ProductSlice.class)))
+    })
     public ApiResult<ProductResponseDTO.ProductSlice> getProductsByV1(
             @Parameter(description = "상품 상태 필터(미입력시 적용 안됨)")
             @RequestParam(required = false) StatusType status,
@@ -53,6 +66,10 @@ public class ProductController {
 
     @GetMapping("products/{productId}")
     @Operation(description = "상품 상세 조회(리뷰 무한스크롤은 products/{productId}/reviews 이용해주세요.)")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "상품 상세 조회 성공",
+            content = @Content(schema = @Schema(implementation = ProductResponseDTO.Detail.class)))
+    })
     public ApiResult<ProductResponseDTO.Detail> getProduct(
             @PathVariable Long productId,
             @Parameter(description = "페이지 번호(1부터 시작)")

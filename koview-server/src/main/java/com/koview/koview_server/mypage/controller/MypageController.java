@@ -35,10 +35,6 @@ public class MypageController {
 
     @GetMapping("/myreviews")
     @Operation(description = "나의 리뷰 전체 조회")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "나의 리뷰 전체 조회 성공",
-            content = @Content(schema = @Schema(implementation = LimitedReviewResponseDTO.ReviewSlice.class)))
-    })
     public ApiResult<LimitedReviewResponseDTO.ReviewSlice> findAllMyReview(
             @Parameter(description = "페이지 번호(1부터 시작)")
             @RequestParam(defaultValue = "1") int page,
@@ -48,10 +44,6 @@ public class MypageController {
 
     @GetMapping("/myreviews/detail")
     @Operation(description = "나의 리뷰 상세 조회")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "나의 리뷰 상세 조회 성공",
-            content = @Content(schema = @Schema(implementation = ReviewResponseDTO.ReviewSlice.class)))
-    })
     public ApiResult<ReviewResponseDTO.ReviewSlice> findAllMyReviewDetail(
             @Parameter(description = "페이지 번호(1부터 시작)")
             @RequestParam(defaultValue = "1") int page,

@@ -53,10 +53,6 @@ public class ReviewController {
 
     @GetMapping("/reviews")
     @Operation(description = "리뷰 전체 조회(코뷰 메인화면)")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "리뷰 전체 조회 성공",
-            content = @Content(schema = @Schema(implementation = ReviewResponseDTO.ReviewSlice.class)))
-    })
     public ApiResult<ReviewResponseDTO.ReviewSlice> getAllReviews(
             @Parameter(description = "페이지 번호(1부터 시작), default: 1")
             @RequestParam(defaultValue = "1") int page,
@@ -66,10 +62,6 @@ public class ReviewController {
 
     @GetMapping("/reviews/detail")
     @Operation(description = "리뷰 상세 조회")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "리뷰 상세 조회 성공",
-            content = @Content(schema = @Schema(implementation = ReviewResponseDTO.ReviewSlice.class)))
-    })
     public ApiResult<ReviewResponseDTO.ReviewSlice> getReview(
             @Parameter(description = "페이지 번호(1부터 시작), default: 1")
             @RequestParam(defaultValue = "1") int page,
@@ -80,10 +72,6 @@ public class ReviewController {
 
     @GetMapping("/review/search")
     @Operation(description = "리뷰 검색")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "리뷰 검색 성공",
-            content = @Content(schema = @Schema(implementation = ReviewResponseDTO.ReviewSlice.class)))
-    })
     public ApiResult<ReviewResponseDTO.ReviewSlice> searchReviews(
             @RequestParam String keyword,
             @Parameter(description = "페이지 번호(1부터 시작), default: 1")

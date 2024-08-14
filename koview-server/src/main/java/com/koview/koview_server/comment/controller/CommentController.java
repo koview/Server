@@ -44,8 +44,6 @@ public class CommentController {
 
     @GetMapping("/comments")
     @Operation(description = "한 리뷰의 댓글 전체 조회")
-    @ApiResponse(responseCode = "200", description = "댓글 전체 조회 성공",
-            content = @Content(schema = @Schema(implementation = CommentResponseDTO.CommentPaging.class)))
     public ApiResult<CommentResponseDTO.CommentPaging> findAll(
             @RequestParam(name = "reviewId") Long reviewId,
             @RequestParam(defaultValue = "1") int page,

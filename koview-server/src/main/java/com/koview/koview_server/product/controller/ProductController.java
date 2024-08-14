@@ -39,10 +39,6 @@ public class ProductController {
 
     @GetMapping("products")
     @Operation(description = "전체/유해/인기 상품 조회 : categoryId 사용")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "전체/유해/인기 상품 조회 성공",
-            content = @Content(schema = @Schema(implementation = ProductResponseDTO.ProductSlice.class)))
-    })
     public ApiResult<ProductResponseDTO.ProductSlice> getProductsByV1(
             @Parameter(description = "상품 상태 필터(미입력시 적용 안됨)")
             @RequestParam(required = false) StatusType status,
@@ -66,10 +62,6 @@ public class ProductController {
 
     @GetMapping("products/{productId}")
     @Operation(description = "상품 상세 조회(리뷰 무한스크롤은 products/{productId}/reviews 이용해주세요.)")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "상품 상세 조회 성공",
-            content = @Content(schema = @Schema(implementation = ProductResponseDTO.Detail.class)))
-    })
     public ApiResult<ProductResponseDTO.Detail> getProduct(
             @PathVariable Long productId,
             @Parameter(description = "페이지 번호(1부터 시작)")

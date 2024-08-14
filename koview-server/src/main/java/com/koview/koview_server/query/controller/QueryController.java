@@ -50,8 +50,6 @@ public class QueryController {
 
 	@GetMapping("/queries")
 	@Operation(description = "질문 전체 조회")
-	@ApiResponse(responseCode = "200", description = "질문 전체 조회 성공",
-		content = @Content(schema = @Schema(implementation = QueryResponseDTO.QuerySlice.class)))
 	public ApiResult<QueryResponseDTO.QuerySlice> getAllQueries(
 		@Parameter(description = "페이지 번호(1부터 시작)")
 		@RequestParam(defaultValue = "1") int page,
@@ -61,8 +59,6 @@ public class QueryController {
 
 	@GetMapping("/queries/{queryId}")
 	@Operation(description = "질문 상세 조회 (새로 고침 용으로 답변 스크롤은 답변 리스트 조회 Api를 써주세요)")
-	@ApiResponse(responseCode = "200", description = "질문 상세 조회 성공",
-		content = @Content(schema = @Schema(implementation = QueryResponseDTO.DetailDTO.class)))
 	public ApiResult<QueryResponseDTO.DetailDTO> getQuery(
 			@PathVariable(name = "queryId") Long queryId,
 			@Parameter(description = "페이지 번호(1부터 시작)")
@@ -79,10 +75,6 @@ public class QueryController {
 	}
 	@GetMapping("/queries/{queryId}/answers")
 	@Operation(description = "답변 리스트 조회")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "답변 리스트 조회 성공",
-			content = @Content(schema = @Schema(implementation = AnswerResponseDTO.AnswerPaging.class)))
-	})
 	public ApiResult<AnswerResponseDTO.AnswerPaging> getAnswers(
 			@PathVariable(name = "queryId") Long queryId,
 			@Parameter(description = "페이지 번호(1부터 시작)")

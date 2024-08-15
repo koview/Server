@@ -42,16 +42,6 @@ public class MypageController {
         return ApiResult.onSuccess(mypageService.findAllByMemberWithLimitedImages(PageRequest.of(page-1, size)));
     }
 
-    @GetMapping("/myreviews/detail")
-    @Operation(description = "나의 리뷰 상세 조회")
-    public ApiResult<ReviewResponseDTO.ReviewSlice> findAllMyReviewDetail(
-            @Parameter(description = "페이지 번호(1부터 시작)")
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam Long clickedReviewId) {
-        return ApiResult.onSuccess(mypageService.findAllByMember(PageRequest.of(page-1, size), clickedReviewId));
-    }
-
     @DeleteMapping("/myreviews/{reviewId}/delete")
     @Operation(description = "나의 리뷰 삭제")
     public ApiResult<?> deleteMyReview(@PathVariable Long reviewId) {

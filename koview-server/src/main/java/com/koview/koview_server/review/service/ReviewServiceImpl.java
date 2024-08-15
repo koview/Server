@@ -1,6 +1,7 @@
 package com.koview.koview_server.review.service;
 
 import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
+import com.koview.koview_server.global.apiPayload.exception.GeneralException;
 import com.koview.koview_server.global.apiPayload.exception.MemberException;
 import com.koview.koview_server.global.security.util.SecurityUtil;
 import com.koview.koview_server.image.domain.ReviewImage;
@@ -20,6 +21,7 @@ import com.koview.koview_server.review.domain.dto.ReviewRequestDTO;
 import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
 import com.koview.koview_server.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -100,8 +102,31 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ReviewResponseDTO.ReviewSlice findAllDetail(Pageable pageable, Long clickedReviewId) {
-        Slice<Review> reviewSlice = reviewRepository.findAllWithClickedReviewFirst(clickedReviewId, pageable);
+    public ReviewResponseDTO.ReviewSlice findAllByMember(Pageable pageable, Long clickedReviewId, Long memberId) {
+
+        Slice<Review> reviewSlice;
+        Member member;
+        if (memberId == null) {
+            //TODO: 임시로 처음 클릭한 리뷰id로 member id 추출
+            Review review = reviewRepository.findById(clickedReviewId).orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_NOT_FOUND));
+            member = review.getMember();
+            // TODO: 향후 memberId 없으면 토큰으로 받게끔 교체
+            // member = validateMember();
+        }
+        else{
+            member = memberRepository.findById(memberId).orElseThrow(()->
+                    new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
+        }
+
+        if(clickedReviewId != null){
+
+            int reviewPosition = reviewRepository.findReviewPosition(clickedReviewId, member);
+            int pageNumber = (reviewPosition - 1) / pageable.getPageSize();
+
+            reviewSlice = reviewRepository.findAllByMember(member, PageRequest.of(pageNumber,pageable.getPageSize()));
+        } else{
+            reviewSlice = reviewRepository.findAllByMember(member, pageable);
+        }
 
         return getReviewSlice(reviewSlice);
     }

@@ -11,6 +11,6 @@ public interface ReviewService {
     void deleteReview(Long reviewId);
     void deleteReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO);
     ReviewResponseDTO.ReviewSlice findAll(Pageable pageable);
-    ReviewResponseDTO.ReviewSlice findAllDetail(Pageable pageable, Long clickedReviewId);
+    ReviewResponseDTO.ReviewSlice findAllByMember(Pageable pageable, Long clickedReviewId, Long memberId);
     ReviewResponseDTO.ReviewSlice searchReviews(String keyword, Pageable pageable);
 }

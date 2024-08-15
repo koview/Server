@@ -81,7 +81,7 @@ public class QueryServiceImpl implements QueryService {
 					.map(purchaseLink -> {
 						QueryPurchaseLink queryPurchaseLink = PurchaseLinkConverter.toQueryPurchaseLink(purchaseLink, saveQuery);
 						queryPurchaseLink.setQuery(saveQuery);
-						return queryPurchaseLink;
+						return queryPurchaseLinkRepository.save(queryPurchaseLink);
 					});
 		}
 

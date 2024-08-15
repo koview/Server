@@ -54,27 +54,31 @@ public class ReviewController {
     @GetMapping("/reviews")
     @Operation(description = "리뷰 전체 조회(코뷰 메인화면)")
     public ApiResult<ReviewResponseDTO.ReviewSlice> getAllReviews(
-            @Parameter(description = "페이지 번호(1부터 시작), default: 1")
+            @Parameter(description = "페이지 번호(1부터 시작)")
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size) {
+
         return ApiResult.onSuccess(reviewService.findAll(PageRequest.of(page-1, size)));
     }
 
     @GetMapping("/reviews/detail")
-    @Operation(description = "리뷰 상세 조회")
-    public ApiResult<ReviewResponseDTO.ReviewSlice> getReview(
-            @Parameter(description = "페이지 번호(1부터 시작), default: 1")
+    @Operation(description = "특정 유저의 리뷰 조회")
+    public ApiResult<ReviewResponseDTO.ReviewSlice> getReviewDetail(
+            @Parameter(description = "페이지 번호(1부터 시작)")
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size,
-            @RequestParam Long clickedReviewId) {
-        return ApiResult.onSuccess(reviewService.findAllDetail(PageRequest.of(page-1, size), clickedReviewId));
+            @RequestParam Long clickedReviewId,
+            @Parameter(description = "지금은 Null처리. 다음 버전은 memberId 필수로 받아야 합니다.")
+            @RequestParam(required = false) Long memberId) {
+
+        return ApiResult.onSuccess(reviewService.findAllByMember(PageRequest.of(page-1, size), clickedReviewId, memberId));
     }
 
     @GetMapping("/review/search")
     @Operation(description = "리뷰 검색")
     public ApiResult<ReviewResponseDTO.ReviewSlice> searchReviews(
             @RequestParam String keyword,
-            @Parameter(description = "페이지 번호(1부터 시작), default: 1")
+            @Parameter(description = "페이지 번호(1부터 시작)")
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size) {
         return ApiResult.onSuccess(reviewService.searchReviews(keyword, PageRequest.of(page-1, size)));

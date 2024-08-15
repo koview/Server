@@ -43,14 +43,6 @@ public class MyPageServiceImpl implements MypageService {
     }
 
     @Override
-    public ReviewResponseDTO.ReviewSlice findAllByMember(Pageable pageable, Long clickedReviewId) {
-        Member member = validateMember();
-        Slice<Review> reviewSlice = reviewRepository.findAllByMemberWithClickedReviewFirst(member, clickedReviewId, pageable);
-
-        return getReviewSlice(reviewSlice);
-    }
-
-    @Override
     public void deleteMyReview(Long reviewId) {
         reviewPurchaseLinkRepository.deleteByReviewId(reviewId);
         reviewRepository.deleteById(reviewId);

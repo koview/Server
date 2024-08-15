@@ -10,13 +10,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ReviewRepository  extends JpaRepository<Review, Long> {
-    @Query("SELECT r FROM Review r WHERE r.id = :clickedReviewId UNION ALL SELECT r FROM Review r WHERE r.id <> :clickedReviewId")
-    Slice<Review> findAllWithClickedReviewFirst(@Param("clickedReviewId") Long clickedReviewId, Pageable pageable);
+    @Query("SELECT COUNT(r) FROM Review r WHERE r.member = :member AND r.id <= :clickedReviewId")
+    Integer findReviewPosition(@Param("clickedReviewId") Long clickedReviewId, @Param("member") Member member);
 
     Slice<Review> findAllByMember(Member member, Pageable pageable);
-
-    @Query("SELECT r FROM Review r WHERE r.member = :member ORDER BY CASE WHEN r.id = :clickedReviewId THEN 0 ELSE 1 END, r.id")
-    Slice<Review> findAllByMemberWithClickedReviewFirst(@Param("member") Member member, @Param("clickedReviewId") Long clickedReviewId, Pageable pageable);
 
     @Query("SELECT r FROM Review r JOIN ReviewPurchaseLink rp ON r.id = rp.review.id WHERE rp.purchaseLink.product.id = :productId")
     Page<Review> findAllByProductPurchaseLink(@Param("productId") Long productId, Pageable pageable);

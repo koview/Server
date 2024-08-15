@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -38,6 +40,12 @@ public class LikeServiceImpl implements LikeService {
         review.increaseTotalLikesCount();
         reviewRepository.save(review);
 
+        //TODO: like 엔티티 내부로 리팩토링해야함
+        List<Like> likeList = currentMember.getLikeList();
+        likeList.remove(newLike);
+        likeList.add(newLike);
+
+        currentMember.getLikeList().add(newLike);
         memberRepository.save(currentMember);
 
         return new LikeResponseDTO(newLike);
@@ -57,7 +65,7 @@ public class LikeServiceImpl implements LikeService {
         }
         likesRepository.delete(like);
 
-        currentMember.getLikeList().add(like);
+        currentMember.getLikeList().remove(like);
         memberRepository.save(currentMember);
 
         return new LikeResponseDTO(like);

@@ -45,8 +45,10 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public LikeResponseDTO cancelLikes(Long reviewId) {
+        Member currentMember = validateMember();
+
         Review review = validateReview(reviewId);
-        Like like = likesRepository.findByReviewId(reviewId)
+        Like like = likesRepository.findByReviewAndMember(review, currentMember)
                 .orElseThrow(() -> new ReviewException(ErrorStatus.LIKES_NOT_FOUND));
 
         if (review.getTotalLikesCount() > 0) {
@@ -55,7 +57,7 @@ public class LikeServiceImpl implements LikeService {
         }
         likesRepository.delete(like);
 
-        Member currentMember = validateMember();
+        currentMember.getLikeList().add(like);
         memberRepository.save(currentMember);
 
         return new LikeResponseDTO(like);

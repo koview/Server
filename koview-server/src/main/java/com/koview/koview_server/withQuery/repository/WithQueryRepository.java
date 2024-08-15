@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.koview.koview_server.withQuery.domain.WithQuery;
 
 public interface WithQueryRepository extends JpaRepository<WithQuery, Long> {
-	Optional<WithQuery> findByQueryId(Long queryId);
+	Optional<WithQuery> findByQueryAndMember(Query query, Member member);
 	Boolean existsByMemberAndQuery(Member member, Query query);
 }

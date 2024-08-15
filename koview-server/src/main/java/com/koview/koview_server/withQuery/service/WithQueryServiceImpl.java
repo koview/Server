@@ -17,6 +17,8 @@ import com.koview.koview_server.withQuery.repository.WithQueryRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -40,6 +42,11 @@ public class WithQueryServiceImpl implements WithQueryService {
 		query.increaseTotalWithQueriesCount();
 		queryRepository.save(query);
 
+		//TODO: withQuery 내부로 리팩토링해야함
+		List<WithQuery> withQueryList = currentMember.getWithQueryList();
+		withQueryList.remove(newWithQuery);
+		withQueryList.add(newWithQuery);
+
 		memberRepository.save(currentMember);
 
 		return new WithQueryResponseDTO(newWithQuery);
@@ -58,7 +65,7 @@ public class WithQueryServiceImpl implements WithQueryService {
 		}
 		withQueryRepository.delete(withQuery);
 
-		currentMember.getWithQueryList().add(withQuery);
+		currentMember.getWithQueryList().remove(withQuery);
 		memberRepository.save(currentMember);
 
 		return new WithQueryResponseDTO(withQuery);

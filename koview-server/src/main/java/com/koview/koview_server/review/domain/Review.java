@@ -86,13 +86,13 @@ public class Review extends BaseTimeEntity {
         this.totalLikesCount--;
     }
 
-    public void addReviewImages(List<ReviewImage> reviewImages) {
+    public void linkReviewImages(List<ReviewImage> reviewImages) {
         if(this.reviewImageList ==  null) {
             this.reviewImageList = new ArrayList<>();
         }
         for (ReviewImage image : reviewImages) {
             if (!this.reviewImageList.contains(image)) {
-                image.addReview(this);
+                image.linkReview(this);
                 this.reviewImageList.add(image);
             }
         }

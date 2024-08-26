@@ -58,7 +58,7 @@ public class ReviewServiceImpl implements ReviewService {
             .collect(Collectors.toList());
 
         reviewImageRepository.saveAll(images);
-        review.addReviewImages(images);
+        review.linkReviewImages(images);
         Review saveReview = reviewRepository.save(review);
 
 

@@ -48,7 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
         Member member = validateMember();
 
         Review review = requestDTO.toEntity();
-        review.addMember(member);
+        review.linkMember(member);
 
         List<ReviewImage> images = reviewImageRepository.findAllById(requestDTO.getImagePathIdList()).stream()
             .map(image -> ReviewImage.builder()

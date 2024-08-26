@@ -42,4 +42,15 @@ public class Comment extends BaseTimeEntity {
             member.getCommentList().add(this);
         }
     }
+
+    public void linkReview(Review review) {
+        if(this.review != null) {
+            this.review.getCommentList().remove(this);
+        }
+
+        this.review = review;
+        if(review != null) {
+            review.getCommentList().add(this);
+        }
+    }
 }

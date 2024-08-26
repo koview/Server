@@ -3,6 +3,7 @@ package com.koview.koview_server.withQuery.domain;
 import com.koview.koview_server.global.common.BaseTimeEntity;
 import com.koview.koview_server.member.domain.Member;
 import com.koview.koview_server.query.domain.Query;
+import com.koview.koview_server.review.domain.Review;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,4 +38,26 @@ public class WithQuery extends BaseTimeEntity {
 	@ManyToOne
 	@JoinColumn(name = "query_id")
 	private Query query;
+
+	public void linkMember(Member member) {
+		if (this.member != null) {
+			this.member.getWithQueryList().remove(this);
+		}
+
+		this.member = member;
+		if (member != null) {
+			member.getWithQueryList().add(this);
+		}
+	}
+
+	public void linkQuery(Query query) {
+		if (this.query != null) {
+			this.query.getWithQueryList().remove(this);
+		}
+
+		this.query = query;
+		if (query != null) {
+			query.getWithQueryList().add(this);
+		}
+	}
 }

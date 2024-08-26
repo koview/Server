@@ -103,7 +103,7 @@ public class ImageServiceImpl {
                         .member(member)
                         .build()
         );
-        member.addProfileImage(savedProfileImage);
+        member.linkProfileImage(savedProfileImage);
         memberRepository.save(member);
 
         return new ImageResponseDTO(savedProfileImage);

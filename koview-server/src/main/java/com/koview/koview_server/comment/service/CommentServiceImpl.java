@@ -41,9 +41,9 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = Comment.builder()
                 .content(requestDTO.getContent())
-                .member(member)
-                .review(review)
                 .build();
+        comment.linkMember(member);
+        comment.linkReview(review);
         commentRepository.save(comment);
 
         return new CommentResponseDTO.toCommentDTO(comment);

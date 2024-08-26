@@ -59,7 +59,7 @@ public class MemberServiceImpl implements MemberService {
         member.encodePassword(passwordEncoder);
 
         List<Shop> memberLikedShops = shopRepository.findAllByIdIn(signupRequestDTO.getShopIdList());
-        member.addMemberLikedShops(memberLikedShops);
+        member.linkMemberLikedShops(memberLikedShops);
         save(member);
 
         return new SignupResponseDTO(member);

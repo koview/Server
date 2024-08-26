@@ -10,18 +10,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.koview.koview_server.global.apiPayload.ApiResult;
-import com.koview.koview_server.mypage.domain.dto.MyProfileResponseDTO;
+import com.koview.koview_server.mypage.domain.dto.ProfileResponseDTO;
 import com.koview.koview_server.mypage.service.MypageService;
 import com.koview.koview_server.review.domain.dto.LimitedReviewResponseDTO;
 import com.koview.koview_server.review.domain.dto.ReviewRequestDTO;
-import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -57,7 +52,7 @@ public class MypageController {
     }
 
     @GetMapping("/mydetail")
-    public ApiResult<MyProfileResponseDTO> getMyProfile() {
+    public ApiResult<ProfileResponseDTO> getMyProfile() {
         return ApiResult.onSuccess(mypageService.findMyProfile());
     }
 }

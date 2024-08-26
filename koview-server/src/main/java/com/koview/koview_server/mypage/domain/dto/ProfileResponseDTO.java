@@ -7,9 +7,10 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class MyProfileResponseDTO {
+public class ProfileResponseDTO {
 
     private Long imageId;
-    private String url;
-    private String nickname;
+    private String imageUrl;
+    private Long memberId;
+    private String memberNickname;
 }

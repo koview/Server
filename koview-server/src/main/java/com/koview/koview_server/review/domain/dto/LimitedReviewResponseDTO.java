@@ -1,13 +1,13 @@
 package com.koview.koview_server.review.domain.dto;
 
+import java.util.List;
+
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
+import com.koview.koview_server.mypage.domain.dto.ProfileResponseDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Builder
@@ -21,8 +21,7 @@ public class LimitedReviewResponseDTO {
 
         private Long reviewId;
         private String content;
-        private String writer;
-        private ImageResponseDTO profileImage;
+        private ProfileResponseDTO profileInfo;
         private List<ImageResponseDTO> imageList;
         private Long totalCommentCount;
         private Long totalLikesCount;

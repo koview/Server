@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +32,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/review/create")
-    @Operation(description = "리뷰 등록")
+    @Operation(description = "리뷰 등록", security = @SecurityRequirement(name = "jwtAuth"))
     public ApiResult<ReviewResponseDTO.toReviewDTO> createReview(@RequestBody ReviewRequestDTO requestDTO) {
         ReviewResponseDTO.toReviewDTO responseDTO = reviewService.createReview(requestDTO);
         return ApiResult.onSuccess(responseDTO);
@@ -52,7 +53,7 @@ public class ReviewController {
     }
 
     @GetMapping("/reviews")
-    @Operation(description = "리뷰 전체 조회(코뷰 메인화면)")
+    @Operation(description = "리뷰 전체 조회(코뷰 메인화면)", security = @SecurityRequirement(name = "jwtAuth"))
     public ApiResult<ReviewResponseDTO.ReviewSlice> getAllReviews(
             @Parameter(description = "페이지 번호(1부터 시작)")
             @RequestParam(defaultValue = "1") int page,
@@ -62,7 +63,7 @@ public class ReviewController {
     }
 
     @GetMapping("/reviews/detail")
-    @Operation(description = "특정 유저의 리뷰 조회")
+    @Operation(description = "특정 유저의 리뷰 조회", security = @SecurityRequirement(name = "jwtAuth"))
     public ApiResult<ReviewResponseDTO.ReviewSlice> getReviewDetail(
             @Parameter(description = "페이지 번호(1부터 시작)")
             @RequestParam(defaultValue = "1") int page,

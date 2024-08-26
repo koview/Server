@@ -35,17 +35,20 @@ public class LikeServiceImpl implements LikeService {
                 .review(review)
                 .member(currentMember)
                 .build();
-        likesRepository.save(newLike);
 
         review.increaseTotalLikesCount();
         reviewRepository.save(review);
 
         //TODO: like 엔티티 내부로 리팩토링해야함
-        List<Like> likeList = currentMember.getLikeList();
-        likeList.remove(newLike);
-        likeList.add(newLike);
+        // List<Like> likeList = currentMember.getLikeList();
+        // likeList.remove(newLike);
+        // likeList.add(newLike);
+        //
+        // currentMember.getLikeList().add(newLike);
 
-        currentMember.getLikeList().add(newLike);
+        newLike.linkMember(currentMember);
+        newLike.linkReview(review);
+        likesRepository.save(newLike);
         memberRepository.save(currentMember);
 
         return new LikeResponseDTO(newLike);

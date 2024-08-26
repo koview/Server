@@ -37,16 +37,18 @@ public class WithQueryServiceImpl implements WithQueryService {
 			.query(query)
 			.member(currentMember)
 			.build();
-		withQueryRepository.save(newWithQuery);
 
 		query.increaseTotalWithQueriesCount();
 		queryRepository.save(query);
 
 		//TODO: withQuery 내부로 리팩토링해야함
-		List<WithQuery> withQueryList = currentMember.getWithQueryList();
-		withQueryList.remove(newWithQuery);
-		withQueryList.add(newWithQuery);
+		// List<WithQuery> withQueryList = currentMember.getWithQueryList();
+		// withQueryList.remove(newWithQuery);
+		// withQueryList.add(newWithQuery);
 
+		newWithQuery.linkMember(currentMember);
+		newWithQuery.linkQuery(query);
+		withQueryRepository.save(newWithQuery);
 		memberRepository.save(currentMember);
 
 		return new WithQueryResponseDTO(newWithQuery);

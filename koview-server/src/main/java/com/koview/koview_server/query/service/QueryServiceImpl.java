@@ -64,7 +64,7 @@ public class QueryServiceImpl implements QueryService {
 			.collect(Collectors.toList());
 
 		queryImageRepository.saveAll(images);
-		query.addQueryImages(images);
+		query.linkQueryImages(images);
 		Query saveQuery = queryRepository.save(query);
 
 		if (requestDTO.getPurchaseLinkList() != null) {

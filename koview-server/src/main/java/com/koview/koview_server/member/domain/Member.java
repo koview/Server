@@ -101,7 +101,7 @@ public class Member extends BaseTimeEntity {
         }
     }
 
-    public void addProfileImage(ProfileImage profileImage) {
+    public void linkProfileImage(ProfileImage profileImage) {
         this.profileImage = profileImage;
     }
 }

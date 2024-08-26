@@ -21,8 +21,4 @@ public class ProfileImage extends BaseTimeEntity {
     @OneToOne
     @JoinColumn(name = "member_id")
     private Member member;
-
-    public void addMember(Member member) {
-        this.member = member;
-    }
 }

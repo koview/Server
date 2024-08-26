@@ -1,7 +1,12 @@
 package com.koview.koview_server.like.domain;
 
+import java.util.List;
+
 import com.koview.koview_server.member.domain.Member;
+import com.koview.koview_server.memberLikedShop.domain.MemberLikedShop;
 import com.koview.koview_server.review.domain.Review;
+import com.koview.koview_server.shop.domain.Shop;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,4 +30,15 @@ public class Like {
     @ManyToOne
     @JoinColumn(name = "review_id")
     private Review review;
+
+    public void linkMember(Member member) {
+        if (this.member != null) {
+            this.member.getLikeList().remove(this);
+        }
+
+        this.member = member;
+        if (member != null) {
+            member.getLikeList().add(this);
+        }
+    }
 }

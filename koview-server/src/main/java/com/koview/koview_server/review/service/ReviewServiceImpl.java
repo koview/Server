@@ -107,11 +107,7 @@ public class ReviewServiceImpl implements ReviewService {
         Slice<Review> reviewSlice;
         Member member;
         if (memberId == null) {
-            //TODO: 임시로 처음 클릭한 리뷰id로 member id 추출
-            Review review = reviewRepository.findById(clickedReviewId).orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_NOT_FOUND));
-            member = review.getMember();
-            // TODO: 향후 memberId 없으면 토큰으로 받게끔 교체
-            // member = validateMember();
+            member = validateMember();
         }
         else{
             member = memberRepository.findById(memberId).orElseThrow(()->

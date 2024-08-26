@@ -1,6 +1,7 @@
 package com.koview.koview_server.review.domain.dto;
 
 import com.koview.koview_server.global.common.image.ImageResponseDTO;
+import com.koview.koview_server.mypage.domain.dto.ProfileResponseDTO;
 import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
 import com.koview.koview_server.review.domain.Review;
 import org.springframework.data.domain.Page;
@@ -19,9 +20,11 @@ public class ReviewConverter {
         return LimitedReviewResponseDTO.Single.builder()
                 .reviewId(review.getId())
                 .content(review.getContent())
-                .writer(review.getMember().getNickname())
-                .profileImage(review.getMember().getProfileImage() != null ?
-                        new ImageResponseDTO(review.getMember().getProfileImage()) : null)
+                .profileInfo(review.getMember()!= null ?
+                    new ProfileResponseDTO(review.getMember().getProfileImage().getId(),
+                        review.getMember().getProfileImage().getUrl(),
+                        review.getMember().getId(),
+                        review.getMember().getNickname()) : null)
                 .imageList(review.getReviewImageList() != null ?
                         review.getReviewImageList().stream()
                                 .limit(2)
@@ -49,9 +52,11 @@ public class ReviewConverter {
         return ReviewResponseDTO.Single.builder()
                 .reviewId(review.getId())
                 .content(review.getContent())
-                .writer(review.getMember().getNickname())
-                .profileImage(review.getMember().getProfileImage() != null ?
-                        new ImageResponseDTO(review.getMember().getProfileImage()) : null)
+                .profileInfo(review.getMember()!= null ?
+                    new ProfileResponseDTO(review.getMember().getProfileImage().getId(),
+                        review.getMember().getProfileImage().getUrl(),
+                        review.getMember().getId(),
+                        review.getMember().getNickname()) : null)
                 .imageList(review.getReviewImageList() != null ?
                         review.getReviewImageList().stream()
                                 .map(ImageResponseDTO::new)

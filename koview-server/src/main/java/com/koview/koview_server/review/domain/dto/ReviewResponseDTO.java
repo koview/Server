@@ -1,16 +1,17 @@
 package com.koview.koview_server.review.domain.dto;
 
-import com.koview.koview_server.global.common.image.ImageResponseDTO;
-import com.koview.koview_server.like.service.LikeService;
-import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
-import com.koview.koview_server.review.domain.Review;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.koview.koview_server.global.common.image.ImageResponseDTO;
+import com.koview.koview_server.mypage.domain.dto.ProfileResponseDTO;
+import com.koview.koview_server.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
+import com.koview.koview_server.review.domain.Review;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 public class ReviewResponseDTO {
 
@@ -23,8 +24,7 @@ public class ReviewResponseDTO {
 
         private Long reviewId;
         private String content;
-        private String writer;
-        private ImageResponseDTO profileImage;
+        private ProfileResponseDTO profileInfo;
         private List<ImageResponseDTO> imageList;
         private List<PurchaseLinkResponseDTO> purchaseLinkList;
         private Long totalCommentCount;
@@ -49,8 +49,7 @@ public class ReviewResponseDTO {
     public static class toReviewDTO {
         private Long reviewId;
         private String content;
-        private String writer;
-        private ImageResponseDTO profileImage;
+        private ProfileResponseDTO profileInfo;
         private List<ImageResponseDTO> imageList;
         private Long totalCommentCount;
         private Long totalLikeCount;
@@ -62,9 +61,11 @@ public class ReviewResponseDTO {
         public toReviewDTO(Review review, Boolean isLiked) {
             this.reviewId = review.getId();
             this.content = review.getContent();
-            this.writer = review.getMember().getNickname();
-            this.profileImage = review.getMember().getProfileImage() != null ?
-                new ImageResponseDTO(review.getMember().getProfileImage()) : null;
+            this.profileInfo = review.getMember() != null ?
+                new ProfileResponseDTO(review.getMember().getProfileImage().getId(),
+                    review.getMember().getProfileImage().getUrl(),
+                    review.getMember().getId(),
+                    review.getMember().getNickname()) : null;
             this.imageList = review.getReviewImageList() != null ?
                     review.getReviewImageList().stream()
                             .distinct()

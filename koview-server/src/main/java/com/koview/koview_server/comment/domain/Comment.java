@@ -31,4 +31,15 @@ public class Comment extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "review_id")
     private Review review;
+
+    public void linkMember(Member member) {
+        if(this.member != null) {
+            this.member.getCommentList().remove(this);
+        }
+
+        this.member = member;
+        if(member != null) {
+            member.getCommentList().add(this);
+        }
+    }
 }

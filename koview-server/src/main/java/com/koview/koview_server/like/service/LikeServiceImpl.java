@@ -47,6 +47,7 @@ public class LikeServiceImpl implements LikeService {
         // currentMember.getLikeList().add(newLike);
 
         newLike.linkMember(currentMember);
+        newLike.linkReview(review);
         likesRepository.save(newLike);
         memberRepository.save(currentMember);
 

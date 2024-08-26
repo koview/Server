@@ -41,4 +41,15 @@ public class Like {
             member.getLikeList().add(this);
         }
     }
+
+    public void linkReview(Review review) {
+        if (this.review != null) {
+            this.review.getLikeList().remove(this);
+        }
+
+        this.review = review;
+        if (review != null) {
+            review.getLikeList().add(this);
+        }
+    }
 }

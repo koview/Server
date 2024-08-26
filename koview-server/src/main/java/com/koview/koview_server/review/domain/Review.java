@@ -59,6 +59,19 @@ public class Review extends BaseTimeEntity {
 
     private Long totalLikesCount = 0L;
 
+    public void addMember(Member member) {
+        // 기존 Member 와의 연관관계 제거
+        if(this.member != null) {
+            this.member.getReviewList().remove(this);
+        }
+
+        // 새로운 연관관계 설정
+        this.member = member;
+        if(member != null) {
+            member.getReviewList().add(this);
+        }
+    }
+
     public void increaseTotalLikesCount() {
         if (this.totalLikesCount == null) {
             this.totalLikesCount = 0L;

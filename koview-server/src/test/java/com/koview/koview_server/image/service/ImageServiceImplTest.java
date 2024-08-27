@@ -1,9 +1,10 @@
 package com.koview.koview_server.image.service;
 
+import com.koview.koview_server.api.image.service.ImageServiceImpl;
 import com.koview.koview_server.global.s3.AmazonS3Manager;
-import com.koview.koview_server.global.common.image.ImageResponseDTO;
-import com.koview.koview_server.image.domain.ReviewImage;
-import com.koview.koview_server.image.repository.ReviewImageRepository;
+import com.koview.koview_server.api.image.domain.dto.ImageResponseDTO;
+import com.koview.koview_server.api.image.domain.ReviewImage;
+import com.koview.koview_server.api.image.repository.ReviewImageRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,6 @@
 package com.koview.koview_server.global.security.filter;
 
-import com.koview.koview_server.global.apiPayload.code.status.ErrorStatus;
-import com.koview.koview_server.global.apiPayload.exception.CustomAuthenticationException;
-import com.koview.koview_server.global.apiPayload.exception.GeneralException;
+import com.koview.koview_server.api.common.apiPayload.exception.CustomAuthenticationException;
 import com.koview.koview_server.global.security.service.JwtTokenProvider;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;

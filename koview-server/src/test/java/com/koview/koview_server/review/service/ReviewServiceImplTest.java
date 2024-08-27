@@ -1,13 +1,14 @@
 package com.koview.koview_server.review.service;
 
-import com.koview.koview_server.image.domain.ReviewImage;
-import com.koview.koview_server.image.repository.ReviewImageRepository;
-import com.koview.koview_server.member.domain.Member;
-import com.koview.koview_server.member.repository.MemberRepository;
-import com.koview.koview_server.review.domain.Review;
-import com.koview.koview_server.review.domain.dto.ReviewRequestDTO;
-import com.koview.koview_server.review.domain.dto.ReviewResponseDTO;
-import com.koview.koview_server.review.repository.ReviewRepository;
+import com.koview.koview_server.api.image.domain.ReviewImage;
+import com.koview.koview_server.api.image.repository.ReviewImageRepository;
+import com.koview.koview_server.api.auth.member.domain.Member;
+import com.koview.koview_server.api.auth.member.repository.MemberRepository;
+import com.koview.koview_server.api.user.review.domain.Review;
+import com.koview.koview_server.api.user.review.domain.dto.ReviewRequestDTO;
+import com.koview.koview_server.api.user.review.domain.dto.ReviewResponseDTO;
+import com.koview.koview_server.api.user.review.repository.ReviewRepository;
+import com.koview.koview_server.api.user.review.service.ReviewServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

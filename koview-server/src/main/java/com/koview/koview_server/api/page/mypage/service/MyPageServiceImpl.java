@@ -17,6 +17,7 @@ import com.koview.koview_server.api.user.review.domain.dto.ReviewRequestDTO;
 import com.koview.koview_server.api.user.review.domain.dto.ReviewResponseDTO;
 import com.koview.koview_server.api.user.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -63,12 +65,13 @@ public class MyPageServiceImpl implements MypageService {
 
         if (profileImage == null)
             return ProfileResponseDTO.builder()
+                    .memberId(member.getId())
                     .memberNickname(member.getNickname())
                     .build();
 
         return ProfileResponseDTO.builder()
-                .imageId(member.getProfileImage().getId())
-                .imageUrl(member.getProfileImage().getUrl())
+                .imageId(profileImage.getId())
+                .imageUrl(profileImage.getUrl())
                 .memberId(member.getId())
                 .memberNickname(member.getNickname())
                 .build();

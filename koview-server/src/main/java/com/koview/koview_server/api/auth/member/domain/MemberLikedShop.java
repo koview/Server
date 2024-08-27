@@ -25,4 +25,19 @@ public class MemberLikedShop extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "shop_id")
     private Shop shop;
+
+    public void linkMember(Member member){
+        if(this.member != null){
+            this.member.getMemberLikedShopList().remove(this);
+        }
+        this.member = member;
+        this.member.getMemberLikedShopList().add(this);
+    }
+
+    public void unLink(){
+        if(this.member != null){
+            this.member.getMemberLikedShopList().remove(this);
+            this.member = null;
+        }
+    }
 }

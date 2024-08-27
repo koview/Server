@@ -90,16 +90,6 @@ public class Member extends BaseTimeEntity {
         this.role = RoleType.USER;
     }
 
-    public void linkMemberLikedShops(List<Shop> shops) {
-        for (Shop shop : shops) {
-            MemberLikedShop memberLikedShop = MemberLikedShop.builder()
-                    .member(this)
-                    .shop(shop)
-                    .build();
-            this.memberLikedShopList.add(memberLikedShop);
-        }
-    }
-
     public void linkProfileImage(ProfileImage profileImage) {
         this.profileImage = profileImage;
     }

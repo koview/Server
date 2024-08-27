@@ -1,5 +1,7 @@
 package com.koview.koview_server.api.auth.member.service;
 
+import com.koview.koview_server.api.auth.member.domain.MemberLikedShop;
+import com.koview.koview_server.api.auth.member.repository.MemberLikedShopRepository;
 import com.koview.koview_server.api.auth.member.repository.MemberRepository;
 import com.koview.koview_server.api.auth.member.repository.RefreshTokenRepository;
 import com.koview.koview_server.api.common.apiPayload.code.status.ErrorStatus;
@@ -33,6 +35,7 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberLikedShopRepository memberLikedShopRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final ShopRepository shopRepository;
     private final PasswordEncoder passwordEncoder;
@@ -58,8 +61,16 @@ public class MemberServiceImpl implements MemberService {
         member.addMemberAuthority();
         member.encodePassword(passwordEncoder);
 
-        List<Shop> memberLikedShops = shopRepository.findAllByIdIn(signupRequestDTO.getShopIdList());
-        member.linkMemberLikedShops(memberLikedShops);
+        List<Shop> shops = shopRepository.findAllByIdIn(signupRequestDTO.getShopIdList());
+
+        for(Shop shop: shops){
+            memberLikedShopRepository.save(
+                    MemberLikedShop.builder()
+                    .member(member)
+                    .shop(shop)
+                    .build()
+            ).linkMember(member);
+        }
         save(member);
 
         return new SignupResponseDTO(member);

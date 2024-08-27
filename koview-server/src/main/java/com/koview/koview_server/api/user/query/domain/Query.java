@@ -84,9 +84,25 @@ public class Query extends BaseTimeEntity {
 		}
 		for (QueryImage image : queryImages) {
 			if (!this.queryImageList.contains(image)) {
-				image.addQuery(this);
+				image.linkQuery(this);
 				this.queryImageList.add(image);
 			}
 		}
 	}
+
+	public void linkMember(Member member){
+		if(this.member != null){
+			this.member.getQueryList().remove(this);
+		}
+		this.member = member;
+		this.member.getQueryList().add(this);
+	}
+
+	public void unLink(){
+		if(this.member != null){
+			this.member.getQueryList().remove(this);
+			this.member = null;
+		}
+	}
+
 }

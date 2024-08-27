@@ -37,11 +37,15 @@ public class QueryAnswer extends BaseTimeEntity {
     public void linkReview(Review review){
         if(this.review != null){
             this.review.getAnswerList().remove(this);
-        } // 답변 인스턴스를 만들었는데, 리뷰 정보가 있어.
-        // 그러면, 해당 리뷰-답변리스트에서 이 답변을 일단 빼(초기화)
+        }
         this.review=review;
-        // 상점 정보를 다시 세팅해주고
         this.review.getAnswerList().add(this);
-        // 해당 상점에 다시 미션 추가해줌.
+    }
+
+    public void unLink(){
+        if(this.review != null){
+            this.review.getAnswerList().remove(this);
+            this.review = null;
+        }
     }
 }

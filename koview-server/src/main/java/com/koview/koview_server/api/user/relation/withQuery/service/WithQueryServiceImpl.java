@@ -37,17 +37,13 @@ public class WithQueryServiceImpl implements WithQueryService {
 			.query(query)
 			.member(currentMember)
 			.build();
-		withQueryRepository.save(newWithQuery);
 
 		query.increaseTotalWithQueriesCount();
 		queryRepository.save(query);
 
-		//TODO: withQuery 내부로 리팩토링해야함
-		List<WithQuery> withQueryList = currentMember.getWithQueryList();
-		withQueryList.remove(newWithQuery);
-		withQueryList.add(newWithQuery);
-
-		memberRepository.save(currentMember);
+		newWithQuery.linkMember(currentMember);
+		newWithQuery.linkQuery(query);
+		withQueryRepository.save(newWithQuery);
 
 		return new WithQueryResponseDTO(newWithQuery);
 	}
@@ -59,6 +55,8 @@ public class WithQueryServiceImpl implements WithQueryService {
 		WithQuery withQuery = withQueryRepository.findByQueryAndMember(query, currentMember)
 			.orElseThrow(() -> new GeneralException(ErrorStatus.WITH_QUERY_NOT_FOUND));
 
+		withQuery.unLink();
+
 		if (query.getTotalWithQueriesCount() > 0) {
 			query.decreaseTotalWithQueriesCount();
 			queryRepository.save(query);
@@ -66,8 +64,6 @@ public class WithQueryServiceImpl implements WithQueryService {
 		withQueryRepository.delete(withQuery);
 
 		currentMember.getWithQueryList().remove(withQuery);
-		memberRepository.save(currentMember);
-
 		return new WithQueryResponseDTO(withQuery);
 	}
 

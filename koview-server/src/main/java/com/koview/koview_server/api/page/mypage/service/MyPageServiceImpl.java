@@ -44,14 +44,14 @@ public class MyPageServiceImpl implements MypageService {
 
     @Override
     public void deleteMyReview(Long reviewId) {
-        reviewPurchaseLinkRepository.deleteByReviewId(reviewId);
+        reviewPurchaseLinkRepository.deleteAllByReviewId(reviewId);
         reviewRepository.deleteById(reviewId);
     }
 
     @Override
     public void deleteMyReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO) {
         for (Long reviewId : reviewIdListDTO.getReviewIdList()) {
-            reviewPurchaseLinkRepository.deleteByReviewId(reviewId);
+            reviewPurchaseLinkRepository.deleteAllByReviewId(reviewId);
             reviewRepository.deleteById(reviewId);
         }
     }

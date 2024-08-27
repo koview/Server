@@ -72,6 +72,14 @@ public class Review extends BaseTimeEntity {
         }
     }
 
+    public void unLink() {
+        // 모든 연관관계 제거
+        if(this.member != null) {
+            this.member.getReviewList().remove(this);
+            this.member = null;
+        }
+    }
+
     public void increaseTotalLikesCount() {
         if (this.totalLikesCount == null) {
             this.totalLikesCount = 0L;

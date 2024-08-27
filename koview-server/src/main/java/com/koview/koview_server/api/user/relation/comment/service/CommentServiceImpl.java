@@ -37,22 +37,21 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = Comment.builder()
                 .content(requestDTO.getContent())
-                .member(member)
-                .review(review)
                 .build();
+        comment.linkMember(member);
+        comment.linkReview(review);
         commentRepository.save(comment);
 
         return new CommentResponseDTO.toCommentDTO(comment);
     }
 
     @Override
-    public void deleteComment(Long reviewId, Long commentId) {
+    public void deleteComment(Long reviewId, Long commentId) { //TODO: reviewId가 불필요해서 향후 삭제 하기
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ReviewException(ErrorStatus.COMMENT_NOT_FOUND));
 
-        if (!comment.getReview().getId().equals(reviewId)) {
-            throw new ReviewException(ErrorStatus.REVIEW_NOT_FOUND);
-        }
+        comment.unLink();
+
         commentRepository.delete(comment);
     }
 

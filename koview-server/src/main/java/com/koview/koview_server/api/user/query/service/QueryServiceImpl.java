@@ -53,7 +53,7 @@ public class QueryServiceImpl implements QueryService {
 		Member member = validateMember();
 
 		Query query = requestDTO.toEntity();
-		query.setMember(member);
+		query.linkMember(member);
 
 		List<QueryImage> images = queryImageRepository.findAllById(requestDTO.getImagePathIdList()).stream()
 			.map(image -> QueryImage.builder()
@@ -63,7 +63,7 @@ public class QueryServiceImpl implements QueryService {
 			.collect(Collectors.toList());
 
 		queryImageRepository.saveAll(images);
-		query.addQueryImages(images);
+		query.linkQueryImages(images);
 		Query saveQuery = queryRepository.save(query);
 
 		if (requestDTO.getPurchaseLinkList() != null) {
@@ -89,6 +89,10 @@ public class QueryServiceImpl implements QueryService {
 
 	@Override
 	public void deleteQuery(Long queryId) {
+
+		Query query = queryRepository.findById(queryId).orElseThrow(() -> new GeneralException(ErrorStatus.QUERY_NOT_FOUND));
+		query.unLink();
+
 		queryRepository.deleteById(queryId);
 	}
 

@@ -21,6 +21,7 @@ import com.koview.koview_server.api.user.review.domain.Review;
 import com.koview.koview_server.api.user.review.domain.dto.ReviewConverter;
 import com.koview.koview_server.api.user.review.domain.dto.ReviewRequestDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -48,7 +50,7 @@ public class ReviewServiceImpl implements ReviewService {
         Member member = validateMember();
 
         Review review = requestDTO.toEntity();
-        review.setMember(member);
+        review.linkMember(member);
 
         List<ReviewImage> images = reviewImageRepository.findAllById(requestDTO.getImagePathIdList()).stream()
             .map(image -> ReviewImage.builder()
@@ -58,7 +60,7 @@ public class ReviewServiceImpl implements ReviewService {
             .collect(Collectors.toList());
 
         reviewImageRepository.saveAll(images);
-        review.addReviewImages(images);
+        review.linkReviewImages(images);
         Review saveReview = reviewRepository.save(review);
 
 
@@ -82,16 +84,16 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void deleteReview(Long reviewId) {
-        reviewPurchaseLinkRepository.deleteByReviewId(reviewId);
+        Review review = reviewRepository.findById(reviewId).orElseThrow(()->new GeneralException(ErrorStatus.REVIEW_NOT_FOUND));
+        reviewPurchaseLinkRepository.deleteAllByReviewId(reviewId);
+
+        review.unLink(); // warning: 구매링크 삭제 위에 작성하면 hibernate 오류 발생
         reviewRepository.deleteById(reviewId);
     }
 
     @Override
     public void deleteReviewList(ReviewRequestDTO.ReviewIdListDTO reviewIdListDTO) {
-        for (Long reviewId : reviewIdListDTO.getReviewIdList()) {
-            reviewPurchaseLinkRepository.deleteByReviewId(reviewId);
-            reviewRepository.deleteById(reviewId);
-        }
+        for (Long reviewId : reviewIdListDTO.getReviewIdList()) deleteReview(reviewId);
     }
 
     @Override
@@ -107,11 +109,7 @@ public class ReviewServiceImpl implements ReviewService {
         Slice<Review> reviewSlice;
         Member member;
         if (memberId == null) {
-            //TODO: 임시로 처음 클릭한 리뷰id로 member id 추출
-            Review review = reviewRepository.findById(clickedReviewId).orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_NOT_FOUND));
-            member = review.getMember();
-            // TODO: 향후 memberId 없으면 토큰으로 받게끔 교체
-            // member = validateMember();
+            member = validateMember();
         }
         else{
             member = memberRepository.findById(memberId).orElseThrow(()->

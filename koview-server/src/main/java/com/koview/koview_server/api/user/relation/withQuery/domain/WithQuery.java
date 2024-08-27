@@ -59,4 +59,15 @@ public class WithQuery extends BaseTimeEntity {
 			query.getWithQueryList().add(this);
 		}
 	}
+
+	public void unLink(){
+		if (this.member != null) {
+			this.member.getWithQueryList().remove(this);
+			this.member = null;
+		}
+		if (this.query != null) {
+			this.query.getWithQueryList().remove(this);
+			this.query = null;
+		}
+	}
 }

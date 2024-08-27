@@ -12,5 +12,5 @@ public interface ReviewPurchaseLinkRepository extends JpaRepository<ReviewPurcha
     @Query("SELECT rpl.purchaseLink FROM ReviewPurchaseLink rpl WHERE rpl.review.id = :reviewId")
     List<PurchaseLink> findPurchaseLinksByReviewId(@Param("reviewId") Long reviewId);
 
-    void deleteByReviewId(Long reviewId);
+    void deleteAllByReviewId(Long reviewId);
 }

@@ -70,13 +70,14 @@ public class ImageServiceImpl {
         s3Manager.deleteFile(reviewImage.getUrl());
         reviewImageRepository.delete(reviewImage);
 
+        reviewImage.unLink();
+
         return "삭제하였습니다.";
     }
 
     @Transactional
     public String deleteReviews(List<Long> imageIds) {
-        for (Long imageId : imageIds)
-            deleteReview(imageId);
+        for (Long imageId : imageIds) deleteReview(imageId);
         return "이미지 리스트 삭제하였습니다.";
     }
 
@@ -100,7 +101,7 @@ public class ImageServiceImpl {
                         .member(member)
                         .build()
         );
-        member.addProfileImage(savedProfileImage);
+        member.linkProfileImage(savedProfileImage);
         memberRepository.save(member);
 
         return new ImageResponseDTO(savedProfileImage);
@@ -161,13 +162,13 @@ public class ImageServiceImpl {
         s3Manager.deleteFile(queryImage.getUrl());
         queryImageRepository.delete(queryImage);
 
+        queryImage.unLink();
         return "삭제하였습니다.";
     }
 
     @Transactional
     public String deleteQueryImages(List<Long> imageIds) {
-        for (Long imageId : imageIds)
-            deleteQueryImage(imageId);
+        for (Long imageId : imageIds) deleteQueryImage(imageId);
         return "이미지 리스트 삭제하였습니다.";
     }
 

@@ -53,4 +53,15 @@ public class Comment extends BaseTimeEntity {
             review.getCommentList().add(this);
         }
     }
+
+    public void unLink(){
+        if(this.member != null) {
+            this.member.getCommentList().remove(this);
+            this.member = null;
+        }
+        if(this.review != null) {
+            this.review.getCommentList().remove(this);
+            this.review = null;
+        }
+    }
 }

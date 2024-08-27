@@ -35,18 +35,13 @@ public class LikeServiceImpl implements LikeService {
                 .review(review)
                 .member(currentMember)
                 .build();
-        likesRepository.save(newLike);
 
         review.increaseTotalLikesCount();
         reviewRepository.save(review);
 
-        //TODO: like 엔티티 내부로 리팩토링해야함
-        List<Like> likeList = currentMember.getLikeList();
-        likeList.remove(newLike);
-        likeList.add(newLike);
-
-        currentMember.getLikeList().add(newLike);
-        memberRepository.save(currentMember);
+        newLike.linkMember(currentMember);
+        newLike.linkReview(review);
+        likesRepository.save(newLike);
 
         return new LikeResponseDTO(newLike);
     }
@@ -58,6 +53,8 @@ public class LikeServiceImpl implements LikeService {
         Review review = validateReview(reviewId);
         Like like = likesRepository.findByReviewAndMember(review, currentMember)
                 .orElseThrow(() -> new ReviewException(ErrorStatus.LIKES_NOT_FOUND));
+
+        like.unLink();
 
         if (review.getTotalLikesCount() > 0) {
             review.decreaseTotalLikesCount();

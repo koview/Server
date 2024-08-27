@@ -36,11 +36,18 @@ public class QueryImage extends BaseTimeEntity {
 	@JoinColumn(name = "query_id")
 	private Query query;
 
-	public void addQuery(Query query) {
+	public void linkQuery(Query query) {
+		if(this.query != null){
+			this.query.getQueryImageList().remove(this);
+		}
 		this.query = query;
+		query.getQueryImageList().add(this);
+	}
 
-		if (query.getQueryImageList() != null && !query.getQueryImageList().contains(this)) {
-			query.getQueryImageList().add(this);
+	public void unLink(){
+		if(this.query != null){
+			this.query.getQueryImageList().remove(this);
+			this.query = null;
 		}
 	}
 }

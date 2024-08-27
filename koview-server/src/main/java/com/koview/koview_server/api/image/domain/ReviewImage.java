@@ -38,4 +38,11 @@ public class ReviewImage extends BaseTimeEntity {
             review.getReviewImageList().add(this);
         }
     }
+
+    public void unLink(){
+        if(this.review != null){
+            this.review.getReviewImageList().remove(this);
+            this.review = null;
+        }
+    }
 }

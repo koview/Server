@@ -1,7 +1,7 @@
 package com.koview.koview_server.global.security.service;
 
-import com.koview.koview_server.member.domain.Member;
-import com.koview.koview_server.member.service.MemberServiceImpl;
+import com.koview.koview_server.api.auth.member.domain.Member;
+import com.koview.koview_server.api.auth.member.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

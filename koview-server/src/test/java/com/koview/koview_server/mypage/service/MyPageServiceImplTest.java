@@ -1,8 +1,9 @@
 package com.koview.koview_server.mypage.service;
 
-import com.koview.koview_server.member.repository.MemberRepository;
-import com.koview.koview_server.review.domain.dto.ReviewRequestDTO;
-import com.koview.koview_server.review.repository.ReviewRepository;
+import com.koview.koview_server.api.auth.member.repository.MemberRepository;
+import com.koview.koview_server.api.page.mypage.service.MyPageServiceImpl;
+import com.koview.koview_server.api.user.review.domain.dto.ReviewRequestDTO;
+import com.koview.koview_server.api.user.review.repository.ReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

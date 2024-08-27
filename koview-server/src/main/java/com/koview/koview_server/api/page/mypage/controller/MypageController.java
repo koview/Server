@@ -1,6 +1,6 @@
 package com.koview.koview_server.api.page.mypage.controller;
 
-import com.koview.koview_server.api.image.domain.dto.MyProfileResponseDTO;
+import com.koview.koview_server.api.common.ProfileResponseDTO;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,7 +52,7 @@ public class MypageController {
     }
 
     @GetMapping("/mydetail")
-    public ApiResult<MyProfileResponseDTO> getMyProfile() {
+    public ApiResult<ProfileResponseDTO> getMyProfile() {
         return ApiResult.onSuccess(mypageService.findMyProfile());
     }
 }

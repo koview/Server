@@ -49,7 +49,7 @@ public class QueryAnswerServiceImpl implements QueryAnswerService{
                 .content(request.getContent())
                 .build();
 
-        answer.setReview(review);
+        answer.linkReview(review);
         QueryAnswer saveAnswer = queryAnswerRepository.save(answer);
 
         return AnswerConverter.toSingleDTO(saveAnswer, false);

@@ -59,6 +59,19 @@ public class Review extends BaseTimeEntity {
 
     private Long totalLikesCount = 0L;
 
+    public void linkMember(Member member) {
+        // 기존 Member 와의 연관관계 제거
+        if(this.member != null) {
+            this.member.getReviewList().remove(this);
+        }
+
+        // 새로운 연관관계 설정
+        this.member = member;
+        if(member != null) {
+            member.getReviewList().add(this);
+        }
+    }
+
     public void increaseTotalLikesCount() {
         if (this.totalLikesCount == null) {
             this.totalLikesCount = 0L;
@@ -73,13 +86,13 @@ public class Review extends BaseTimeEntity {
         this.totalLikesCount--;
     }
 
-    public void addReviewImages(List<ReviewImage> reviewImages) {
+    public void linkReviewImages(List<ReviewImage> reviewImages) {
         if(this.reviewImageList ==  null) {
             this.reviewImageList = new ArrayList<>();
         }
         for (ReviewImage image : reviewImages) {
             if (!this.reviewImageList.contains(image)) {
-                image.addReview(this);
+                image.linkReview(this);
                 this.reviewImageList.add(image);
             }
         }

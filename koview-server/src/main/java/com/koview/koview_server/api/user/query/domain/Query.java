@@ -78,7 +78,7 @@ public class Query extends BaseTimeEntity {
 		this.totalViewCount++;
 	}
 
-	public void addQueryImages(List<QueryImage> queryImages) {
+	public void linkQueryImages(List<QueryImage> queryImages) {
 		if(this.queryImageList ==  null) {
 			this.queryImageList = new ArrayList<>();
 		}

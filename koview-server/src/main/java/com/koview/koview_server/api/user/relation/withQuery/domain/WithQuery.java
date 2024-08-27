@@ -37,4 +37,26 @@ public class WithQuery extends BaseTimeEntity {
 	@ManyToOne
 	@JoinColumn(name = "query_id")
 	private Query query;
+
+	public void linkMember(Member member) {
+		if (this.member != null) {
+			this.member.getWithQueryList().remove(this);
+		}
+
+		this.member = member;
+		if (member != null) {
+			member.getWithQueryList().add(this);
+		}
+	}
+
+	public void linkQuery(Query query) {
+		if (this.query != null) {
+			this.query.getWithQueryList().remove(this);
+		}
+
+		this.query = query;
+		if (query != null) {
+			query.getWithQueryList().add(this);
+		}
+	}
 }

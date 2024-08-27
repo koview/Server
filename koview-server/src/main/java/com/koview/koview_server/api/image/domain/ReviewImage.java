@@ -31,7 +31,7 @@ public class ReviewImage extends BaseTimeEntity {
     @JoinColumn(name = "review_id")
     private Review review;
 
-    public void addReview(Review review) {
+    public void linkReview(Review review) {
         this.review = review;
 
         if (review.getReviewImageList() != null && !review.getReviewImageList().contains(this)) {

@@ -34,7 +34,7 @@ public class CommentController {
 
     @DeleteMapping("/comments/{commentId}/delete")
     @Operation(description = "댓글 삭제")
-    public ApiResult<?> deleteReview(@RequestParam(name = "reviewId") Long reviewId, @PathVariable Long commentId) {
+    public ApiResult<?> deleteReview(@RequestParam(name = "reviewId", required = false) Long reviewId, @PathVariable Long commentId) {
         commentService.deleteComment(reviewId, commentId);
         return ApiResult.onSuccess();
     }

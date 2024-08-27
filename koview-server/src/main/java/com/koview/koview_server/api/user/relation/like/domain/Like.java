@@ -1,5 +1,6 @@
 package com.koview.koview_server.api.user.relation.like.domain;
 
+
 import com.koview.koview_server.api.auth.member.domain.Member;
 import com.koview.koview_server.api.user.review.domain.Review;
 import jakarta.persistence.*;
@@ -25,4 +26,26 @@ public class Like {
     @ManyToOne
     @JoinColumn(name = "review_id")
     private Review review;
+
+    public void linkMember(Member member) {
+        if (this.member != null) {
+            this.member.getLikeList().remove(this);
+        }
+
+        this.member = member;
+        if (member != null) {
+            member.getLikeList().add(this);
+        }
+    }
+
+    public void linkReview(Review review) {
+        if (this.review != null) {
+            this.review.getLikeList().remove(this);
+        }
+
+        this.review = review;
+        if (review != null) {
+            review.getLikeList().add(this);
+        }
+    }
 }

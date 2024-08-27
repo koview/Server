@@ -1,15 +1,19 @@
 package com.koview.koview_server.api.user.review.domain.dto;
 
+import com.koview.koview_server.api.auth.member.domain.Member;
+import com.koview.koview_server.api.image.domain.ProfileImage;
 import com.koview.koview_server.api.image.domain.dto.ImageResponseDTO;
 import com.koview.koview_server.api.common.purchaseLink.domain.dto.PurchaseLinkResponseDTO;
 import com.koview.koview_server.api.user.review.domain.Review;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.koview.koview_server.api.common.ProfileResponseDTO;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 public class ReviewResponseDTO {
 
@@ -22,8 +26,7 @@ public class ReviewResponseDTO {
 
         private Long reviewId;
         private String content;
-        private String writer;
-        private ImageResponseDTO profileImage;
+        private ProfileResponseDTO profileInfo;
         private List<ImageResponseDTO> imageList;
         private List<PurchaseLinkResponseDTO> purchaseLinkList;
         private Long totalCommentCount;
@@ -48,8 +51,7 @@ public class ReviewResponseDTO {
     public static class toReviewDTO {
         private Long reviewId;
         private String content;
-        private String writer;
-        private ImageResponseDTO profileImage;
+        private ProfileResponseDTO profileInfo;
         private List<ImageResponseDTO> imageList;
         private Long totalCommentCount;
         private Long totalLikeCount;
@@ -59,22 +61,35 @@ public class ReviewResponseDTO {
 
 
         public toReviewDTO(Review review, Boolean isLiked) {
+            Long likeCount = review.getTotalLikesCount();
+
+            ProfileResponseDTO profileInfo = getProfileInfo(review.getMember());
+
+            List<ImageResponseDTO> imageList = review.getReviewImageList().stream()
+                    .map(ImageResponseDTO::new)
+                    .collect(Collectors.toList());
+
             this.reviewId = review.getId();
             this.content = review.getContent();
-            this.writer = review.getMember().getNickname();
-            this.profileImage = review.getMember().getProfileImage() != null ?
-                new ImageResponseDTO(review.getMember().getProfileImage()) : null;
-            this.imageList = review.getReviewImageList() != null ?
-                    review.getReviewImageList().stream()
-                            .distinct()
-                            .map(ImageResponseDTO::new)
-                            .collect(Collectors.toList()) : null;
+            this.profileInfo = profileInfo;
+            this.imageList = review.getReviewImageList() != null ? imageList : null;
             this.totalCommentCount = review.getCommentList() != null ? (long) review.getCommentList().size() : 0L;
-            this.totalLikeCount = review.getTotalLikesCount();
+            this.totalLikeCount = likeCount != null ? likeCount : 0L;
             this.isLiked = isLiked;
             this.createdAt = review.getCreatedDate().format(formatter);
             this.updatedAt = review.getLastModifiedDate().format(formatter);
 
+        }
+        private static ProfileResponseDTO getProfileInfo(Member member){
+            ProfileImage profileImage = member.getProfileImage();
+            boolean isProfileImage = profileImage != null;
+
+            return ProfileResponseDTO.builder()
+                    .imageId(isProfileImage ? profileImage.getId() : null)
+                    .imageUrl(isProfileImage ? profileImage.getUrl() : null)
+                    .memberId(member.getId())
+                    .memberNickname(member.getNickname())
+                    .build();
         }
     }
 }

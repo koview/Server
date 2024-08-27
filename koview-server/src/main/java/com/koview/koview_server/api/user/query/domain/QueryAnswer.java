@@ -34,7 +34,7 @@ public class QueryAnswer extends BaseTimeEntity {
     @JoinColumn(name = "query_id")
     private Query query;
 
-    public void setReview(Review review){
+    public void linkReview(Review review){
         if(this.review != null){
             this.review.getAnswerList().remove(this);
         } // 답변 인스턴스를 만들었는데, 리뷰 정보가 있어.

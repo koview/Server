@@ -24,6 +24,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import static lombok.Builder.*;
+
 @Entity
 @Getter
 @Setter
@@ -43,17 +45,20 @@ public class Query extends BaseTimeEntity {
 	@ManyToOne
 	@JoinColumn(name = "member_id")
 	private Member member;
-	@Builder.Default
+	@Default
 	private Long totalWithQueriesCount = 0L;
-	@Builder.Default
+	@Default
 	private Long totalViewCount = 0L;
 
+	@Default
 	@OneToMany(mappedBy = "query", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<QueryPurchaseLink> queryPurchaseLinkList = new ArrayList<>();
 
+	@Default
 	@OneToMany(mappedBy = "query", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<WithQuery> withQueryList = new ArrayList<>();
 
+	@Default
 	@OneToMany(mappedBy = "query", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<QueryImage> queryImageList = new ArrayList<>();
 

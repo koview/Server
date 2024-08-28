@@ -18,6 +18,7 @@ import com.koview.koview_server.api.image.repository.QueryImageRepository;
 import com.koview.koview_server.api.user.query.repository.QueryRepository;
 import com.koview.koview_server.api.user.query.domain.dto.*;
 import com.koview.koview_server.api.user.relation.withQuery.repository.WithQueryRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -34,6 +35,7 @@ import com.koview.koview_server.api.user.query.domain.Query;
 
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -77,10 +79,10 @@ public class QueryServiceImpl implements QueryService {
 							return purchaseLinkRepository.save(newPurchaseLink);
 						});
 					})
-					.map(purchaseLink -> {
+					.forEach(purchaseLink -> {
 						QueryPurchaseLink queryPurchaseLink = PurchaseLinkConverter.toQueryPurchaseLink(purchaseLink, saveQuery);
-						queryPurchaseLink.setQuery(saveQuery);
-						return queryPurchaseLinkRepository.save(queryPurchaseLink);
+						queryPurchaseLink.linkQuery(saveQuery);
+						queryPurchaseLinkRepository.save(queryPurchaseLink);
 					});
 		}
 

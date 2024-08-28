@@ -31,6 +31,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import static lombok.Builder.*;
+
 @Entity
 @Getter
 @Setter
@@ -58,15 +60,19 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false, length = 30)
     private RoleType role; // 권한
 
+    @Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviewList = new ArrayList<>();
 
+    @Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberLikedShop> memberLikedShopList = new ArrayList<>();
 
+    @Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
+    @Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likeList = new ArrayList<>();
 
@@ -74,9 +80,11 @@ public class Member extends BaseTimeEntity {
     @JoinColumn(name = "profile_image_id")
     private ProfileImage profileImage;
 
+    @Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Query> queryList = new ArrayList<>();
 
+    @Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WithQuery> withQueryList = new ArrayList<>();
 

@@ -25,6 +25,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import static lombok.Builder.*;
+
 @Entity
 @Getter
 @Setter
@@ -45,18 +47,23 @@ public class Review extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Default
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewImage> reviewImageList = new ArrayList<>();
 
+    @Default
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
+    @Default
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likeList = new ArrayList<>();
 
+    @Default
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QueryAnswer> answerList = new ArrayList<>();
 
+    @Default
     private Long totalLikesCount = 0L;
 
     public void linkMember(Member member) {

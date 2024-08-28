@@ -1,5 +1,6 @@
 package com.koview.koview_server.api.user.review.service;
 
+import com.koview.koview_server.api.common.purchaseLink.domain.ReviewPurchaseLink;
 import com.koview.koview_server.api.user.review.domain.dto.LimitedReviewResponseDTO;
 import com.koview.koview_server.api.user.review.domain.dto.ReviewResponseDTO;
 import com.koview.koview_server.api.user.review.repository.ReviewRepository;
@@ -75,8 +76,10 @@ public class ReviewServiceImpl implements ReviewService {
                             return purchaseLinkRepository.save(newPurchaseLink);
                         });
                     })
-                    .map(purchaseLink -> PurchaseLinkConverter.toReviewPurchaseLink(purchaseLink, saveReview))
-                    .forEach(reviewPurchaseLinkRepository::save);
+                    .forEach(purchaseLink -> {
+                        ReviewPurchaseLink reviewPurchaseLink = PurchaseLinkConverter.toReviewPurchaseLink(purchaseLink, saveReview);
+                        reviewPurchaseLinkRepository.save(reviewPurchaseLink);
+                    });
         }
 
         return new ReviewResponseDTO.toReviewDTO(review, false);

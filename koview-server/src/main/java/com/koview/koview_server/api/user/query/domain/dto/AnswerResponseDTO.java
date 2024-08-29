@@ -1,5 +1,6 @@
 package com.koview.koview_server.api.user.query.domain.dto;
 
+import com.koview.koview_server.api.common.ProfileResponseDTO;
 import com.koview.koview_server.api.image.domain.dto.ImageResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,11 +16,12 @@ public class AnswerResponseDTO {
     public static class Single {
         private Long answerId;
         private String content;
-        private String writer;
+        private ProfileResponseDTO profileInform;
         private List<ImageResponseDTO> imageList;
         private Long totalLikeCount;
         private Boolean isLiked;
         private Long commentCount;
+        private Long reviewId;
         private LocalDate createdAt;
         private LocalDate updatedAt;
     }
